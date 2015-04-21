@@ -7,6 +7,7 @@
     app.use(morgan('dev'));
 
     app.use('/stockcheck', routes.stockCheck);
+    app.use('/textsearch', routes.textSearch);
   };
 
 

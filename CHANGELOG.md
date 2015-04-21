@@ -4,3 +4,4 @@
 - refactored project into components (conor.fennell)
 - added jshint (conor.fennell)
 - fixed the path to ./server/stock/stock_routes.js (conor.fennell)
+- added text search route (brian.lough)

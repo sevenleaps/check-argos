@@ -56,7 +56,7 @@
   }
 
   function getStockQuantity(body) {
-    return body.match('([0-9]*) left to')[1];
+    return body.match(/([0-9]*) left to/)[1];
   }
 
   function isOrderable(body) {
