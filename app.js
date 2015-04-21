@@ -8,7 +8,7 @@
   routers.stockCheck = express.Router();
   require('./config.js')(app, routers);
 
-  require('./lib/stock/stock_routes.js')(routers.stockCheck);
+  require('./server/stock/stock_routes.js')(routers.stockCheck);
 
   module.exports = exports = app;
 }());

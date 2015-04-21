@@ -3,3 +3,4 @@
 - added check stock route (conor.fennell)
 - refactored project into components (conor.fennell)
 - added jshint (conor.fennell)
+- fixed the path to ./server/stock/stock_routes.js (conor.fennell)
