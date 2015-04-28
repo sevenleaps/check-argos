@@ -4,8 +4,45 @@
   var ProductsUtil = require('../../lib/util/index').Products
 
   module.exports = exports = {
-    textSearch : textSearch
+    textSearch : textSearch,
+    search : search
   };
+
+  function search(req, res, next) {
+    if(req.query && req.query.q)
+    {
+      if(ProductsUtil.isValidProductId(req.query.q))
+      {
+        searchProductNumber(req, res, next);
+      }
+      else
+      {
+        //should we check was this an effort at a productId?
+        req.query.searchString = req.query.q;
+        textSearch(req, res, next);
+
+      }
+    }
+  }
+
+  function searchProductNumber(req, res, next){
+    var productNum = ProductsUtil.cleanUpProductId(req.query.q);
+    ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body)
+    {
+      var productPageHtml = body;
+      //console.log(productPageHtml);
+      if(ProductsUtil.isValidProductPage(productPageHtml))
+      {
+        var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
+        res.status(200).json(productInfoJson);
+      }
+      else
+      {
+        //invalid product page
+      }
+    });
+
+  }
 
   function textSearch(req, res, next) {
 
