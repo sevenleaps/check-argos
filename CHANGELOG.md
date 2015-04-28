@@ -10,3 +10,4 @@
 - added images Url to text search output (brian.lough)
 - text search that only returns one result now handled (brian.lough)
 - added less garbage search page (conor.fennell)
+- added error catch (conor.fennell)
