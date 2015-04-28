@@ -56,8 +56,19 @@
 
       request(url, function onResponse(error, response, body)
       {
-        var productsJson = ProductsUtil.getProductsFromHtml(body);
-        res.status(200).json(productsJson);
+
+        if(ProductsUtil.isListOfProductsPage(body))
+        {
+          console.log("list of items");
+          var productsJson = ProductsUtil.getProductsFromHtml(body);
+          res.status(200).json(productsJson);
+        }
+        else if(!ProductsUtil.isFoundNoProductsPage(body))
+        {
+          console.log("productPage");
+          var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
+          res.status(200).json(productInfoJson);
+        }
       });
 
     }

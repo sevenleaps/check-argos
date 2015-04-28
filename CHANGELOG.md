@@ -8,3 +8,4 @@
 - added search route for search by product number (brian.lough)
 - added garbage search page (conor.fennell)
 - added images Url to text search output (brian.lough)
+- text search that only returns one result now handled (brian.lough)
