@@ -1,4 +1,4 @@
-## 0.1.0
+## 2.0.0
 - added base files (conor.fennell)
 - added check stock route (conor.fennell)
 - refactored project into components (conor.fennell)
@@ -11,3 +11,4 @@
 - text search that only returns one result now handled (brian.lough)
 - added less garbage search page (conor.fennell)
 - added error catch (conor.fennell)
+- added wrecker.yml deployment file (conor.fennell)
