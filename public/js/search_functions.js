@@ -12,10 +12,10 @@ function handleResponseFromSearch(response)
   var result =  JSON.parse(response);
   if (!Array.isArray(result))
   {
-    //this is a single result, display stockCheck
+    displayStockPage(result);
   }
   else
   {
-    displaySearchResultPage(result)
+    displaySearchResultPage(result);
   }
 }

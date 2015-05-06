@@ -14,3 +14,4 @@
 - added wrecker.yml deployment file (conor.fennell)
 - removed test step in wercker.yml (conor.fennell)
 - refactored javascript code on UI (brian.lough)
+- added product info for a stock check page (brian.lough)
