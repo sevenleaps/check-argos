@@ -16,3 +16,4 @@
 - refactored javascript code on UI (brian.lough)
 - added product info for a stock check page (brian.lough)
 - added basic stock check page (brian.lough)
+- looking at url onload for search query and acting on it (brian.lough)
