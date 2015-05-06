@@ -12,3 +12,4 @@
 - added less garbage search page (conor.fennell)
 - added error catch (conor.fennell)
 - added wrecker.yml deployment file (conor.fennell)
+- removed test step in wercker.yml (conor.fennell)
