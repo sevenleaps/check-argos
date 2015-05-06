@@ -7,6 +7,5 @@
     "request": "^2.55.0"
   },
   "scripts" : {
-    "test": "jshint ."
   }
 }
