@@ -17,3 +17,5 @@
 - added product info for a stock check page (brian.lough)
 - added basic stock check page (brian.lough)
 - looking at url onload for search query and acting on it (brian.lough)
+- Making stock page a table with banded rows (brian.lough)
+- Adding in footer, the template requires attribution (brian.lough)

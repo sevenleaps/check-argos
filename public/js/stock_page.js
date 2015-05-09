@@ -5,7 +5,8 @@ function displayStockPage(item)
 
   resultsDiv.appendChild(generateProductInfoRow(item));
 
-  generateStockInfo(item, resultsDiv);
+  generateStockTable(item, resultsDiv)
+  //generateStockInfo(item, resultsDiv);
 
   checkStockForAllStores(item);
 
@@ -115,6 +116,62 @@ function generateStockInfo(item, resultsDiv)
   }
 }
 
+function generateStockTable(item, resultsDiv)
+{
+  var row = null;
+  var leftStorePopulated = false;
+  var rowCount = 0;
+
+  var table = document.createElement("TABLE");
+  table.setAttribute("class", "default");
+
+  for(var key in stores)
+  {
+    if (stores.hasOwnProperty(key))
+    {
+      if(row == null)
+      {
+        rowCount++;
+        row = document.createElement("tr");
+        if(rowCount % 2 == 0)
+        {
+          row.setAttribute("style", "background-color:#EFEFEF");
+        }
+      }
+
+      var storeName = key;
+      var storeId = stores[key];
+
+      var storeNameCell = document.createElement("td");
+      storeNameCell.innerHTML = storeName;
+      var stockStatusCell = document.createElement("td");
+      stockStatusCell.setAttribute("id", "store" + storeId);
+
+      row.appendChild(storeNameCell);
+      row.appendChild(stockStatusCell);
+
+      if(leftStorePopulated)
+      {
+        table.appendChild(row);
+        leftStorePopulated = false;
+        row = null;
+      }
+      else
+      {
+        leftStorePopulated = true;
+      }
+
+    }
+  }
+
+  if(row != null)
+  {
+    table.appendChild(row);
+  }
+
+  resultsDiv.appendChild(table);
+}
+
 function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
 {
   var row = document.createElement('DIV');
@@ -135,8 +192,21 @@ function generateStoreDiv(storeName, storeId)
   storeDiv.setAttribute("class", "6u");
   storeDiv.setAttribute("style", "text-align: center;");
   //storeDiv.setAttribute("id", "store" + storeId);
+  var table = document.createElement("TABLE");
+  table.setAttribute("class", "default");
+  var row = document.createElement("tr");
+  var storeNameCell = document.createElement("td");
+  storeNameCell.innerHTML = storeName;
+  var stockStatusCell = document.createElement("td");
+  stockStatusCell.setAttribute("id", "store" + storeId);
+  stockStatusCell.innerHTML = "Checking...";
 
-  storeDiv.innerHTML = storeName + ' : <span id="store' + storeId + '">Checking...</span>';
+  row.appendChild(storeNameCell);
+  row.appendChild(stockStatusCell);
+
+  table.appendChild(row);
+
+  storeDiv.appendChild(table);
 
   return storeDiv;
 
