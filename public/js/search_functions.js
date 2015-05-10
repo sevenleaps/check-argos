@@ -1,5 +1,6 @@
 function searchByQuery (searchQuery)
 {
+  displaySpinner();
   window.history.pushState(null, null, '?search=' + searchQuery);
   var myRequest = new XMLHttpRequest();
   myRequest.onload = function(){ handleResponseFromSearch(myRequest.response);};
@@ -7,15 +8,28 @@ function searchByQuery (searchQuery)
   myRequest.send();
 }
 
+var noResults = "No Results";
+
 function handleResponseFromSearch(response)
 {
   var result =  JSON.parse(response);
-  if (!Array.isArray(result))
+
+  if(result.hasOwnProperty("error"))
   {
-    displayStockPage(result);
+    if(result["error"].toUpperCase() === noResults.toUpperCase())
+    {
+      displayMessage("No results found.");
+    }
   }
   else
   {
-    displaySearchResultPage(result);
+    if (!Array.isArray(result))
+    {
+      displayStockPage(result);
+    }
+    else
+    {
+      displaySearchResultPage(result);
+    }
   }
 }

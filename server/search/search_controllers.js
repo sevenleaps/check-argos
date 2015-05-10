@@ -59,20 +59,29 @@
 
         if(ProductsUtil.isListOfProductsPage(body))
         {
-          console.log("list of items");
           var productsJson = ProductsUtil.getProductsFromHtml(body);
           res.status(200).json(productsJson);
         }
         else if(!ProductsUtil.isFoundNoProductsPage(body))
         {
-          console.log("productPage");
           var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
           res.status(200).json(productInfoJson);
+        }
+        else
+        {
+          res.status(200).json(generateError("No Results"));
         }
       });
 
     }
 
+  }
+
+  function generateError(errorMessage)
+  {
+    return{
+      error: errorMessage
+    }
   }
 
   function validateParams(params)

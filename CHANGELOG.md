@@ -19,3 +19,6 @@
 - looking at url onload for search query and acting on it (brian.lough)
 - Making stock page a table with banded rows (brian.lough)
 - Adding in footer, the template requires attribution (brian.lough)
+- Fixed crashing bug when search returned no results (brian.lough)
+- Added spinner when searching (brian.lough)
+- Fixed some of the spacing issues in CSS (brian.lough)

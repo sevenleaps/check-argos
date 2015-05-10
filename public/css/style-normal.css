@@ -27,7 +27,7 @@
 
 	#header
 	{
-		padding: 12em 0 12em 0;
+		padding: 6em 0 6em 0;
 	}
 
 /*********************************************************************************/
@@ -37,13 +37,13 @@
 	.main
 	{
 	}
-	
+
 		.main > header
 		{
 			padding: 4em 0 4em 0;
 		}
-		
+
 		.main > .content
 		{
-			padding: 4em 0 4em 0;
+			padding: 4em 0 1em 0;
 		}
