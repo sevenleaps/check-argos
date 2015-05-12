@@ -27,5 +27,10 @@ deploy:
         overwrite: true
         hide-from-log: true
     - script:
-        name: restart docker
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 docker restart check-argos
+        name: git pull
+        code: >
+          ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167
+          cd /home/vagrant/repos/check-argos
+          git pull
+          npm install
+          docker restart check-argos
