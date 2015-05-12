@@ -17,6 +17,7 @@ function checkStockForAllStores(item)
 {
   var productId = item.productId.replace("/", "");
 
+  var stores = getStoreList();
   for(var key in stores)
   {
     if (stores.hasOwnProperty(key))
@@ -24,78 +25,6 @@ function checkStockForAllStores(item)
       checkStockForSingleStore(productId, stores[key]);
     }
   }
-}
-
-function checkStockForSingleStore(productId, storeId)
-{
-
-  var pos = -1;
-	for (var i=0; i<xmlreqs.length; i++)
-	{
-		if (xmlreqs[i].freed == 1)
-		{
-		pos = i; break;
-		}
-	}
-	if (pos == -1)
-	{
-		pos = xmlreqs.length; xmlreqs[pos] = new CXMLReq(1);
-	}
-	if (xmlreqs[pos].xmlhttp)
-	{
-		xmlreqs[pos].freed = 0;
-		xmlreqs[pos].xmlhttp.open("GET", "stockcheck/" + storeId + "/" + productId, true);
-		xmlreqs[pos].xmlhttp.onload = function()
-		{
-				processStockChange(pos, storeId);
-		}
-
-		xmlreqs[pos].xmlhttp.send();
-	}
-
-}
-
-function processStockChange(pos, storeId)
-{
-	if (typeof(xmlreqs[pos]) != 'undefined' && xmlreqs[pos].freed == 0 && xmlreqs[pos].xmlhttp.readyState == 4)
-	{
-		if (xmlreqs[pos].xmlhttp.status == 200 || xmlreqs[pos].xmlhttp.status == 304)
-		{
-			var elementId = "status";
-      var result =  JSON.parse(xmlreqs[pos].xmlhttp.responseText);
-
-      var elementsToBeUpdated = document.getElementsByName("store" + storeId);
-
-      for(element in elementsToBeUpdated)
-      {
-        if (elementsToBeUpdated.hasOwnProperty(element))
-        {
-          var elem = elementsToBeUpdated[element];
-
-          if (result.isStocked)
-    			{
-            elem.innerHTML = result.stockQuantity + " in stock."
-    			}
-    			else if (result.isOrderable)
-    			{
-            elem.innerHTML = "Can be ordered.";
-    			}
-    			else if (result.hasOutOfStockMessage)
-    			{
-            elem.innerHTML = "Out of stock.";
-    			}
-          else
-          {
-            elem.innerHTML = "Unknown status.";
-          }
-        }
-      }
-
-
-		}
-
-		xmlreqs[pos].freed = 1;
-	}
 }
 
 function generateStockInfo(item, resultsDiv)
@@ -135,6 +64,7 @@ function generateMobileStockTable(item, resultsDiv)
   var table = document.createElement("TABLE");
   table.setAttribute("class", "default visibleOnMobile");
 
+  var stores = getStoreList();
   for(var key in stores)
   {
     if (stores.hasOwnProperty(key))
@@ -180,6 +110,7 @@ function generateStockTable(item, resultsDiv)
   var table = document.createElement("TABLE");
   table.setAttribute("class", "default notVisibleOnMobile");
 
+  var stores = getStoreList();
   for(var key in stores)
   {
     if (stores.hasOwnProperty(key))
@@ -284,7 +215,6 @@ function generateProductInfoRow(item)
   productInfoDiv.setAttribute("class", "6u");
   productInfoDiv.setAttribute("style", "text-align: center;");
 
-
   var productId = item.productId.replace("/", "");
   var productUrl = "http://www.argos.ie/static/Product/partNumber/" + productId +".htm";
 
@@ -309,63 +239,33 @@ function generateProductInfoRow(item)
   return row;
 }
 
-var xmlreqs = new Array();
-
-function CXMLReq(freed)
+function handleStoreStockStatus(itemJson, storeId)
 {
-	this.freed = freed;
-	this.xmlhttp = false;
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-		this.xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{
-		this.xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
+
+  var elementsToBeUpdated = document.getElementsByName("store" + storeId);
+
+  for(element in elementsToBeUpdated)
+  {
+    if (elementsToBeUpdated.hasOwnProperty(element))
+    {
+      var elem = elementsToBeUpdated[element];
+
+      if (itemJson.isStocked)
+      {
+        elem.innerHTML = itemJson.stockQuantity + " in stock."
+      }
+      else if (itemJson.isOrderable)
+      {
+        elem.innerHTML = "Can be ordered.";
+      }
+      else if (itemJson.hasOutOfStockMessage)
+      {
+        elem.innerHTML = "Out of stock.";
+      }
+      else
+      {
+        elem.innerHTML = "Unknown status.";
+      }
+    }
+  }
 }
-
-
-
-var stores = {
-          "Arklow (Extra)" : 4101,
-					"Ashbourne Retail Park" : 943,
-					"Athlone" : 262,
-					"Blanchardstown West End" : 669,
-					"Carlow (Extra)" : 4130,
-					"Castlebar" : 807,
-					"Cavan (Extra)" : 814,
-					"Clonmel (Extra)" : 4214,
-					"Cork Mahon (Extra)" : 4113,
-					"Cork Queens Old Castle" : 45,
-					"Cork Retail Park" : 801,
-					"Drogheda (Extra)" : 875,
-					"Dun Laoghaire" : 200,
-					"Dundalk Retail Park (Extra)" : 931,
-					"Dundrum" : 817,
-					"Galway" : 547,
-					"Ilac Centre Dublin" : 394,
-					"Jervis Street Dublin" : 397,
-					"Kilkenny" : 201,
-					"Killarney (Extra)" : 899,
-					"Letterkenny (Extra)" : 793,
-					"Liffey Valley (Extra)" : 687,
-					"Limerick Childers Road (Extra)" : 915,
-					"Limerick Cruises Street" : 393,
-					"Limerick The Crescent" : 583,
-					"Longford (Extra)" : 880,
-					"Monaghan (Extra)" : 945,
-					"Naas (Extra)" : 4218,
-					"Navan" : 832,
-					"Nutgrove" : 392,
-					"Omni Park Dublin (Extra)" : 4150,
-					"Portlaoise (Extra)" : 4125,
-					"Sligo (Extra)" : 4146,
-					"St Stephens Green Dublin" : 584,
-					"Swords (Extra)" : 581,
-					"Tallaght" : 395,
-					"Tralee (Extra)" : 11,
-					"Tullamore (Extra)" : 879,
-					"Waterford" : 396,
-					"Wexford (Extra)" : 826
-        };

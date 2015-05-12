@@ -12,6 +12,10 @@
 /* Basic                                                                         */
 /*********************************************************************************/
 
+.hide{
+	display: none;
+}
+
 .notVisibleOnMobile
 {
 	display: table;
