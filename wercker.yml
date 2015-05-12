@@ -14,3 +14,17 @@ build:
         code: |
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
+deploy:
+  steps:
+    - add-to-know_hosts:
+      hostname: 188.226.243.167
+    - mktemp:
+      envvar: PRIVATEKEY_PATH
+    - create-file:
+      name: write key
+      filename: $PRIVATEKEY_PATH
+      content: $PRIVATE_KEY
+      overwrite: true
+      hide-from-log: true
+    - script:
+      code: ssh -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no brian-digital-ocean root@188.226.243.167 docker restart check-argos

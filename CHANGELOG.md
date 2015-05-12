@@ -23,4 +23,5 @@
 - Added spinner when searching (brian.lough)
 - Fixed some of the spacing issues in CSS (brian.lough)
 - Updated search result page (brian.lough)
-- Decoding search string before adding it to searchBox - #4 (brian.lough)
+- #4 : decoding search string before adding it to searchBox (brian.lough)
+- #5 : automatic deployment on push to repository (conor.fennell)
