@@ -25,3 +25,4 @@
 - Updated search result page (brian.lough)
 - #4 : decoding search string before adding it to searchBox (brian.lough)
 - #5 : automatic deployment on push to repository (conor.fennell)
+- Fixed issue where it was trying to get stock of an item with bad data (brian.lough)

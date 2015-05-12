@@ -166,8 +166,11 @@ function onStoreSelectChange()
     for(var i =0; i < itemsList.length; i++ )
     {
       var item = itemsList[i];
-      var productId = item.productId.replace("/", "");
-      filterSearchRowByStockStatus(productId, storeId)
+      if(isValidItemData(item))
+      {
+        var productId = item.productId.replace("/", "");
+        filterSearchRowByStockStatus(productId, storeId)
+      }
     }
   }
   else
