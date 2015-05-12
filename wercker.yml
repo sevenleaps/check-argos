@@ -16,7 +16,7 @@ build:
           echo "npm version $(npm -v) running"
 deploy:
   steps:
-    - add-to-know_hosts:
+    - add-to-known_hosts:
         hostname: 188.226.243.167
     - mktemp:
         envvar: PRIVATEKEY_PATH
