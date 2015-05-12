@@ -30,7 +30,7 @@ deploy:
         name: git pull
         code: >
           ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167
-          && cd /home/vagrant/repos/check-argos
+          cd /home/vagrant/repos/check-argos
           && git pull
           && npm install
           && docker restart check-argos
