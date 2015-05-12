@@ -22,3 +22,4 @@
 - Fixed crashing bug when search returned no results (brian.lough)
 - Added spinner when searching (brian.lough)
 - Fixed some of the spacing issues in CSS (brian.lough)
+- Updated search result page (brian.lough)

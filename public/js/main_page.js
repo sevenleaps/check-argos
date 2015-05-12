@@ -71,6 +71,12 @@ function displayMessage(message)
   resultsDiv.appendChild(div);
 }
 
+function searchBoxSubmitWithReturnFalse(searchQuery)
+{
+  searchBoxSubmit(searchQuery);
+  return false;
+}
+
 function searchBoxSubmit(searchQuery)
 {
   event.preventDefault();

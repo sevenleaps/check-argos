@@ -22,6 +22,16 @@
 	display: none;
 }
 
+.hideCellOnMobile
+{
+	display: cell;
+}
+
+.itemProductImage
+{
+	width: 110px !important;
+}
+
 	body
 	{
 		background: #F8F8F8;
