@@ -35,3 +35,6 @@ deploy:
     - script:
         name: restart docker image check-argos
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 docker restart check-argos
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        webhook_url: $SLACK_WEBHOOK_URL
