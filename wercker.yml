@@ -27,4 +27,4 @@ deploy:
         overwrite: true
         hide-from-log: true
     - script:
-        code: ssh -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no brian-digital-ocean root@188.226.243.167 docker restart check-argos
+        code: ssh -i $PRIVATEKEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=no root@188.226.243.167 docker restart check-argos
