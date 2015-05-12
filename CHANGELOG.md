@@ -23,3 +23,4 @@
 - Added spinner when searching (brian.lough)
 - Fixed some of the spacing issues in CSS (brian.lough)
 - Updated search result page (brian.lough)
+- Decoding search string before adding it to searchBox - #4 (brian.lough)

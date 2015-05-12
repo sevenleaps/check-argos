@@ -14,7 +14,7 @@ function initPage()
 
 				if(params.search != null)
 				{
-          document.getElementById('searchBox').value = params.search;
+          document.getElementById('searchBox').value = decodeURI(params.search);
           searchBoxSubmit(params.search)
 				}
 			}
