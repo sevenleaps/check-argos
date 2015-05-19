@@ -1,7 +1,11 @@
 function searchByQuery (searchQuery)
 {
-  displaySpinner();
   window.history.pushState(null, null, '?search=' + searchQuery);
+  searchByQueryNoHistory(searchQuery);
+}
+
+function searchByQueryNoHistory(searchQuery){
+  displaySpinner();
   var myRequest = new XMLHttpRequest();
   myRequest.onload = function(){ handleResponseFromSearch(myRequest.response);};
   myRequest.open("GET", "search/simple?q=" +  searchQuery);

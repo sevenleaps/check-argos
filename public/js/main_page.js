@@ -1,27 +1,29 @@
 function initPage()
 {
-  document.getElementById('search').addEventListener('submit', function() {searchBoxSubmit(this.childNodes[1].value)});
+  document.getElementById('searchBox').addEventListener('keypress', function(event) {
+    if (!event){
+      event = window.event;
+    }
+    var keyCode = event.keyCode || event.which;
+    if (keyCode == '13'){
+      // Enter pressed
+      searchBoxSubmit(this.value);
+    }
+  });
 
   try{
-				var prmstr = window.location.search.substr(1);
-				var prmarr = prmstr.split ("&");
-				var params = {};
+    params = retrieveParams();
 
-				for ( var i = 0; i < prmarr.length; i++) {
-				    var tmparr = prmarr[i].split("=");
-				    params[tmparr[0]] = tmparr[1];
-				}
+		if(params.search != null)
+		{
+      document.getElementById('searchBox').value = decodeURI(params.search);
+      searchBoxSubmit(params.search)
+		}
+	}
+	catch(err)
+	{
 
-				if(params.search != null)
-				{
-          document.getElementById('searchBox').value = decodeURI(params.search);
-          searchBoxSubmit(params.search)
-				}
-			}
-			catch(err)
-			{
-
-			}
+	}
 }
 
 function displaySpinner()
@@ -79,7 +81,43 @@ function searchBoxSubmitWithReturnFalse(searchQuery)
 
 function searchBoxSubmit(searchQuery)
 {
-  event.preventDefault();
+  //event.preventDefault();
   searchByQuery(searchQuery);
   document.activeElement.blur();
 }
+
+function manipulateHistory(event)
+{
+  if(!window.location.search){
+    if(document.getElementById('results')){
+      document.getElementById('searchBox').value = "";
+      displayMessage("");
+    }
+  }else{
+    params = retrieveParams();
+
+    if(params.search != null)
+    {
+      document.getElementById('searchBox').value = decodeURI(params.search);
+      searchByQueryNoHistory(params.search);
+    }
+  }
+}
+
+function retrieveParams(){
+  var prmstr = window.location.search.substr(1);
+  var prmarr = prmstr.split ("&");
+  var params = {};
+
+  for ( var i = 0; i < prmarr.length; i++) {
+      var tmparr = prmarr[i].split("=");
+      params[tmparr[0]] = tmparr[1];
+  }
+  return params;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  window.addEventListener('popstate', function(event) {
+    manipulateHistory(event);
+  });
+});
