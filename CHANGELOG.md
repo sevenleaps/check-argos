@@ -27,3 +27,5 @@
 - #5 : automatic deployment on push to repository (conor.fennell)
 - Fixed issue where it was trying to get stock of an item with bad data (brian.lough)
 - #12: added slack notification on build/deployment status (conor.fennell)
+- Added divider between filters and product list (brian.lough)
+- Added some error handling on service side (brian.lough)

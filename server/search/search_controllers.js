@@ -9,19 +9,26 @@
   };
 
   function search(req, res, next) {
-    if(req.query && req.query.q)
-    {
-      if(ProductsUtil.isValidProductId(req.query.q))
-      {
-        searchProductNumber(req, res, next);
-      }
-      else
-      {
-        //should we check was this an effort at a productId?
-        req.query.searchString = req.query.q;
-        textSearch(req, res, next);
 
+    try{
+      if(req.query && req.query.q)
+      {
+        if(ProductsUtil.isValidProductId(req.query.q))
+        {
+          searchProductNumber(req, res, next);
+        }
+        else
+        {
+          //should we check was this an effort at a productId?
+          req.query.searchString = req.query.q;
+          textSearch(req, res, next);
+
+        }
       }
+    }
+    catch(ex){
+      console.error(ex);
+      res.status(500).send('Error with request');
     }
   }
 
@@ -45,34 +52,39 @@
   }
 
   function textSearch(req, res, next) {
-
-    if(!validateParams(req.query))
-    {
-      res.status(400);
-    }
-    else
-    {
-      var url = buildSearchUrl(req.query);
-
-      request(url, function onResponse(error, response, body)
+    try{
+      if(!validateParams(req.query))
       {
+        res.status(400);
+      }
+      else
+      {
+        var url = buildSearchUrl(req.query);
 
-        if(ProductsUtil.isListOfProductsPage(body))
+        request(url, function onResponse(error, response, body)
         {
-          var productsJson = ProductsUtil.getProductsFromHtml(body);
-          res.status(200).json(productsJson);
-        }
-        else if(!ProductsUtil.isFoundNoProductsPage(body))
-        {
-          var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
-          res.status(200).json(productInfoJson);
-        }
-        else
-        {
-          res.status(200).json(generateError("No Results"));
-        }
-      });
 
+          if(ProductsUtil.isListOfProductsPage(body))
+          {
+            var productsJson = ProductsUtil.getProductsFromHtml(body);
+            res.status(200).json(productsJson);
+          }
+          else if(!ProductsUtil.isFoundNoProductsPage(body))
+          {
+            var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
+            res.status(200).json(productInfoJson);
+          }
+          else
+          {
+            res.status(200).json(generateError("No Results"));
+          }
+        });
+
+      }
+    }
+    catch(ex){
+      console.error(ex);
+      res.status(500).send('Error with request');
     }
 
   }

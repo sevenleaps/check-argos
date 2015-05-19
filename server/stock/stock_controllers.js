@@ -7,12 +7,19 @@
   };
 
   function checkStock(req, res, next) {
-    checkStockStatus(req, res, next, true);
+    try{
+      checkStockStatus(req, res, next, true);
+    }
+    catch(ex){
+      console.error(ex);
+      res.status(500).send('Error with request');
+    }
   }
 
   function checkStockStatus(req, res, next, retry) {
     var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
-
+    var num = null;
+    var it = num[0];
     request(url, function onResponse(error, response, body) {
       var stockStatus = {
         productId: req.params.productId,

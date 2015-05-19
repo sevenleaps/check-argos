@@ -17,6 +17,7 @@ function generateFilterSection(resultsDiv)
 {
   var outerRow = document.createElement('DIV');
   outerRow.setAttribute("class", "row");
+  outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
 
   var storeSelecterDiv = document.createElement('DIV');
   storeSelecterDiv.setAttribute("class", "12u");
