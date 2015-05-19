@@ -45,7 +45,7 @@
       }
       else
       {
-        //invalid product page
+        res.status(404).json({});
       }
     });
 
