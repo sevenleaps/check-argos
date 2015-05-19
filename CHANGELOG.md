@@ -29,3 +29,4 @@
 - #12: added slack notification on build/deployment status (conor.fennell)
 - Added divider between filters and product list (brian.lough)
 - Added some error handling on service side (brian.lough)
+- Removed dev code that purposely caused a crash (brian.lough)
