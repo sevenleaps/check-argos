@@ -7,14 +7,95 @@ function displaySearchResultPage(items)
 
   generateFilterSection(resultsDiv);
   generateSearchResultsTable(items, resultsDiv);
+
+  populatePreviouslySearchedFilters();
+}
+
+function populatePreviouslySearchedFilters()
+{
+
 }
 
 var itemsList = null;
 
 var storeDropDownId = "storeDropDown";
+var catagoriesDropDownId = "catagoriesDropDown";
+var minPriceId = "minPriceInput";
+var maxPriceId = "maxPriceInput";
 
 function generateFilterSection(resultsDiv)
 {
+  var searchRow = document.createElement('DIV');
+  searchRow.setAttribute("class", "row");
+
+  var minPriceDiv = document.createElement('DIV');
+  minPriceDiv.setAttribute("class", "3u");
+  minPriceDiv.setAttribute("style", "text-align: center;");
+
+  var minPriceText = document.createElement('span');
+  minPriceText.setAttribute("style", "padding-right: 0.5em;");
+  minPriceText.innerHTML = "Min Price";
+
+  var minPriceInput = document.createElement("input");
+  minPriceInput.type = "number";
+  minPriceInput.setAttribute("name", "minPrice");
+  minPriceInput.setAttribute("id", minPriceId);
+  minPriceInput.setAttribute("style", "width: 4em;");
+
+  minPriceDiv.appendChild(minPriceText);
+  minPriceDiv.appendChild(minPriceInput);
+
+  var maxPriceDiv = document.createElement('DIV');
+  maxPriceDiv.setAttribute("class", "3u");
+  maxPriceDiv.setAttribute("style", "text-align: center;");
+
+  var maxPriceText = document.createElement('span');
+  maxPriceText.setAttribute("style", "padding-right: 0.5em;");
+  maxPriceText.innerHTML = "Max Price";
+
+  var maxPriceInput = document.createElement("input");
+  maxPriceInput.type = "number";
+  maxPriceInput.setAttribute("name", "maxPrice");
+  maxPriceInput.setAttribute("id", maxPriceId);
+  maxPriceInput.setAttribute("style", "width: 4em;");
+
+  maxPriceDiv.appendChild(maxPriceText);
+  maxPriceDiv.appendChild(maxPriceInput);
+
+  searchRow.appendChild(minPriceDiv);
+  searchRow.appendChild(maxPriceDiv);
+
+
+
+  var catagoriesDiv = document.createElement('DIV');
+  catagoriesDiv.setAttribute("class", "3u");
+  catagoriesDiv.setAttribute("style", "text-align: center;");
+
+  var catagoriesDropDown = generateCatagoriesDropDown();
+  catagoriesDropDown.setAttribute("id", catagoriesDropDownId);
+  //catagoriesDropDown.onchange = function(){ onStoreSelectChange();};
+
+  catagoriesDiv.appendChild(catagoriesDropDown);
+  searchRow.appendChild(catagoriesDiv);
+
+  var searchButtonDiv = document.createElement('DIV');
+  searchButtonDiv.setAttribute("class", "3u");
+  searchButtonDiv.setAttribute("style", "text-align: center;");
+
+
+  var searchButton = document.createElement("input");
+  searchButton.type = "button";
+  searchButton.value = "Update";
+  searchButton.onclick = function() {
+      updateFilterSearch();
+    };
+
+  searchButtonDiv.appendChild(searchButton);
+  searchRow.appendChild(searchButtonDiv);
+
+
+
+
   var outerRow = document.createElement('DIV');
   outerRow.setAttribute("class", "row");
   outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
@@ -29,6 +110,8 @@ function generateFilterSection(resultsDiv)
 
   storeSelecterDiv.appendChild(storeDropDown);
   outerRow.appendChild(storeSelecterDiv);
+
+  resultsDiv.appendChild(searchRow);
   resultsDiv.appendChild(outerRow);
 }
 
@@ -142,6 +225,33 @@ function generateSearchResultsTable(items, resultsDiv)
   div.appendChild(table);
   outerRow.appendChild(div);
   resultsDiv.appendChild(outerRow);
+}
+
+function updateFilterSearch()
+{
+  var minPrice = document.getElementById(minPriceId).value;
+  if( minPrice === "")
+  {
+    minPrice = null;
+  }
+
+  var maxPrice = document.getElementById(maxPriceId).value;
+  if( maxPrice === "")
+  {
+    maxPrice = null;
+  }
+
+  var catagoriesDropDown = document.getElementById(catagoriesDropDownId);
+  var catagoryId = catagoriesDropDown.options[catagoriesDropDown.selectedIndex].value;
+  var catagoryName = null;
+  if(catagoryId !== 0)
+  {
+    catagoryName = getCatagoriesList()[catagoryId];
+  }
+
+  var query = document.getElementById("searchBox").value;
+
+  advancedSearch(query, minPrice, maxPrice, catagoryId)
 }
 
 function isValidItemData(itemJson)

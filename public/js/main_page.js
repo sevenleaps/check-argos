@@ -15,7 +15,14 @@ function initPage()
 				if(params.search != null)
 				{
           document.getElementById('searchBox').value = decodeURI(params.search);
-          searchBoxSubmit(params.search)
+
+          var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
+          var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
+          var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
+
+          //will default to a simple search if needed
+          advancedSearch (params.search, minPrice, maxPrice, catagoryId)
+
 				}
 			}
 			catch(err)

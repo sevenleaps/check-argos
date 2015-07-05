@@ -140,7 +140,7 @@
 
       url = url + "&r_001=2|Price|" + params.minPrice + "+%3C%3D++%3C%3D+" + params.maxPrice + "|2";
     }
-
+    console.log(url);
     return url;
 
   }
