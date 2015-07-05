@@ -1,34 +1,36 @@
 function initPage()
 {
-  document.getElementById('search').addEventListener('submit', function() {searchBoxSubmit(this.childNodes[1].value)});
+  document.getElementById('searchBox').addEventListener('keypress', function(event) {
+    if (!event){
+      event = window.event;
+    }
+    var keyCode = event.keyCode || event.which;
+    if (keyCode == '13'){
+      // Enter pressed
+      searchBoxSubmit(this.value);
+    }
+  });
 
   try{
-				var prmstr = window.location.search.substr(1);
-				var prmarr = prmstr.split ("&");
-				var params = {};
+    params = retrieveParams();
 
-				for ( var i = 0; i < prmarr.length; i++) {
-				    var tmparr = prmarr[i].split("=");
-				    params[tmparr[0]] = tmparr[1];
-				}
+		if(params.search != null)
+		{
+      document.getElementById('searchBox').value = decodeURI(params.search);
 
-				if(params.search != null)
-				{
-          document.getElementById('searchBox').value = decodeURI(params.search);
+      var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
+      var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
+      var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
 
-          var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
-          var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
-          var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
+      //will default to a simple search if needed
+      advancedSearch (params.search, minPrice, maxPrice, catagoryId)
 
-          //will default to a simple search if needed
-          advancedSearch (params.search, minPrice, maxPrice, catagoryId)
+		}
+	}
+	catch(err)
+	{
 
-				}
-			}
-			catch(err)
-			{
-
-			}
+	}
 }
 
 function displaySpinner()
@@ -86,7 +88,43 @@ function searchBoxSubmitWithReturnFalse(searchQuery)
 
 function searchBoxSubmit(searchQuery)
 {
-  event.preventDefault();
+  //event.preventDefault();
   searchByQuery(searchQuery);
   document.activeElement.blur();
 }
+
+function manipulateHistory(event)
+{
+  if(!window.location.search){
+    if(document.getElementById('results')){
+      document.getElementById('searchBox').value = "";
+      displayMessage("");
+    }
+  }else{
+    params = retrieveParams();
+
+    if(params.search != null)
+    {
+      document.getElementById('searchBox').value = decodeURI(params.search);
+      searchByQueryNoHistory(params.search);
+    }
+  }
+}
+
+function retrieveParams(){
+  var prmstr = window.location.search.substr(1);
+  var prmarr = prmstr.split ("&");
+  var params = {};
+
+  for ( var i = 0; i < prmarr.length; i++) {
+      var tmparr = prmarr[i].split("=");
+      params[tmparr[0]] = tmparr[1];
+  }
+  return params;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  window.addEventListener('popstate', function(event) {
+    manipulateHistory(event);
+  });
+});

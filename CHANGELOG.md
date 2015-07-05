@@ -30,4 +30,5 @@
 - Added divider between filters and product list (brian.lough)
 - Added some error handling on service side (brian.lough)
 - Removed dev code that purposely caused a crash (brian.lough)
+- respond with 404 when product not found (conor.fennell)
 - Work on advanced search UI (brian.lough)
