@@ -11,12 +11,18 @@ function initPage()
     }
   });
 
+  // $('body').css('min-height',$(document).height() + $('#searchBox').offset().top);
+  //
+  // $('#searchBox').on('focus', function() {
+  //   document.body.scrollTop = $(this).offset().top;
+  // });
+
   try{
     params = retrieveParams();
 
 		if(params.search != null)
 		{
-      document.getElementById('searchBox').value = decodeURI(params.search);
+      populateSearchBox(decodeURI(params.search));
 
       var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
       var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
@@ -24,6 +30,7 @@ function initPage()
 
       //will default to a simple search if needed
       advancedSearch (params.search, minPrice, maxPrice, catagoryId);
+      hideHomeScreen();
 
 		}
 	}
@@ -89,6 +96,8 @@ function searchBoxSubmitWithReturnFalse(searchQuery)
 function searchBoxSubmit(searchQuery)
 {
   //event.preventDefault();
+  populateSearchBox(searchQuery);
+  hideHomeScreen();
   searchByQuery(searchQuery);
   document.activeElement.blur();
 }
@@ -97,7 +106,7 @@ function manipulateHistory(event)
 {
   if(!window.location.search){
     if(document.getElementById('results')){
-      document.getElementById('searchBox').value = "";
+      populateSearchBox("");
       displayMessage("");
     }
   }else{
@@ -105,10 +114,17 @@ function manipulateHistory(event)
 
     if(params.search !== null)
     {
-      document.getElementById('searchBox').value = decodeURI(params.search);
+      populateSearchBox(decodeURI(params.search));
       searchByQueryNoHistory(params.search);
     }
   }
+}
+
+function populateSearchBox(value)
+{
+  $('input[name=search]').each(function(){
+    $(this).val(value);
+  });
 }
 
 function retrieveParams(){
@@ -121,6 +137,27 @@ function retrieveParams(){
       params[tmparr[0]] = tmparr[1];
   }
   return params;
+}
+
+function scrollToSearchBar()
+{
+  $('html, body').animate({
+        scrollTop: $("#searchBox").offset().top
+    }, 2000);
+}
+
+function hideHomeScreen(){
+  $( "#homeScreen" ).addClass( "hidden" );
+  $( "#navbarSearchForm" ).removeClass( "hidden" );
+}
+
+function showHomeScreen(){
+  $( "#homeScreen" ).removeClass( "hidden" );
+  $( "#navbarSearchForm" ).addClass( "hidden" );
+  $( "#results" ).html("");
+  populateSearchBox("");
+
+  return false;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
