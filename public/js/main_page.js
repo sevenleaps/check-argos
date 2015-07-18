@@ -89,6 +89,7 @@ function displayMessage(message)
 
 function searchBoxSubmitWithReturnFalse(searchQuery)
 {
+  ga('send', 'event', 'box', 'searched', searchQuery);
   searchBoxSubmit(searchQuery);
   return false;
 }

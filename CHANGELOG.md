@@ -33,3 +33,5 @@
 - respond with 404 when product not found (conor.fennell)
 - Work on advanced search UI (brian.lough)
 - added error handling library (conor.fennell)
+- added google analytics (conor.fennell)
+- Updated UI to bootstrap (brian.lough)
