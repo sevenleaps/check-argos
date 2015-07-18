@@ -1,7 +1,7 @@
 function generateCatagoriesDropDown()
 {
   var select = document.createElement("select");
-
+  select.setAttribute("class", "form-control");
   var option = document.createElement("option");
   option.text = "-- All Sections --";
   option.value = 0;

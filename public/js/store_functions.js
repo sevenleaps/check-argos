@@ -1,9 +1,9 @@
 function generateStoreDropDown()
 {
   var select = document.createElement("select");
-
+  select.setAttribute("class", "form-control");
   var option = document.createElement("option");
-  option.text = "-- No Store --";
+  option.text = "-- Check store for Stock --";
   option.value = 0;
   select.add(option);
 

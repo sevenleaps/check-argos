@@ -29,37 +29,43 @@ function generateFilterSection(resultsDiv)
   searchRow.setAttribute("class", "row");
 
   var minPriceDiv = document.createElement('DIV');
-  minPriceDiv.setAttribute("class", "3u");
+  minPriceDiv.setAttribute("class", "form-group col-lg-3 col-md-3 col-sm-6 col-xs-6");
   minPriceDiv.setAttribute("style", "text-align: center;");
 
-  var minPriceText = document.createElement('span');
-  minPriceText.setAttribute("style", "padding-right: 0.5em;");
-  minPriceText.innerHTML = "Min Price";
+  // var minPriceText = document.createElement('label');
+  // minPriceText.setAttribute("class", "control-label");
+  // minPriceText.setAttribute("style", "padding-right: 0.5em;");
+  // minPriceText.setAttribute("for", "minPriceId");
+  // minPriceText.innerHTML = "Min Price";
 
   var minPriceInput = document.createElement("input");
   minPriceInput.type = "number";
+  minPriceInput.setAttribute("class", "form-control");
   minPriceInput.setAttribute("name", "minPrice");
   minPriceInput.setAttribute("id", minPriceId);
-  minPriceInput.setAttribute("style", "width: 4em;");
+  minPriceInput.setAttribute("placeholder", "Min Price");
 
-  minPriceDiv.appendChild(minPriceText);
+  // minPriceDiv.appendChild(minPriceText);
   minPriceDiv.appendChild(minPriceInput);
 
   var maxPriceDiv = document.createElement('DIV');
-  maxPriceDiv.setAttribute("class", "3u");
+  maxPriceDiv.setAttribute("class", "form-group col-lg-3 col-md-3 col-sm-6 col-xs-6");
   maxPriceDiv.setAttribute("style", "text-align: center;");
 
-  var maxPriceText = document.createElement('span');
-  maxPriceText.setAttribute("style", "padding-right: 0.5em;");
-  maxPriceText.innerHTML = "Max Price";
+  // var maxPriceText = document.createElement('label');
+  // maxPriceText.setAttribute("class", "control-label");
+  // maxPriceText.setAttribute("style", "padding-right: 0.5em;");
+  // maxPriceText.setAttribute("for", "minPriceId");
+  // maxPriceText.innerHTML = "Max Price";
 
   var maxPriceInput = document.createElement("input");
   maxPriceInput.type = "number";
+  maxPriceInput.setAttribute("class", "form-control");
   maxPriceInput.setAttribute("name", "maxPrice");
   maxPriceInput.setAttribute("id", maxPriceId);
-  maxPriceInput.setAttribute("style", "width: 4em;");
+  maxPriceInput.setAttribute("placeholder", "Max Price");
 
-  maxPriceDiv.appendChild(maxPriceText);
+  //maxPriceDiv.appendChild(maxPriceText);
   maxPriceDiv.appendChild(maxPriceInput);
 
   searchRow.appendChild(minPriceDiv);
@@ -68,7 +74,7 @@ function generateFilterSection(resultsDiv)
 
 
   var catagoriesDiv = document.createElement('DIV');
-  catagoriesDiv.setAttribute("class", "3u");
+  catagoriesDiv.setAttribute("class", "col-lg-3 col-md-3 col-sm-6 col-xs-6");
   catagoriesDiv.setAttribute("style", "text-align: center;");
 
   var catagoriesDropDown = generateCatagoriesDropDown();
@@ -79,11 +85,12 @@ function generateFilterSection(resultsDiv)
   searchRow.appendChild(catagoriesDiv);
 
   var searchButtonDiv = document.createElement('DIV');
-  searchButtonDiv.setAttribute("class", "3u");
+  searchButtonDiv.setAttribute("class", "col-lg-3 col-md-3 col-sm-6 col-xs-6");
   searchButtonDiv.setAttribute("style", "text-align: center;");
 
 
   var searchButton = document.createElement("input");
+  searchButton.setAttribute("class", "btn btn-primary");
   searchButton.type = "button";
   searchButton.value = "Update";
   searchButton.onclick = function() {
@@ -93,16 +100,13 @@ function generateFilterSection(resultsDiv)
   searchButtonDiv.appendChild(searchButton);
   searchRow.appendChild(searchButtonDiv);
 
-
-
-
   var outerRow = document.createElement('DIV');
   outerRow.setAttribute("class", "row");
   outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
 
   var storeSelecterDiv = document.createElement('DIV');
-  storeSelecterDiv.setAttribute("class", "12u");
-  storeSelecterDiv.setAttribute("style", "text-align: center;");
+  storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
+  storeSelecterDiv.setAttribute("style", "text-align: center; padding-top:10px");
 
   var storeDropDown = generateStoreDropDown();
   storeDropDown.setAttribute("id", storeDropDownId);
@@ -121,10 +125,9 @@ function generateSearchResultsTable(items, resultsDiv)
   outerRow.setAttribute("class", "row");
 
   var div = document.createElement('DIV');
-  div.setAttribute("class", "12u");
 
   var table = document.createElement("TABLE");
-  table.setAttribute("class", "default");
+  table.setAttribute("class", "table table-striped");
 
   var headerRow = document.createElement('tr');
   headerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
@@ -141,6 +144,7 @@ function generateSearchResultsTable(items, resultsDiv)
   var priceHeaderCell = document.createElement("th");
   priceHeaderCell.setAttribute("style", "text-align: center;");
   priceHeaderCell.innerHTML = "Price (€)";
+  priceHeaderCell.setAttribute("data-sort-method", "numeric;");
 
   var stockHeaderCell = document.createElement("th");
   stockHeaderCell.setAttribute("style", "text-align: center;");
@@ -218,11 +222,13 @@ function generateSearchResultsTable(items, resultsDiv)
       row.appendChild(itemPriceCell);
       row.appendChild(stockStatusCell);
 
-      table.appendChild(row);
+      tbody.appendChild(row);
+      table.appendChild(tbody);
     }
   }
 
   div.appendChild(table);
+  new Tablesort(table);
   outerRow.appendChild(div);
   resultsDiv.appendChild(outerRow);
 }
