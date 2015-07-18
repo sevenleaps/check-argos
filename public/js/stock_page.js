@@ -62,7 +62,8 @@ function generateMobileStockTable(item, resultsDiv)
   var rowCount = 0;
 
   var table = document.createElement("TABLE");
-  table.setAttribute("class", "default visibleOnMobile");
+  table.setAttribute("class", "table table-striped visible-sm visible-xs");
+  var tableBody = document.createElement("TBODY");
 
   var stores = getStoreList();
   for(var key in stores)
@@ -70,34 +71,30 @@ function generateMobileStockTable(item, resultsDiv)
     if (stores.hasOwnProperty(key))
     {
 
-      rowCount++;
       row = document.createElement("tr");
-      if(rowCount % 2 == 0)
-      {
-        row.setAttribute("style", "background-color:#EFEFEF");
-      }
 
       var storeName = key;
       var storeId = stores[key];
 
       var storeNameCell = document.createElement("td");
+      storeNameCell.setAttribute("class", "storeNameCol");
       storeNameCell.innerHTML = storeName;
       var stockStatusCell = document.createElement("td");
+      stockStatusCell.setAttribute("class", "stockStatusCol");
       stockStatusCell.setAttribute("name", "store" + storeId);
 
       row.appendChild(storeNameCell);
       row.appendChild(stockStatusCell);
-
-      table.appendChild(row);
+      tableBody.appendChild(row);
 
     }
   }
 
   if(row != null)
   {
-    table.appendChild(row);
+    tableBody.appendChild(row);
   }
-
+  table.appendChild(tableBody);
   resultsDiv.appendChild(table);
 }
 
@@ -108,7 +105,8 @@ function generateStockTable(item, resultsDiv)
   var rowCount = 0;
 
   var table = document.createElement("TABLE");
-  table.setAttribute("class", "default notVisibleOnMobile");
+  table.setAttribute("class", "table table-striped hidden-sm hidden-xs");
+  var tableBody = document.createElement("TBODY");
 
   var stores = getStoreList();
   for(var key in stores)
@@ -117,20 +115,17 @@ function generateStockTable(item, resultsDiv)
     {
       if(row == null)
       {
-        rowCount++;
         row = document.createElement("tr");
-        if(rowCount % 2 == 0)
-        {
-          row.setAttribute("style", "background-color:#EFEFEF");
-        }
       }
 
       var storeName = key;
       var storeId = stores[key];
 
       var storeNameCell = document.createElement("td");
+      storeNameCell.setAttribute("class", "storeNameCol");
       storeNameCell.innerHTML = storeName;
       var stockStatusCell = document.createElement("td");
+      stockStatusCell.setAttribute("class", "stockStatusCol");
       stockStatusCell.setAttribute("name", "store" + storeId);
 
       row.appendChild(storeNameCell);
@@ -138,7 +133,7 @@ function generateStockTable(item, resultsDiv)
 
       if(leftStorePopulated)
       {
-        table.appendChild(row);
+        tableBody.appendChild(row);
         leftStorePopulated = false;
         row = null;
       }
@@ -152,9 +147,9 @@ function generateStockTable(item, resultsDiv)
 
   if(row != null)
   {
-    table.appendChild(row);
+    tableBody.appendChild(row);
   }
-
+  table.appendChild(tableBody);
   resultsDiv.appendChild(table);
 }
 
@@ -201,18 +196,18 @@ function generateStoreDiv(storeName, storeId)
 function generateProductInfoRow(item)
 {
   var row = document.createElement('DIV');
-  row.setAttribute("class", "row");
-  row.setAttribute("style", "border-bottom:solid 1px rgba(0, 0, 0, 0.1); padding-bottom:1em;");
+  row.setAttribute("class", "row vertical-align");
+  row.setAttribute("style", "padding-bottom:1em;");
 
   var imageDiv = document.createElement('DIV');
-  imageDiv.setAttribute("class", "6u");
+  imageDiv.setAttribute("class", "col-md-4 col-lg-4");
   imageDiv.setAttribute("style", "text-align: center;");
   var img = new Image();
   img.src = item.productImageUrl;
   imageDiv.appendChild(img);
 
   var productInfoDiv = document.createElement('DIV');
-  productInfoDiv.setAttribute("class", "6u");
+  productInfoDiv.setAttribute("class", "col-md-4 col-lg-4");
   productInfoDiv.setAttribute("style", "text-align: center;");
 
   var productId = item.productId.replace("/", "");

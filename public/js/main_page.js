@@ -23,7 +23,7 @@ function initPage()
       var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
 
       //will default to a simple search if needed
-      advancedSearch (params.search, minPrice, maxPrice, catagoryId)
+      advancedSearch (params.search, minPrice, maxPrice, catagoryId);
 
 		}
 	}
@@ -103,7 +103,7 @@ function manipulateHistory(event)
   }else{
     params = retrieveParams();
 
-    if(params.search != null)
+    if(params.search !== null)
     {
       document.getElementById('searchBox').value = decodeURI(params.search);
       searchByQueryNoHistory(params.search);
