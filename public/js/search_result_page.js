@@ -13,7 +13,36 @@ function displaySearchResultPage(items)
 
 function populatePreviouslySearchedFilters()
 {
+  try{
+    params = retrieveParams();
 
+    if(params.search != null)
+    {
+      if(params.minPrice != null || params.minPrice != undefined)
+      {
+        document.getElementById(minPriceId).value = params.minPrice;
+      }
+      if(params.maxPrice != null || params.maxPrice != undefined)
+      {
+        document.getElementById(maxPriceId).value = params.maxPrice;
+      }
+      if(params.catagoryId != null || params.catagoryId != undefined)
+      {
+        if(params.catagoryId != 0)
+        {
+          $("#" + catagoriesDropDownId).val(params.catagoryId).attr("selected", "selected");
+          $("#" + catagoriesDropDownId).selectmenu('refresh');
+          // var catagoriesDropDown = document.getElementById(catagoriesDropDownId);
+          // catagoriesDropDown.selectedIndex = params.catagoryId;
+          // catagoriesDropDown.value = getCatagoriesList()[params.catagoryId];
+        }
+      }
+    }
+  }
+  catch(err)
+  {
+
+  }
 }
 
 var itemsList = null;

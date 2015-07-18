@@ -172,32 +172,6 @@ function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
   return row;
 }
 
-function generateStoreDiv(storeName, storeId)
-{
-  var storeDiv = document.createElement('DIV');
-  storeDiv.setAttribute("class", "6u");
-  storeDiv.setAttribute("style", "text-align: center;");
-  //storeDiv.setAttribute("id", "store" + storeId);
-  var table = document.createElement("TABLE");
-  table.setAttribute("class", "default");
-  var row = document.createElement("tr");
-  var storeNameCell = document.createElement("td");
-  storeNameCell.innerHTML = storeName;
-  var stockStatusCell = document.createElement("td");
-  stockStatusCell.setAttribute("id", "store" + storeId);
-  stockStatusCell.innerHTML = "Checking...";
-
-  row.appendChild(storeNameCell);
-  row.appendChild(stockStatusCell);
-
-  table.appendChild(row);
-
-  storeDiv.appendChild(table);
-
-  return storeDiv;
-
-}
-
 function generateProductInfoRow(item)
 {
   var row = document.createElement('DIV');
