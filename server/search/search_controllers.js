@@ -1,7 +1,8 @@
 (function () {
   'use strict';
-  var request = require('request')
-  var ProductsUtil = require('../../lib/util/index').Products
+  var request = require('request');
+  var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
+  var ProductsUtil = require('../../lib/util/index').Products;
 
   module.exports = exports = {
     textSearch : textSearch,
@@ -32,7 +33,7 @@
     }
   }
 
-  function searchProductNumber(req, res, next){
+  function searchProductNumber(req, res, next) {
     var productNum = ProductsUtil.cleanUpProductId(req.query.q);
     ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body)
     {
@@ -61,13 +62,18 @@
       {
         var url = buildSearchUrl(req.query);
 
-        request(url, function onResponse(error, response, body)
-        {
+        request(url, function onResponse(error, response, body) {
+          if (error) {
+            return next(new ArgosResponseError(error));
+          }
 
-          if(ProductsUtil.isListOfProductsPage(body))
-          {
-            var productsJson = ProductsUtil.getProductsFromHtml(body);
-            res.status(200).json(productsJson);
+          if (ProductsUtil.isListOfProductsPage(body)) {
+            try {
+              var productsJson = ProductsUtil.getProductsFromHtml(body);
+              res.status(200).json(productsJson);
+             } catch (error) {
+               return next(new ArgosResponseError(error));
+             }
           }
           else if(!ProductsUtil.isFoundNoProductsPage(body))
           {
