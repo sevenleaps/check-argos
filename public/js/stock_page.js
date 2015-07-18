@@ -81,7 +81,10 @@ function generateMobileStockTable(item, resultsDiv)
       storeNameCell.innerHTML = storeName;
       var stockStatusCell = document.createElement("td");
       stockStatusCell.setAttribute("class", "stockStatusCol");
-      stockStatusCell.setAttribute("name", "store" + storeId);
+      var stockStatusContent = document.createElement('DIV');
+      stockStatusContent.setAttribute("id", "store" + storeId);
+
+      stockStatusCell.appendChild(stockStatusContent);
 
       row.appendChild(storeNameCell);
       row.appendChild(stockStatusCell);
@@ -126,8 +129,10 @@ function generateStockTable(item, resultsDiv)
       storeNameCell.innerHTML = storeName;
       var stockStatusCell = document.createElement("td");
       stockStatusCell.setAttribute("class", "stockStatusCol");
-      stockStatusCell.setAttribute("name", "store" + storeId);
+      var stockStatusContent = document.createElement('DIV');
+      stockStatusContent.setAttribute("id", "sm-store" + storeId);
 
+      stockStatusCell.appendChild(stockStatusContent);
       row.appendChild(storeNameCell);
       row.appendChild(stockStatusCell);
 
@@ -234,33 +239,49 @@ function generateProductInfoRow(item)
   return row;
 }
 
+function appendStockStatus(itemJson, element)
+{
+  var glyphSpan = document.createElement("span");
+  glyphSpan.setAttribute("aria-hidden", "true");
+
+  var textSpan = document.createElement("span");
+  textSpan.setAttribute("class", "hidden-xs");
+
+  if (itemJson.isStocked)
+  {
+    glyphSpan.setAttribute("class", "glyphicon glyphicon-ok");
+    glyphSpan.setAttribute("style", "color: green;font-size: 20px;");
+    textSpan.setAttribute("style", "color: green;padding-left:1em;");
+    textSpan.innerHTML = itemJson.stockQuantity + " in stock";
+  }
+  else if (itemJson.isOrderable)
+  {
+    glyphSpan.setAttribute("class", "glyphicon glyphicon-transfer");
+    glyphSpan.setAttribute("style", "color: orange;font-size: 20px;");
+    textSpan.setAttribute("style", "color: orange;padding-left:1em;");
+    textSpan.innerHTML = "Orderable";
+  }
+  else if (itemJson.hasOutOfStockMessage)
+  {
+    glyphSpan.setAttribute("class", "glyphicon glyphicon-remove");
+    glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
+    textSpan.setAttribute("style", "color: red;padding-left:1em;");
+    textSpan.innerHTML = "Out of stock";
+  }
+  else
+  {
+    glyphSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
+    glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
+    textSpan.setAttribute("style", "color: red;padding-left:1em;");
+    textSpan.innerHTML = "Unknown";
+  }
+
+  element.appendChild(glyphSpan);
+  element.appendChild(textSpan);
+}
+
 function handleStoreStockStatus(itemJson, storeId)
 {
-
-  var elementsToBeUpdated = document.getElementsByName("store" + storeId);
-
-  for(element in elementsToBeUpdated)
-  {
-    if (elementsToBeUpdated.hasOwnProperty(element))
-    {
-      var elem = elementsToBeUpdated[element];
-
-      if (itemJson.isStocked)
-      {
-        elem.innerHTML = itemJson.stockQuantity + " in stock."
-      }
-      else if (itemJson.isOrderable)
-      {
-        elem.innerHTML = "Can be ordered.";
-      }
-      else if (itemJson.hasOutOfStockMessage)
-      {
-        elem.innerHTML = "Out of stock.";
-      }
-      else
-      {
-        elem.innerHTML = "Unknown status.";
-      }
-    }
-  }
+  appendStockStatus(itemJson, document.getElementById("sm-store" + storeId));
+  appendStockStatus(itemJson, document.getElementById("store" + storeId));
 }

@@ -336,20 +336,29 @@ function handleItemRowsStockResponse(itemJson)
   var productId = itemJson.productId.replace("/", "");
   var element = document.getElementById("stockStatus" + productId);
 
+  var span = document.createElement("span");
+  span.setAttribute("aria-hidden", "true");
+
   if (itemJson.isStocked)
   {
-    element.innerHTML = "Yes";
+    span.setAttribute("class", "glyphicon glyphicon-ok");
+    span.setAttribute("style", "color: green;font-size: 20px;");
   }
   else if (itemJson.isOrderable)
   {
-    element.innerHTML = "Order";
+    span.setAttribute("class", "glyphicon glyphicon-transfer");
+    span.setAttribute("style", "color: orange;font-size: 20px;");
   }
   else if (itemJson.hasOutOfStockMessage)
   {
-    element.innerHTML = "No";
+    span.setAttribute("class", "glyphicon glyphicon-remove");
+    span.setAttribute("style", "color: red;font-size: 20px;");
   }
   else
   {
-    element.innerHTML = "?";
+    span.setAttribute("class", "glyphicon glyphicon-question-sign");
+    span.setAttribute("style", "color: red;font-size: 20px;");
   }
+
+  element.appendChild(span);
 }

@@ -31,11 +31,11 @@
 /* larger than phone & tablet */
 @media (min-width: 992px) {
   .storeNameCol{
-    width: 38%;
+    width: 35%;
   }
 
   .stockStatusCol{
-    width: 12%;
+    width: 15%;
   }
 }
 
