@@ -11,6 +11,7 @@
       checkStockStatus(req, res, next, true);
     }
     catch(ex){
+      console.error("Catch");
       console.error(ex);
       res.status(500).send('Error with request');
     }
@@ -35,7 +36,9 @@
 
       if (isStocked(body)) {
         stockStatus.stockQuantity = getStockQuantity(body);
+        console.error("After");
       }
+
 
       var tryAgain = retry && !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
 
@@ -61,7 +64,17 @@
   }
 
   function getStockQuantity(body) {
-    return body.match(/([0-9]*) left to/)[1];
+    var stockQuant;
+    try
+    {
+      stockQuant = body.match(/([0-9]*) left to/)[1];
+    }
+    catch(ex)
+    {
+      stockQuant = "Error";
+    }
+
+    return stockQuant;
   }
 
   function isOrderable(body) {
