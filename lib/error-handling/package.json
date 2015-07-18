@@ -1,0 +1,23 @@
+{
+  "name": "error-handling",
+  "version": "0.10.1",
+  "description": "Custom errors & factory for better error logging & HTTP responses",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "2.2.x",
+    "istanbul": "0.3.x",
+    "jshint": "2.4.4",
+    "mocha": "2.2.x",
+    "mocha-jenkins-reporter": "0.1.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "main": "index",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/_mocha && npm run linter",
+    "linter": "./node_modules/jshint/bin/jshint .",
+    "coverage": "NODE_ENV=test ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000 2> coverage/error.txt",
+    "jenkins": "JUNIT_REPORT_PATH=test/junit-report.xml NODE_ENV=test ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --reporter mocha-jenkins-reporter -t 5000 && npm run linter"
+  }
+}
