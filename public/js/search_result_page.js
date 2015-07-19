@@ -166,18 +166,19 @@ function generateSearchResultsTable(items, resultsDiv)
   imageHeaderCell.innerHTML = "";
   var nameHeaderCell = document.createElement("th");
   nameHeaderCell.innerHTML = "Product Name";
+  nameHeaderCell.setAttribute("style", "cursor: pointer;");
   var priceSavingHeaderCell = document.createElement("th");
-  priceSavingHeaderCell.setAttribute("class", "hideCellOnMobile");
-  priceSavingHeaderCell.setAttribute("style", "text-align: center;");
+  priceSavingHeaderCell.setAttribute("class", "");
+  priceSavingHeaderCell.setAttribute("style", "text-align: center;  cursor: pointer;");
   priceSavingHeaderCell.innerHTML = "% Saving";
   var priceHeaderCell = document.createElement("th");
-  priceHeaderCell.setAttribute("style", "text-align: center;");
+  priceHeaderCell.setAttribute("style", "text-align: center; cursor: pointer;");
   priceHeaderCell.innerHTML = "Price (€)";
   priceHeaderCell.setAttribute("data-sort-method", "numeric;");
 
   var stockHeaderCell = document.createElement("th");
   stockHeaderCell.setAttribute("style", "text-align: center;");
-  stockHeaderCell.setAttribute("class", "hide");
+  stockHeaderCell.setAttribute("class", "hide no-sort");
   stockHeaderCell.setAttribute("name", "stockStatusColumn");
   stockHeaderCell.innerHTML = "Stock";
 
@@ -231,7 +232,7 @@ function generateSearchResultsTable(items, resultsDiv)
 
       var itemPriceSavingCell = document.createElement("td");
       itemPriceSavingCell.setAttribute("style", "vertical-align:middle; text-align: center");
-      itemPriceSavingCell.setAttribute("class", "hideCellOnMobile");
+      itemPriceSavingCell.setAttribute("class", "");
       itemPriceSavingCell.innerHTML = precentageSaving;
 
       var itemPriceCell = document.createElement("td");
