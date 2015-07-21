@@ -70,7 +70,24 @@ function generateMobileStockTable(item, resultsDiv)
   {
     if (stores.hasOwnProperty(key))
     {
-
+      var opts = {
+        lines: 7, // The number of lines to draw
+        length: 3, // The length of each line
+        width: 3, // The line thickness
+        radius: 3, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 1, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '50%', // Top position relative to parent
+        left: '50%' // Left position relative to parent
+      };
       row = document.createElement("tr");
 
       var storeName = key;
@@ -83,6 +100,9 @@ function generateMobileStockTable(item, resultsDiv)
       stockStatusCell.setAttribute("class", "stockStatusCol");
       var stockStatusContent = document.createElement('DIV');
       stockStatusContent.setAttribute("id", "store" + storeId);
+      stockStatusContent.setAttribute("style", "position: relative; height:25px; top:50%;");
+
+      var spinner = new Spinner(opts).spin(stockStatusContent);
 
       stockStatusCell.appendChild(stockStatusContent);
 
@@ -120,6 +140,24 @@ function generateStockTable(item, resultsDiv)
       {
         row = document.createElement("tr");
       }
+      var opts = {
+        lines: 7, // The number of lines to draw
+        length: 3, // The length of each line
+        width: 3, // The line thickness
+        radius: 3, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 1, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '50%', // Top position relative to parent
+        left: '50%' // Left position relative to parent
+      };
 
       var storeName = key;
       var storeId = stores[key];
@@ -131,6 +169,9 @@ function generateStockTable(item, resultsDiv)
       stockStatusCell.setAttribute("class", "stockStatusCol");
       var stockStatusContent = document.createElement('DIV');
       stockStatusContent.setAttribute("id", "sm-store" + storeId);
+      stockStatusContent.setAttribute("style", "position: relative; height:25px; top:50%;");
+
+      var spinner = new Spinner(opts).spin(stockStatusContent);
 
       stockStatusCell.appendChild(stockStatusContent);
       row.appendChild(storeNameCell);
@@ -215,6 +256,7 @@ function generateProductInfoRow(item)
 
 function appendStockStatus(itemJson, element)
 {
+  element.innerHTML = "";
   var glyphSpan = document.createElement("span");
   glyphSpan.setAttribute("aria-hidden", "true");
 
@@ -225,28 +267,28 @@ function appendStockStatus(itemJson, element)
   {
     glyphSpan.setAttribute("class", "glyphicon glyphicon-ok");
     glyphSpan.setAttribute("style", "color: green;font-size: 20px;");
-    textSpan.setAttribute("style", "color: green;padding-left:1em;");
+    textSpan.setAttribute("style", "color: green;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = itemJson.stockQuantity + " in stock";
   }
   else if (itemJson.isOrderable)
   {
     glyphSpan.setAttribute("class", "glyphicon glyphicon-transfer");
     glyphSpan.setAttribute("style", "color: orange;font-size: 20px;");
-    textSpan.setAttribute("style", "color: orange;padding-left:1em;");
+    textSpan.setAttribute("style", "color: orange;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Orderable";
   }
   else if (itemJson.hasOutOfStockMessage)
   {
     glyphSpan.setAttribute("class", "glyphicon glyphicon-remove");
     glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
-    textSpan.setAttribute("style", "color: red;padding-left:1em;");
+    textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Out of stock";
   }
   else
   {
     glyphSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
     glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
-    textSpan.setAttribute("style", "color: red;padding-left:1em;");
+    textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Unknown";
   }
 

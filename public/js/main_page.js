@@ -158,6 +158,13 @@ function showHomeScreen(){
   $( "#results" ).html("");
   populateSearchBox("");
 
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //History not supported - Go to page
+    location.href = url;
+  }else{
+    window.history.pushState(null, null, "/");
+  }
+
   return false;
 }
 
