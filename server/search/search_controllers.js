@@ -10,20 +10,19 @@
   };
 
   function search(req, res, next) {
-    try{
-      if(req.query && req.query.q)
+    try {
+      if (req.query && req.query.q)
       {
-        if(ProductsUtil.isValidProductId(req.query.q))
-        {
+        if(ProductsUtil.isValidProductId(req.query.q)) {
           searchProductNumber(req, res, next);
         }
-        else
-        {
+        else {
           //should we check was this an effort at a productId?
           req.query.searchString = req.query.q;
           textSearch(req, res, next);
-
         }
+      } else {
+        res.status(200).json([]);
       }
     }
     catch(ex){
