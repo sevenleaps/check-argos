@@ -258,7 +258,11 @@ function generateSearchResultsTable(items, resultsDiv)
   }
 
   div.appendChild(table);
-  new Tablesort(table);
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //No sorting for IE 8 and IE 9
+  }else{
+    new Tablesort(table);
+  }
   outerRow.appendChild(div);
   resultsDiv.appendChild(outerRow);
 }

@@ -1,15 +1,30 @@
 function searchByQuery (searchQuery)
 {
-  window.history.pushState(null, null, '?search=' + searchQuery);
+  var url = '?search=' + searchQuery;
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //History not supported - Go to page
+    if(location.search !== url){
+      location.href = url;
+    }
+  }else{
+    window.history.pushState(null, null, url);
+  }
   searchByQueryNoHistory(searchQuery);
+}
+
+function searchViaAJAX(url){
+  var myRequest = new XMLHttpRequest();
+  myRequest.onload = function(){
+    handleResponseFromSearch(myRequest.responseText);
+  };
+  myRequest.open("GET", url);
+  myRequest.send();
 }
 
 function searchByQueryNoHistory(searchQuery){
   displaySpinner();
-  var myRequest = new XMLHttpRequest();
-  myRequest.onload = function(){ handleResponseFromSearch(myRequest.response);};
-  myRequest.open("GET", "search/simple?q=" +  searchQuery);
-  myRequest.send();
+  var url = "search/simple?q=" +  searchQuery;
+  searchViaAJAX(url);
 }
 
 var noResults = "No Results";
@@ -24,12 +39,17 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId)
   else
   {
     displaySpinner();
+    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId);
     //TODO Populate this properly!
-    window.history.pushState(null, null, generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId));
-    var myRequest = new XMLHttpRequest();
-    myRequest.onload = function(){ handleResponseFromSearch(myRequest.response);};
-    myRequest.open("GET", generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId));
-    myRequest.send();
+    if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+      //History not supported - Go to page
+      if(location.search !== urlForAdvancedQuery){
+        location.href = urlForAdvancedQuery;
+      }
+    }else{
+      window.history.pushState(null, null, urlForAdvancedQuery);
+    }
+    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId));
   }
 }
 
