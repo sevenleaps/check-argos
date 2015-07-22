@@ -68,11 +68,16 @@ function generateFilterSection(resultsDiv)
   // minPriceText.innerHTML = "Min Price";
 
   var minPriceInput = document.createElement("input");
-  minPriceInput.type = "number";
   minPriceInput.setAttribute("class", "form-control");
   minPriceInput.setAttribute("name", "minPrice");
   minPriceInput.setAttribute("id", minPriceId);
   minPriceInput.setAttribute("placeholder", "Min Price");
+
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //IE 9 doesnt support input type
+  }else{
+    minPriceInput.type = "number";
+  }
 
   // minPriceDiv.appendChild(minPriceText);
   minPriceDiv.appendChild(minPriceInput);
@@ -88,11 +93,16 @@ function generateFilterSection(resultsDiv)
   // maxPriceText.innerHTML = "Max Price";
 
   var maxPriceInput = document.createElement("input");
-  maxPriceInput.type = "number";
   maxPriceInput.setAttribute("class", "form-control");
   maxPriceInput.setAttribute("name", "maxPrice");
   maxPriceInput.setAttribute("id", maxPriceId);
   maxPriceInput.setAttribute("placeholder", "Max Price");
+
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //IE 9 doesnt support input type
+  }else{
+    maxPriceInput.type = "number";
+  }
 
   //maxPriceDiv.appendChild(maxPriceText);
   maxPriceDiv.appendChild(maxPriceInput);
