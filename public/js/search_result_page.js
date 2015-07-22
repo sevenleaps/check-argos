@@ -184,7 +184,7 @@ function generateSearchResultsTable(items, resultsDiv)
   var priceHeaderCell = document.createElement("th");
   priceHeaderCell.setAttribute("style", "text-align: center; cursor: pointer;");
   priceHeaderCell.innerHTML = "Price (€)";
-  priceHeaderCell.setAttribute("data-sort-method", "numeric;");
+  //priceHeaderCell.setAttribute("data-sort-method", "numeric;");
 
   var stockHeaderCell = document.createElement("th");
   stockHeaderCell.setAttribute("style", "text-align: center;");
