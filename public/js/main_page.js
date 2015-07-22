@@ -160,12 +160,13 @@ function showHomeScreen(){
 
   if(navigator.userAgent.indexOf("MSIE 9.") > -1){
     //History not supported - Go to page
-    location.href = url;
+    //location.href = url;
+    return true;
   }else{
     window.history.pushState(null, null, "/");
+    return false;
   }
 
-  return false;
 }
 
 document.addEventListener("DOMContentLoaded", function() {

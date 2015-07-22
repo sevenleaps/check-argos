@@ -82,7 +82,15 @@
             return next(new ArgosResponseError(error));
           }
 
-          if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(req.query.subSectionText || req.query.subSectionNumber)){
+          if (ProductsUtil.isListOfProductsPage(body) && (ProductsUtil.getTotalNumberOfProducts(body) != "Error")) {
+            try {
+              var productsJson = ProductsUtil.getProductsFromHtml(body);
+              res.status(200).json(productsJson);
+             } catch (error) {
+               return next(new ArgosResponseError(error));
+             }
+          }
+          else if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(req.query.subSectionText || req.query.subSectionNumber)){
             try{
               console.log("Is a sub catagory page");
               var catagoryInfo = ProductsUtil.getCatagoryInformationFromPath(response.request.path);
@@ -98,14 +106,6 @@
             catch (error) {
               return next(new ArgosResponseError(error));
             }
-          }
-          else if (ProductsUtil.isListOfProductsPage(body)) {
-            try {
-              var productsJson = ProductsUtil.getProductsFromHtml(body);
-              res.status(200).json(productsJson);
-             } catch (error) {
-               return next(new ArgosResponseError(error));
-             }
           }
           else if(!ProductsUtil.isFoundNoProductsPage(body)) {
             try{
