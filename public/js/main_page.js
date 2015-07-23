@@ -27,9 +27,9 @@ function initPage()
       var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
       var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
       var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
-
+      var clearance = (params.catagoryId != null || params.catagoryId != undefined);
       //will default to a simple search if needed
-      advancedSearch (params.search, minPrice, maxPrice, catagoryId);
+      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance);
       hideHomeScreen();
 
 		}

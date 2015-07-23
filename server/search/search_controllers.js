@@ -11,7 +11,7 @@
 
   function search(req, res, next) {
     try {
-      if (req.query && req.query.q)
+      if (req.query && (req.query.q || req.query.isClearance))
       {
         if(ProductsUtil.isValidProductId(req.query.q)) {
           searchProductNumber(req, res, next);
@@ -163,7 +163,7 @@ function buildSubCatagorySearchUrl(params) {
     url = url + '/s/' + searchPreference + '.htm';
 
     console.log('clearance ' + url)
-    return url;
+    return url.replace(/ /g, '+');
   }
 
   function buildSearchUrl(params) {
@@ -183,7 +183,7 @@ function buildSubCatagorySearchUrl(params) {
 
     url = url + '&r_001=2|Price|' + params.minPrice + '+%3C%3D++%3C%3D+' + params.maxPrice + '|2';
 
-    return url;
+    return url.replace(/ /g, '+');
 
   }
 

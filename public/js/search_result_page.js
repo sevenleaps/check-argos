@@ -1,11 +1,42 @@
+var isClearancePage = false;
+
+function displayClearanceSearch()
+{
+  hideHomeScreen();
+  populateSearchBox("");
+  isClearancePage = true;
+  displayMessage("Clearance Search");
+  var resultsDiv = document.getElementById('results');
+
+  generateFilterSection(resultsDiv, false);
+
+  return false;
+}
+
 function displaySearchResultPage(items)
 {
+  isClearancePage = false;
   var resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = "";
 
   itemsList = items;
 
-  generateFilterSection(resultsDiv);
+  generateFilterSection(resultsDiv, true);
+  generateSearchResultsTable(items, resultsDiv);
+
+  populatePreviouslySearchedFilters();
+}
+
+function displayClearanceResultPage(items)
+{
+  isClearancePage = true;
+  populateSearchBox("");
+  displayMessage("Clearance Search");
+  var resultsDiv = document.getElementById('results');
+
+  itemsList = items;
+
+  generateFilterSection(resultsDiv, true);
   generateSearchResultsTable(items, resultsDiv);
 
   populatePreviouslySearchedFilters();
@@ -52,7 +83,7 @@ var catagoriesDropDownId = "catagoriesDropDown";
 var minPriceId = "minPriceInput";
 var maxPriceId = "maxPriceInput";
 
-function generateFilterSection(resultsDiv)
+function generateFilterSection(resultsDiv, showStoreFilter)
 {
   var searchRow = document.createElement('DIV');
   searchRow.setAttribute("class", "row");
@@ -131,7 +162,14 @@ function generateFilterSection(resultsDiv)
   var searchButton = document.createElement("input");
   searchButton.setAttribute("class", "btn btn-primary");
   searchButton.type = "button";
-  searchButton.value = "Update";
+  if(isClearancePage)
+  {
+    searchButton.value = "Search";
+  }
+  else
+  {
+    searchButton.value = "Update";
+  }
   searchButton.onclick = function() {
       updateFilterSearch();
     };
@@ -139,23 +177,28 @@ function generateFilterSection(resultsDiv)
   searchButtonDiv.appendChild(searchButton);
   searchRow.appendChild(searchButtonDiv);
 
-  var outerRow = document.createElement('DIV');
-  outerRow.setAttribute("class", "row");
-  outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
-
-  var storeSelecterDiv = document.createElement('DIV');
-  storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
-  storeSelecterDiv.setAttribute("style", "text-align: center; padding-top:10px");
-
-  var storeDropDown = generateStoreDropDown();
-  storeDropDown.setAttribute("id", storeDropDownId);
-  storeDropDown.onchange = function(){ onStoreSelectChange();};
-
-  storeSelecterDiv.appendChild(storeDropDown);
-  outerRow.appendChild(storeSelecterDiv);
-
   resultsDiv.appendChild(searchRow);
-  resultsDiv.appendChild(outerRow);
+
+  if(showStoreFilter)
+  {
+    var outerRow = document.createElement('DIV');
+    outerRow.setAttribute("class", "row");
+    outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
+
+    var storeSelecterDiv = document.createElement('DIV');
+    storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
+    storeSelecterDiv.setAttribute("style", "text-align: center; padding-top:10px");
+
+    var storeDropDown = generateStoreDropDown();
+    storeDropDown.setAttribute("id", storeDropDownId);
+    storeDropDown.onchange = function(){ onStoreSelectChange();};
+
+    storeSelecterDiv.appendChild(storeDropDown);
+    outerRow.appendChild(storeSelecterDiv);
+
+    resultsDiv.appendChild(outerRow);
+  }
+
 }
 
 function generateSearchResultsTable(items, resultsDiv)
@@ -301,7 +344,7 @@ function updateFilterSearch()
 
   var query = document.getElementById("searchBox").value;
 
-  advancedSearch(query, minPrice, maxPrice, catagoryId)
+  advancedSearch(query, minPrice, maxPrice, catagoryId, isClearancePage);
 }
 
 function isValidItemData(itemJson)

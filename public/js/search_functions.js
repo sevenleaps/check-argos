@@ -12,10 +12,10 @@ function searchByQuery (searchQuery)
   searchByQueryNoHistory(searchQuery);
 }
 
-function searchViaAJAX(url){
+function searchViaAJAX(url, clearance){
   var myRequest = new XMLHttpRequest();
   myRequest.onload = function(){
-    handleResponseFromSearch(myRequest.responseText);
+    handleResponseFromSearch(myRequest.responseText, clearance);
   };
   myRequest.open("GET", url);
   myRequest.send();
@@ -29,7 +29,7 @@ function searchByQueryNoHistory(searchQuery){
 
 var noResults = "No Results";
 
-function advancedSearch (query, minPrice, maxPrice, catagoryId)
+function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance)
 {
   if(minPrice === null && maxPrice === null && catagoryId == 0)
   {
@@ -39,7 +39,7 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId)
   else
   {
     displaySpinner();
-    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId);
+    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance);
     //TODO Populate this properly!
     if(navigator.userAgent.indexOf("MSIE 9.") > -1){
       //History not supported - Go to page
@@ -49,11 +49,11 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId)
     }else{
       window.history.pushState(null, null, urlForAdvancedQuery);
     }
-    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId));
+    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance), clearance);
   }
 }
 
-function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId)
+function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance)
 {
   var url = "?search=" +  query;
   if(minPrice !== null)
@@ -71,10 +71,15 @@ function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catago
     url = url + "&catagoryId=" + catagoryId;
   }
 
+  if(clearance)
+  {
+    url = url + "&isClearance=true"
+  }
+
   return url;
 }
 
-function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId)
+function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance)
 {
   var url = "search/advanced?searchString=" +  query;
   if(minPrice !== null)
@@ -97,11 +102,15 @@ function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId)
     }
   }
 
+  if(clearance)
+  {
+    url = url + "&isClearance=true"
+  }
   return url;
 
 }
 
-function handleResponseFromSearch(response)
+function handleResponseFromSearch(response, clearance)
 {
   var result =  JSON.parse(response);
 
@@ -120,7 +129,14 @@ function handleResponseFromSearch(response)
     }
     else
     {
-      displaySearchResultPage(result);
+      if(clearance)
+      {
+        displayClearanceResultPage(result);
+      }
+      else
+      {
+        displaySearchResultPage(result);
+      }
     }
   }
 }
