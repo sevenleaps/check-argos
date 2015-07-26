@@ -9,8 +9,26 @@ function displayClearanceSearch()
   var resultsDiv = document.getElementById('results');
 
   generateFilterSection(resultsDiv, false);
-
+  disableFilterButtonByDropdown();
+  $( "#filterButton").addClass('disabled');
   return false;
+}
+
+function disableFilterButtonByDropdown()
+{
+  $( "#" + catagoriesDropDownId ).change(function()
+  {
+
+    if(this.selectedIndex == 0)
+    {
+      $( "#filterButton").addClass('disabled');
+    }
+    else
+    {
+      $( "#filterButton").removeClass('disabled');
+    }
+  });
+
 }
 
 function displaySearchResultPage(result)
@@ -44,6 +62,7 @@ function displayClearanceResultPage(result)
     generateSearchResultsTable(itemsList, resultsDiv);
 
     populatePreviouslySearchedFilters();
+    disableFilterButtonByDropdown();
   }
 }
 
@@ -152,7 +171,15 @@ function generateFilterSection(resultsDiv, showStoreFilter)
   catagoriesDiv.setAttribute("class", "col-lg-3 col-md-3 col-sm-6 col-xs-6");
   catagoriesDiv.setAttribute("style", "text-align: center;");
 
-  var catagoriesDropDown = generateCatagoriesDropDown();
+  var catagoriesDropDown;
+  if(isClearancePage)
+  {
+    catagoriesDropDown = generateCatagoriesDropDown("-- Select a catagory --");
+  }
+  else
+  {
+    catagoriesDropDown = generateCatagoriesDropDown();
+  }
   catagoriesDropDown.setAttribute("id", catagoriesDropDownId);
   //catagoriesDropDown.onchange = function(){ onStoreSelectChange();};
 
@@ -165,6 +192,7 @@ function generateFilterSection(resultsDiv, showStoreFilter)
 
 
   var searchButton = document.createElement("input");
+  searchButton.setAttribute("id", "filterButton");
   searchButton.setAttribute("class", "btn btn-primary");
   searchButton.type = "button";
   if(isClearancePage)

@@ -1,9 +1,11 @@
-function generateCatagoriesDropDown()
+function generateCatagoriesDropDown(defaultOptionText)
 {
+  if (defaultOptionText === undefined) defaultOptionText = "-- All Sections --";
   var select = document.createElement("select");
   select.setAttribute("class", "form-control");
+
   var option = document.createElement("option");
-  option.text = "-- All Sections --";
+  option.text = defaultOptionText;
   option.value = 0;
   select.add(option);
 
