@@ -30,7 +30,7 @@ function displaySearchResultPage(result)
   }
 }
 
-function displayClearanceResultPage(items)
+function displayClearanceResultPage(result)
 {
   isClearancePage = true;
   populateSearchBox("");
