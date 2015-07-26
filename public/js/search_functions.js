@@ -123,7 +123,7 @@ function handleResponseFromSearch(response, clearance)
   }
   else
   {
-    if (!Array.isArray(result))
+    if (!result.hasOwnProperty("totalNumProducts"))
     {
       displayStockPage(result);
     }

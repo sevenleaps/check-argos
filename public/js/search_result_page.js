@@ -13,18 +13,21 @@ function displayClearanceSearch()
   return false;
 }
 
-function displaySearchResultPage(items)
+function displaySearchResultPage(result)
 {
   isClearancePage = false;
   var resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = "";
 
-  itemsList = items;
 
-  generateFilterSection(resultsDiv, true);
-  generateSearchResultsTable(items, resultsDiv);
+  if(result.hasOwnProperty("items"))
+  {
+    itemsList = result.items;
+    generateFilterSection(resultsDiv, true);
+    generateSearchResultsTable(itemsList, resultsDiv);
 
-  populatePreviouslySearchedFilters();
+    populatePreviouslySearchedFilters();
+  }
 }
 
 function displayClearanceResultPage(items)
@@ -34,12 +37,14 @@ function displayClearanceResultPage(items)
   displayMessage("Clearance Search");
   var resultsDiv = document.getElementById('results');
 
-  itemsList = items;
+  if(result.hasOwnProperty("items"))
+  {
+    itemsList = result.items;
+    generateFilterSection(resultsDiv, true);
+    generateSearchResultsTable(itemsList, resultsDiv);
 
-  generateFilterSection(resultsDiv, true);
-  generateSearchResultsTable(items, resultsDiv);
-
-  populatePreviouslySearchedFilters();
+    populatePreviouslySearchedFilters();
+  }
 }
 
 function populatePreviouslySearchedFilters()

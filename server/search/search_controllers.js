@@ -82,10 +82,15 @@
             return next(new ArgosResponseError(error));
           }
 
-          if (ProductsUtil.isListOfProductsPage(body) && (ProductsUtil.getTotalNumberOfProducts(body) != "Error")) {
+          var totalNumProducts = ProductsUtil.getTotalNumberOfProducts(body);
+          if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts != "Error")) {
             try {
               var productsJson = ProductsUtil.getProductsFromHtml(body);
-              res.status(200).json(productsJson);
+              var returnObj = {
+                items: productsJson,
+                totalNumProducts: totalNumProducts
+              };
+              res.status(200).json(returnObj);
              } catch (error) {
                return next(new ArgosResponseError(error));
              }
@@ -144,16 +149,19 @@
 
     return true;
   }
+
+  var productsPerPage = 60;
 // http://www.argos.ie/static/Browse/c_1/1|category_root|Video games|14419738/c_2/2|14419738|Clearance+Video games|14419738/p/1/pp/80/r_001=2|Price|0+%3C%3D++%3C%3D+1000000|2/s/Price%3A+Low+-+High.htm
 // http://www.argos.ie/static/Browse/c_1/1|category_root|".$sectionSelected.|".$sectionNumber[$sectionSelected]."/c_2/2|".$sectionNumber[$sectionSelected]."|Clearance+".$sectionSelected."|".$clearanceNumber[$sectionSelected]."/p/".$countProduct."/pp/".$productsPerPage."/r_001/4|Price|".$minPrice."+%3C%3D++%3C%3D+".$maxPrice."|2/s/".$searchPreference.".htm");
 function buildSubCatagorySearchUrl(params) {
     var baseUrl = 'http://www.argos.ie/static/Browse/c_1/1%7Ccategory_root%7C';
     var url = baseUrl;
-    var productsPerPage = 60;
     var searchPreference = 'Price%3A+Low+-+High';
     url = url + params.sectionText + '|' + params.sectionNumber + '/c_2/2|' + params.sectionNumber  + '|' + params.subSectionText + '|' + params.subSectionNumber;
 
-    url = url + '/p/1';
+    var p = (params.productOffset) ? params.productOffset : 1;
+    var pp
+    url = url + '/p/'+ p;
     url = url + '/pp/' + productsPerPage;
 
     params.minPrice = params.minPrice === undefined ? 0 : params.minPrice;
@@ -174,7 +182,9 @@ function buildSubCatagorySearchUrl(params) {
     url = url + '?storeId=10152&langId=111';
     //Adding optional search parameters
     url = (params.searchString) ? url + '&q=' + params.searchString : url;
-    url = url + '&pp=Show+all';
+    var pp = (params.productsPerPage) ? params.productsPerPage : productsPerPage;
+    url = url + '&pp=' + pp;
+    url = (params.productOffset) ? url + '&p=' + params.productOffset : url;
     url = (params.sortType) ? url + '&s=' + params.sortType : url;
     url = (params.sectionText && params.sectionNumber) ? url + '&c_1=1|category_root|' + params.sectionText + '|' + params.sectionNumber : url;
 
