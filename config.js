@@ -14,6 +14,11 @@
     app.use('/stockcheck', routes.stockCheck);
     app.use('/search', routes.search);
     app.use(middleware.serverError);
+    app.get('/StockCheckPage*', function(req, res) {
+      console.log('Got legacy request:', req.url);
+      console.log('Product ID:', req.query.productId);
+      res.redirect('/?search=' + req.query.productId);
+    });
   };
 
   // Catch the uncaught errors that weren't wrapped in a domain or try catch statement.
