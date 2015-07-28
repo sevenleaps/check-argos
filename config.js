@@ -19,6 +19,10 @@
       console.log('Product ID:', req.query.productId);
       res.redirect('/?search=' + req.query.productId);
     });
+    app.get('/ebay', function(req, res) {
+      console.log('Got legacy for ebay');
+      res.redirect('http://ebayvenison.com');
+    });
   };
 
   // Catch the uncaught errors that weren't wrapped in a domain or try catch statement.
