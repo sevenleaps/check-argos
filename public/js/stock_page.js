@@ -1,7 +1,7 @@
 function displayStockPage(item)
 {
   var resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = "";
+  resultsDiv.innerHTML = '';
 
   resultsDiv.appendChild(generateProductInfoRow(item));
 
@@ -10,7 +10,15 @@ function displayStockPage(item)
   //generateStockInfo(item, resultsDiv);
 
   checkStockForAllStores(item);
+  DST('//www.anrdoezrs.net/am/7708057/include/allCj/generate/onLoad/impressions/page/am.js');
 
+}
+
+function DST(url) {
+  var s = document.createElement('script');
+    s.type='text/javascript';
+    s.src= url;
+    document.getElementsByTagName('head')[0].appendChild(s);
 }
 
 function checkStockForAllStores(item)
