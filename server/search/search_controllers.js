@@ -150,7 +150,7 @@
     return true;
   }
 
-  var productsPerPage = 60;
+  var productsPerPage = 40;
 // http://www.argos.ie/static/Browse/c_1/1|category_root|Video games|14419738/c_2/2|14419738|Clearance+Video games|14419738/p/1/pp/80/r_001=2|Price|0+%3C%3D++%3C%3D+1000000|2/s/Price%3A+Low+-+High.htm
 // http://www.argos.ie/static/Browse/c_1/1|category_root|".$sectionSelected.|".$sectionNumber[$sectionSelected]."/c_2/2|".$sectionNumber[$sectionSelected]."|Clearance+".$sectionSelected."|".$clearanceNumber[$sectionSelected]."/p/".$countProduct."/pp/".$productsPerPage."/r_001/4|Price|".$minPrice."+%3C%3D++%3C%3D+".$maxPrice."|2/s/".$searchPreference.".htm");
 function buildSubCatagorySearchUrl(params) {
@@ -160,9 +160,9 @@ function buildSubCatagorySearchUrl(params) {
     url = url + params.sectionText + '|' + params.sectionNumber + '/c_2/2|' + params.sectionNumber  + '|' + params.subSectionText + '|' + params.subSectionNumber;
 
     var p = (params.productOffset) ? params.productOffset : 1;
-    var pp
+    var pp = (params.productsPerPage) ? params.productsPerPage : productsPerPage;
     url = url + '/p/'+ p;
-    url = url + '/pp/' + productsPerPage;
+    url = url + '/pp/' + pp;
 
     params.minPrice = params.minPrice === undefined ? 0 : params.minPrice;
     params.maxPrice = params.maxPrice === undefined ? 1000000 : params.maxPrice;

@@ -1,3 +1,5 @@
+var productsPerPage = 40;
+
 function searchByQuery (searchQuery)
 {
   var url = '?search=' + searchQuery;
@@ -29,9 +31,9 @@ function searchByQueryNoHistory(searchQuery){
 
 var noResults = "No Results";
 
-function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, storeId)
+function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, storeId, page)
 {
-  if(minPrice === null && maxPrice === null && catagoryId == 0)
+  if(minPrice === null && maxPrice === null && catagoryId == 0 && page == null)
   {
     //no need for advanced search
     searchByQuery(query)
@@ -39,7 +41,7 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, store
   else
   {
     displaySpinner();
-    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId);
+    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId, page);
     //TODO Populate this properly!
     if(navigator.userAgent.indexOf("MSIE 9.") > -1){
       //History not supported - Go to page
@@ -49,11 +51,11 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, store
     }else{
       window.history.pushState(null, null, urlForAdvancedQuery);
     }
-    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance), clearance);
+    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance, page), clearance);
   }
 }
 
-function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId)
+function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId, page)
 {
   var url = "?search=" +  query;
   if(minPrice !== null)
@@ -76,15 +78,20 @@ function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catago
     url = url + "&isClearance=true"
   }
 
-  if(storeId)
+  if(storeId !== null)
   {
     url = url + "&storeId=" + storeId;
+  }
+
+  if(page)
+  {
+    url = url + "&page=" + page;
   }
 
   return url;
 }
 
-function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance)
+function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance, page)
 {
   var url = "search/advanced?searchString=" +  query;
   if(minPrice !== null)
@@ -111,6 +118,13 @@ function generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, cleara
   {
     url = url + "&isClearance=true"
   }
+
+  if(page && page > 1)
+  {
+    var offset = ((page - 1) * productsPerPage) + 1;
+    url = url + "&productOffset=" + offset;
+  }
+
   return url;
 
 }

@@ -1,4 +1,5 @@
 var isClearancePage = false;
+var currentPage = 1;
 
 function displayClearanceSearch()
 {
@@ -44,10 +45,58 @@ function displaySearchResultPage(result)
   {
     itemsList = result.items;
     generateFilterSection(resultsDiv, true);
+    createPaginationIfNeeded(result, resultsDiv);
     generateSearchResultsTable(itemsList, resultsDiv);
-
+    createPaginationIfNeeded(result, resultsDiv);
     populatePreviouslySearchedFilters();
   }
+}
+
+function createPaginationIfNeeded(result, resultsDiv)
+{
+  if(result.hasOwnProperty("totalNumProducts"))
+  {
+    var totalNum = result.totalNumProducts;
+    if(totalNum > productsPerPage)
+    {
+      var numPages = (totalNum/productsPerPage) + 1;
+      var params = retrieveParams();
+      if(params.page != null || params.page != undefined)
+      {
+        currentPage = params.page;
+      }
+
+      var paginationDiv = document.createElement('DIV');
+      paginationDiv.setAttribute("class", "row");
+      paginationDiv.setAttribute("style", "text-align: center;");
+      var paginationUl = document.createElement('ul');
+      paginationUl.setAttribute("class", "pagination");
+      paginationUl.setAttribute("style", "margin-bottom: 0px; margin-top: 12px;");
+      for(var i = 1; i <= numPages; i++)
+      {
+        var li = document.createElement('li');
+        if(i == currentPage)
+        {
+          li.setAttribute("class", "active");
+        }
+        var aTag = document.createElement('a');
+        aTag.setAttribute("onclick", "return handlePagination(" + i + ")");
+        aTag.setAttribute("href", "#page" + i);
+        aTag.innerHTML = i;
+
+        li.appendChild(aTag);
+        paginationUl.appendChild(li);
+      }
+      paginationDiv.appendChild(paginationUl);
+      resultsDiv.appendChild(paginationDiv);
+    }
+  }
+}
+
+function handlePagination(page)
+{
+  updateSearch(page);
+  return false;
 }
 
 function displayClearanceResultPage(result)
@@ -62,8 +111,9 @@ function displayClearanceResultPage(result)
   {
     itemsList = result.items;
     generateFilterSection(resultsDiv, true);
+    createPaginationIfNeeded(result, resultsDiv);
     generateSearchResultsTable(itemsList, resultsDiv);
-
+    createPaginationIfNeeded(result, resultsDiv);
     populatePreviouslySearchedFilters();
     disableFilterButtonByDropdown();
   }
@@ -93,6 +143,10 @@ function populatePreviouslySearchedFilters()
       {
         updateDropDown(params.catagoryId, catagoriesDropDownId);
       }
+      if(params.page != null || params.page != undefined)
+      {
+        currentPage = params.page;
+      }
     }
   }
   catch(err)
@@ -108,7 +162,6 @@ function updateDropDown(value, elemId)
     if(value != 0)
     {
       $("#" + elemId).val(value).attr("selected", "selected");
-      //$("#" + elemId).selectmenu('refresh', true);
     }
   }
 }
@@ -229,7 +282,7 @@ function generateFilterSection(resultsDiv, showStoreFilter)
   {
     var outerRow = document.createElement('DIV');
     outerRow.setAttribute("class", "row");
-    outerRow.setAttribute("style", "padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)");
+    //outerRow.setAttribute("style", "padding-bottom: 1em;");
 
     var storeSelecterDiv = document.createElement('DIV');
     storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
@@ -251,6 +304,7 @@ function generateSearchResultsTable(items, resultsDiv)
 {
   var outerRow = document.createElement('DIV');
   outerRow.setAttribute("class", "row");
+  outerRow.setAttribute("style", "margin-top: 0.8em; border-top:solid 1px rgba(0, 0, 0, 0.1)");
 
   var div = document.createElement('DIV');
 
@@ -368,6 +422,11 @@ function generateSearchResultsTable(items, resultsDiv)
 
 function updateFilterSearch()
 {
+  updateSearch(1);
+}
+
+function updateSearch(page)
+{
   var minPrice = document.getElementById(minPriceId).value;
   if( minPrice === "")
   {
@@ -393,7 +452,7 @@ function updateFilterSearch()
 
   var query = document.getElementById("searchBox").value;
 
-  advancedSearch(query, minPrice, maxPrice, catagoryId, isClearancePage, storeId);
+  advancedSearch(query, minPrice, maxPrice, catagoryId, isClearancePage, storeId, page);
 }
 
 function isValidItemData(itemJson)

@@ -29,8 +29,9 @@ function initPage()
       var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
       var clearance = (params.isClearance != null || params.isClearance != undefined) && params.isClearance;
       var storeId = (params.storeId != null || params.storeId != undefined) ? params.storeId : 0;
+      var page = (params.page) ? params.page : null;
       //will default to a simple search if needed
-      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance, storeId);
+      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance, storeId, page);
       hideHomeScreen();
 
 		}
