@@ -221,6 +221,20 @@ function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
   return row;
 }
 
+function logClickThrough(productID)
+{
+  var href = $("#productLinkA").attr('href');
+  var re = new RegExp("^http:\/\/www\.argos\.ie");
+  if (href.match(re))
+  {
+    ga('send', 'event', 'linkClick', 'argos', productID);
+  }
+  else
+  {
+    ga('send', 'event', 'linkClick', 'refferal', productID);
+  }
+}
+
 function generateProductInfoRow(item)
 {
   var row = document.createElement('DIV');
@@ -243,7 +257,9 @@ function generateProductInfoRow(item)
 
   var h = document.createElement("H3");
   var titleATag = document.createElement('a');
+  titleATag.setAttribute('id', "productLinkA");
   titleATag.setAttribute('href',productUrl);
+  titleATag.setAttribute('onclick',"logClickThrough("+ productId +");");
   titleATag.innerHTML = item.productName;
   h.appendChild(titleATag);
 
