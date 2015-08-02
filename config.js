@@ -23,6 +23,10 @@
       console.log('Got legacy for ebay');
       res.redirect('http://ebayvenison.com');
     });
+    app.get('/*.php*', function(req, res) {
+      console.log('Got a legacy php link');
+      res.redirect('/');
+    });
   };
 
   // Catch the uncaught errors that weren't wrapped in a domain or try catch statement.
