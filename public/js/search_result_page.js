@@ -3,12 +3,13 @@ var isClearancePage = false;
 function displayClearanceSearch()
 {
   hideHomeScreen();
+  hideAboutScreen();
   populateSearchBox("");
   isClearancePage = true;
   displayMessage("Clearance Search");
   var resultsDiv = document.getElementById('results');
 
-  generateFilterSection(resultsDiv, false);
+  generateFilterSection(resultsDiv, true);
   disableFilterButtonByDropdown();
   $( "#filterButton").addClass('disabled');
   return false;
@@ -36,6 +37,7 @@ function displaySearchResultPage(result)
   isClearancePage = false;
   var resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = "";
+  hideAboutScreen();
 
 
   if(result.hasOwnProperty("items"))
@@ -52,6 +54,7 @@ function displayClearanceResultPage(result)
 {
   isClearancePage = true;
   populateSearchBox("");
+  hideAboutScreen();
   displayMessage("Clearance Search");
   var resultsDiv = document.getElementById('results');
 
@@ -81,22 +84,32 @@ function populatePreviouslySearchedFilters()
       {
         document.getElementById(maxPriceId).value = params.maxPrice;
       }
+      if(params.storeId != null || params.storeId != undefined)
+      {
+        updateDropDown(params.storeId, storeDropDownId);
+        onStoreSelectChange();
+      }
       if(params.catagoryId != null || params.catagoryId != undefined)
       {
-        if(params.catagoryId != 0)
-        {
-          $("#" + catagoriesDropDownId).val(params.catagoryId).attr("selected", "selected");
-          $("#" + catagoriesDropDownId).selectmenu('refresh');
-          // var catagoriesDropDown = document.getElementById(catagoriesDropDownId);
-          // catagoriesDropDown.selectedIndex = params.catagoryId;
-          // catagoriesDropDown.value = getCatagoriesList()[params.catagoryId];
-        }
+        updateDropDown(params.catagoryId, catagoriesDropDownId);
       }
     }
   }
   catch(err)
   {
+    console.log(err);
+  }
+}
 
+function updateDropDown(value, elemId)
+{
+  if(value != null || value != undefined)
+  {
+    if(value != 0)
+    {
+      $("#" + elemId).val(value).attr("selected", "selected");
+      //$("#" + elemId).selectmenu('refresh', true);
+    }
   }
 }
 
@@ -375,9 +388,12 @@ function updateFilterSearch()
     catagoryName = getCatagoriesList()[catagoryId];
   }
 
+  var storeDropDown = document.getElementById(storeDropDownId);
+  var storeId = storeDropDown.options[storeDropDown.selectedIndex].value;
+
   var query = document.getElementById("searchBox").value;
 
-  advancedSearch(query, minPrice, maxPrice, catagoryId, isClearancePage);
+  advancedSearch(query, minPrice, maxPrice, catagoryId, isClearancePage, storeId);
 }
 
 function isValidItemData(itemJson)
@@ -397,7 +413,7 @@ function onStoreSelectChange()
 
   restoreStockFilterOfItems();
 
-  if(storeId != 0)
+  if(storeId != 0 && itemsList != null)
   {
     updateStockColumnVisilbity(true);
     for(var i =0; i < itemsList.length; i++ )
@@ -420,14 +436,17 @@ function onStoreSelectChange()
 
 function restoreStockFilterOfItems()
 {
-  for(var i =0; i < itemsList.length; i++ )
+  if(itemsList != null)
   {
-    var item = itemsList[i];
-    if(isValidItemData(item))
+    for(var i =0; i < itemsList.length; i++ )
     {
-      var productId = item.productId.replace("/", "");
-      var element = document.getElementById("stockStatus" + productId);
-      element.innerHTML = "";
+      var item = itemsList[i];
+      if(isValidItemData(item))
+      {
+        var productId = item.productId.replace("/", "");
+        var element = document.getElementById("stockStatus" + productId);
+        element.innerHTML = "";
+      }
     }
   }
 }
@@ -456,29 +475,28 @@ function handleItemRowsStockResponse(itemJson)
   var productId = itemJson.productId.replace("/", "");
   var element = document.getElementById("stockStatus" + productId);
 
-  var span = document.createElement("span");
-  span.setAttribute("aria-hidden", "true");
+  var icon = document.createElement("i");
 
   if (itemJson.isStocked)
   {
-    span.setAttribute("class", "glyphicon glyphicon-ok");
-    span.setAttribute("style", "color: green;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-check");
+    icon.setAttribute("style", "color: green; font-size: 20px;");
   }
   else if (itemJson.isOrderable)
   {
-    span.setAttribute("class", "glyphicon glyphicon-transfer");
-    span.setAttribute("style", "color: orange;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-truck");
+    icon.setAttribute("style", "color: orange;font-size: 20px;");
   }
   else if (itemJson.hasOutOfStockMessage)
   {
-    span.setAttribute("class", "glyphicon glyphicon-remove");
-    span.setAttribute("style", "color: red;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-close");
+    icon.setAttribute("style", "color: red; font-size: 20px;");
   }
   else
   {
-    span.setAttribute("class", "glyphicon glyphicon-question-sign");
-    span.setAttribute("style", "color: red;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-question");
+    icon.setAttribute("style", "color: red;font-size: 20px;");
   }
 
-  element.appendChild(span);
+  element.appendChild(icon);
 }

@@ -27,9 +27,10 @@ function initPage()
       var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;
       var maxPrice = (params.maxPrice != null || params.maxPrice != undefined) ? params.maxPrice : null;
       var catagoryId = (params.catagoryId != null || params.catagoryId != undefined) ? params.catagoryId : 0;
-      var clearance = (params.catagoryId != null || params.catagoryId != undefined);
+      var clearance = (params.isClearance != null || params.isClearance != undefined) && params.isClearance;
+      var storeId = (params.storeId != null || params.storeId != undefined) ? params.storeId : 0;
       //will default to a simple search if needed
-      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance);
+      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance, storeId);
       hideHomeScreen();
 
 		}
@@ -147,6 +148,19 @@ function scrollToSearchBar()
     }, 2000);
 }
 
+function hideAboutScreen()
+{
+  $( "#aboutScreen" ).addClass( "hidden" );
+}
+
+function showAboutScreen()
+{
+  hideHomeScreen();
+  $( "#aboutScreen" ).removeClass( "hidden" );
+  $( "#results" ).html("");
+  return false;
+}
+
 function hideHomeScreen(){
   $( "#homeScreen" ).addClass( "hidden" );
   $( "#navbarSearchForm" ).removeClass( "hidden" );
@@ -155,6 +169,7 @@ function hideHomeScreen(){
 function showHomeScreen(){
   $( "#homeScreen" ).removeClass( "hidden" );
   $( "#navbarSearchForm" ).addClass( "hidden" );
+  hideAboutScreen();
   $( "#results" ).html("");
   populateSearchBox("");
 

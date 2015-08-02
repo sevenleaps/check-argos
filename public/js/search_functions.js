@@ -29,7 +29,7 @@ function searchByQueryNoHistory(searchQuery){
 
 var noResults = "No Results";
 
-function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance)
+function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, storeId)
 {
   if(minPrice === null && maxPrice === null && catagoryId == 0)
   {
@@ -39,7 +39,7 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance)
   else
   {
     displaySpinner();
-    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance);
+    var urlForAdvancedQuery = generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId);
     //TODO Populate this properly!
     if(navigator.userAgent.indexOf("MSIE 9.") > -1){
       //History not supported - Go to page
@@ -53,7 +53,7 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance)
   }
 }
 
-function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance)
+function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catagoryId, clearance, storeId)
 {
   var url = "?search=" +  query;
   if(minPrice !== null)
@@ -74,6 +74,11 @@ function generatePushStateUrlForAdvancedSearch(query, minPrice, maxPrice, catago
   if(clearance)
   {
     url = url + "&isClearance=true"
+  }
+
+  if(storeId)
+  {
+    url = url + "&storeId=" + storeId;
   }
 
   return url;

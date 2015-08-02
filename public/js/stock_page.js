@@ -257,42 +257,42 @@ function generateProductInfoRow(item)
 function appendStockStatus(itemJson, element)
 {
   element.innerHTML = "";
-  var glyphSpan = document.createElement("span");
-  glyphSpan.setAttribute("aria-hidden", "true");
+  var icon = document.createElement("i");
+  icon.setAttribute("aria-hidden", "true");
 
   var textSpan = document.createElement("span");
   textSpan.setAttribute("class", "hidden-xs");
 
   if (itemJson.isStocked)
   {
-    glyphSpan.setAttribute("class", "glyphicon glyphicon-ok");
-    glyphSpan.setAttribute("style", "color: green;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-check");
+    icon.setAttribute("style", "color: green;font-size: 20px;");
     textSpan.setAttribute("style", "color: green;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = itemJson.stockQuantity + " in stock";
   }
   else if (itemJson.isOrderable)
   {
-    glyphSpan.setAttribute("class", "glyphicon glyphicon-transfer");
-    glyphSpan.setAttribute("style", "color: orange;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-truck");
+    icon.setAttribute("style", "color: orange;font-size: 20px;");
     textSpan.setAttribute("style", "color: orange;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Orderable";
   }
   else if (itemJson.hasOutOfStockMessage)
   {
-    glyphSpan.setAttribute("class", "glyphicon glyphicon-remove");
-    glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-close");
+    icon.setAttribute("style", "color: red;font-size: 20px;");
     textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Out of stock";
   }
   else
   {
-    glyphSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
-    glyphSpan.setAttribute("style", "color: red;font-size: 20px;");
+    icon.setAttribute("class", "fa fa-question");
+    icon.setAttribute("style", "color: red;font-size: 20px;");
     textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
     textSpan.innerHTML = "Unknown";
   }
 
-  element.appendChild(glyphSpan);
+  element.appendChild(icon);
   element.appendChild(textSpan);
 }
 
