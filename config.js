@@ -23,6 +23,10 @@
       console.log('Got legacy for ebay');
       res.redirect('http://ebayvenison.com');
     });
+    app.get('/*Android.php*', function(req, res) {
+      console.log('Got a legacy android app php link, ' + req.url);
+      res.redirect('http://legacy.checkargos.com' + req.url);
+    });
     app.get('/*.php*', function(req, res) {
       console.log('Got a legacy php link');
       res.redirect('/');
