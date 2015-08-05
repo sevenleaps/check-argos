@@ -254,7 +254,7 @@ function generateProductInfoRow(item)
   productInfoDiv.setAttribute("style", "text-align: center;");
 
   var productId = item.productId.replace("/", "");
-  var productUrl = "http://www.argos.ie/static/Product/partNumber/" + productId +".htm";
+  var productUrl = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/' + productId + '.htm';
 
   var h = document.createElement("H3");
   var titleATag = document.createElement('a');
