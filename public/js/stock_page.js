@@ -221,9 +221,9 @@ function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
   return row;
 }
 
-function logClickThrough(productID)
+function logClickThrough(productID, id)
 {
-  var href = $("#productLinkA").attr('href');
+  var href = $("#" + id).attr('href');
   var re = new RegExp("^http:\/\/www\.argos\.ie");
   if (href.match(re))
   {
@@ -231,6 +231,7 @@ function logClickThrough(productID)
   }
   else
   {
+    //$("#" + id).attr('href', "http://" + href);
     ga('send', 'event', 'linkClick', 'refferal', productID);
   }
 }
@@ -259,14 +260,16 @@ function generateProductInfoRow(item)
   var titleATag = document.createElement('a');
   titleATag.setAttribute('id', "productLinkA");
   titleATag.setAttribute('href',productUrl);
-  titleATag.setAttribute('onclick',"logClickThrough("+ productId +");");
+  titleATag.setAttribute('onclick',"logClickThrough("+ productId +", \"productLinkA\");");
   titleATag.innerHTML = item.productName;
   h.appendChild(titleATag);
 
 
 
   var priceATag = document.createElement('a');
+  priceATag.setAttribute('id', "productLinkB");
   priceATag.setAttribute('href',productUrl);
+  priceATag.setAttribute('onclick',"logClickThrough("+ productId +", \"productLinkB\");");
   priceATag.innerHTML = "Buy at Argos.ie - €" + item.price;
 
   productInfoDiv.appendChild(h);
