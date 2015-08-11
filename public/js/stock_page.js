@@ -1,3 +1,5 @@
+var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+
 function displayStockPage(item)
 {
   var resultsDiv = document.getElementById('results');
@@ -21,9 +23,8 @@ function DST(url) {
     document.getElementsByTagName('head')[0].appendChild(s);
 }
 
-function checkStockForAllStores(item)
-{
-  var productId = item.productId.replace("/", "");
+function checkStockForAllStores(item) {
+  var productId = item.productId.replace('/', '');
 
   var stores = getStoreList();
   for(var key in stores)
@@ -44,8 +45,7 @@ function generateStockInfo(item, resultsDiv)
   {
     if (stores.hasOwnProperty(key))
     {
-      if(leftStoreDiv == null)
-      {
+      if(leftStoreDiv === null) {
         leftStoreDiv = generateStoreDiv(key, stores[key]);
       }
       else
@@ -59,19 +59,17 @@ function generateStockInfo(item, resultsDiv)
     }
   }
 
-  if(leftStoreDiv != null)
-  {
+  if (leftStoreDiv !== null) {
     resultsDiv.appendChild(generateStockInfoRow(leftStoreDiv, rightStoreDiv));
   }
 }
 
-function generateMobileStockTable(item, resultsDiv)
-{
+function generateMobileStockTable(item, resultsDiv) {
   var rowCount = 0;
 
-  var table = document.createElement("TABLE");
-  table.setAttribute("class", "table table-striped visible-sm visible-xs");
-  var tableBody = document.createElement("TBODY");
+  var table = document.createElement('TABLE');
+  table.setAttribute('class', 'table table-striped visible-sm visible-xs');
+  var tableBody = document.createElement('TBODY');
 
   var stores = getStoreList();
   for(var key in stores)
@@ -96,19 +94,19 @@ function generateMobileStockTable(item, resultsDiv)
         top: '50%', // Top position relative to parent
         left: '50%' // Left position relative to parent
       };
-      row = document.createElement("tr");
+      var row = document.createElement('tr');
 
       var storeName = key;
       var storeId = stores[key];
 
-      var storeNameCell = document.createElement("td");
-      storeNameCell.setAttribute("class", "storeNameCol");
-      storeNameCell.innerHTML = storeName;
-      var stockStatusCell = document.createElement("td");
-      stockStatusCell.setAttribute("class", "stockStatusCol");
+      var storeNameCell = document.createElement('td');
+      storeNameCell.setAttribute('class', 'storeNameCol');
+      storeNameCell.appendChild(createProductTextLink(item.productId, storeName));
+      var stockStatusCell = document.createElement('td');
+      stockStatusCell.setAttribute('class', 'stockStatusCol');
       var stockStatusContent = document.createElement('DIV');
-      stockStatusContent.setAttribute("id", "store" + storeId);
-      stockStatusContent.setAttribute("style", "position: relative; height:25px; top:50%;");
+      stockStatusContent.setAttribute('id', 'store' + storeId);
+      stockStatusContent.setAttribute('style', 'position: relative; height:25px; top:50%;');
 
       var spinner = new Spinner(opts).spin(stockStatusContent);
 
@@ -121,12 +119,27 @@ function generateMobileStockTable(item, resultsDiv)
     }
   }
 
-  if(row != null)
-  {
+  if (row !== null) {
     tableBody.appendChild(row);
   }
   table.appendChild(tableBody);
   resultsDiv.appendChild(table);
+}
+
+function createProductTextLink(productId, linkName) {
+  var a = document.createElement('a');
+  var linkText = document.createTextNode(linkName);
+  a.appendChild(linkText);
+  a.title = linkName;
+  a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  return a;
+}
+
+function createProductImageLink(productId, img) {
+  var a = document.createElement('a');
+  a.appendChild(img);
+  a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  return a;
 }
 
 function generateStockTable(item, resultsDiv)
@@ -135,18 +148,17 @@ function generateStockTable(item, resultsDiv)
   var leftStorePopulated = false;
   var rowCount = 0;
 
-  var table = document.createElement("TABLE");
-  table.setAttribute("class", "table table-striped hidden-sm hidden-xs");
-  var tableBody = document.createElement("TBODY");
+  var table = document.createElement('TABLE');
+  table.setAttribute('class', 'table table-striped hidden-sm hidden-xs');
+  var tableBody = document.createElement('TBODY');
 
   var stores = getStoreList();
   for(var key in stores)
   {
     if (stores.hasOwnProperty(key))
     {
-      if(row == null)
-      {
-        row = document.createElement("tr");
+      if(row === null) {
+        row = document.createElement('tr');
       }
       var opts = {
         lines: 7, // The number of lines to draw
@@ -170,14 +182,14 @@ function generateStockTable(item, resultsDiv)
       var storeName = key;
       var storeId = stores[key];
 
-      var storeNameCell = document.createElement("td");
-      storeNameCell.setAttribute("class", "storeNameCol");
-      storeNameCell.innerHTML = storeName;
-      var stockStatusCell = document.createElement("td");
-      stockStatusCell.setAttribute("class", "stockStatusCol");
+      var storeNameCell = document.createElement('td');
+      storeNameCell.setAttribute('class', 'storeNameCol');
+      storeNameCell.appendChild(createProductTextLink(item.productId, storeName)); //= storeName;
+      var stockStatusCell = document.createElement('td');
+      stockStatusCell.setAttribute('class', 'stockStatusCol');
       var stockStatusContent = document.createElement('DIV');
-      stockStatusContent.setAttribute("id", "sm-store" + storeId);
-      stockStatusContent.setAttribute("style", "position: relative; height:25px; top:50%;");
+      stockStatusContent.setAttribute('id', 'sm-store' + storeId);
+      stockStatusContent.setAttribute('style', 'position: relative; height:25px; top:50%;');
 
       var spinner = new Spinner(opts).spin(stockStatusContent);
 
@@ -199,7 +211,7 @@ function generateStockTable(item, resultsDiv)
     }
   }
 
-  if(row != null)
+  if(row !== null)
   {
     tableBody.appendChild(row);
   }
@@ -210,10 +222,10 @@ function generateStockTable(item, resultsDiv)
 function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
 {
   var row = document.createElement('DIV');
-  row.setAttribute("class", "row");
+  row.setAttribute('class', 'row');
 
   row.appendChild(leftStoreDiv);
-  if(rightStoreDiv != null)
+  if(rightStoreDiv !== null)
   {
     row.appendChild(rightStoreDiv);
   }
@@ -223,8 +235,8 @@ function generateStockInfoRow(leftStoreDiv, rightStoreDiv)
 
 function logClickThrough(productID, id)
 {
-  var href = $("#" + id).attr('href');
-  var re = new RegExp("^http:\/\/www\.argos\.ie");
+  var href = $('#' + id).attr('href');
+  var re = new RegExp('^http:\/\/www\.argos\.ie');
   if (href.match(re))
   {
     ga('send', 'event', 'linkClick', 'argos', productID);
@@ -239,38 +251,40 @@ function logClickThrough(productID, id)
 function generateProductInfoRow(item)
 {
   var row = document.createElement('DIV');
-  row.setAttribute("class", "row vertical-align");
-  row.setAttribute("style", "padding-bottom:1em;");
+  row.setAttribute('class', 'row vertical-align');
+  row.setAttribute('style', 'padding-bottom:1em;');
 
   var imageDiv = document.createElement('DIV');
-  imageDiv.setAttribute("class", "col-md-4 col-lg-4");
-  imageDiv.setAttribute("style", "text-align: center;");
+  imageDiv.setAttribute('class', 'col-md-4 col-lg-4');
+  imageDiv.setAttribute('style', 'text-align: center;');
   var img = new Image();
   img.src = item.productImageUrl;
-  imageDiv.appendChild(img);
+  var productImageLink = createProductImageLink(item.productId, img);
+  imageDiv.appendChild(productImageLink);
+
 
   var productInfoDiv = document.createElement('DIV');
-  productInfoDiv.setAttribute("class", "col-md-4 col-lg-4");
-  productInfoDiv.setAttribute("style", "text-align: center;");
+  productInfoDiv.setAttribute('class', 'col-md-4 col-lg-4');
+  productInfoDiv.setAttribute('style', 'text-align: center;');
 
-  var productId = item.productId.replace("/", "");
-  var productUrl = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/' + productId + '.htm';
+  var productId = item.productId.replace('/', '');
+  var productUrl = REFFERL_LINK + productId + '.htm';
 
-  var h = document.createElement("H3");
+  var h = document.createElement('H3');
   var titleATag = document.createElement('a');
-  titleATag.setAttribute('id', "productLinkA");
+  titleATag.setAttribute('id', 'productLinkA');
   titleATag.setAttribute('href',productUrl);
-  titleATag.setAttribute('onclick',"logClickThrough("+ productId +", \"productLinkA\");");
+  titleATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
   titleATag.innerHTML = item.productName;
   h.appendChild(titleATag);
 
 
 
   var priceATag = document.createElement('a');
-  priceATag.setAttribute('id', "productLinkB");
+  priceATag.setAttribute('id', 'productLinkB');
   priceATag.setAttribute('href',productUrl);
-  priceATag.setAttribute('onclick',"logClickThrough("+ productId +", \"productLinkB\");");
-  priceATag.innerHTML = "Buy at Argos.ie - €" + item.price;
+  priceATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkB\");');
+  priceATag.innerHTML = 'Buy at Argos.ie - €' + item.price;
 
   productInfoDiv.appendChild(h);
   productInfoDiv.appendChild(priceATag);
@@ -281,50 +295,48 @@ function generateProductInfoRow(item)
   return row;
 }
 
-function appendStockStatus(itemJson, element)
-{
-  element.innerHTML = "";
-  var icon = document.createElement("i");
-  icon.setAttribute("aria-hidden", "true");
+function appendStockStatus(itemJson, element) {
+  element.innerHTML = '';
+  var icon = document.createElement('i');
+  icon.setAttribute('aria-hidden', 'true');
 
-  var textSpan = document.createElement("span");
-  textSpan.setAttribute("class", "hidden-xs");
+  var textSpan = document.createElement('span');
+  textSpan.setAttribute('class', 'hidden-xs');
 
   if (itemJson.isStocked)
   {
-    icon.setAttribute("class", "fa fa-check");
-    icon.setAttribute("style", "color: green;font-size: 20px;");
-    textSpan.setAttribute("style", "color: green;padding-left:1em; vertical-align: top;");
-    textSpan.innerHTML = itemJson.stockQuantity + " in stock";
+    icon.setAttribute('class', 'fa fa-check');
+    icon.setAttribute('style', 'color: green;font-size: 20px;');
+    textSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
+    textSpan.innerHTML = itemJson.stockQuantity + ' in stock';
   }
   else if (itemJson.isOrderable)
   {
-    icon.setAttribute("class", "fa fa-truck");
-    icon.setAttribute("style", "color: orange;font-size: 20px;");
-    textSpan.setAttribute("style", "color: orange;padding-left:1em; vertical-align: top;");
-    textSpan.innerHTML = "Orderable";
+    icon.setAttribute('class', 'fa fa-truck');
+    icon.setAttribute('style', 'color: orange;font-size: 20px;');
+    textSpan.setAttribute('style', 'color: orange;padding-left:1em; vertical-align: top;');
+    textSpan.innerHTML = 'Orderable';
   }
   else if (itemJson.hasOutOfStockMessage)
   {
-    icon.setAttribute("class", "fa fa-close");
-    icon.setAttribute("style", "color: red;font-size: 20px;");
-    textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
-    textSpan.innerHTML = "Out of stock";
+    icon.setAttribute('class', 'fa fa-close');
+    icon.setAttribute('style', 'color: red;font-size: 20px;');
+    textSpan.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
+    textSpan.innerHTML = 'Out of stock';
   }
   else
   {
-    icon.setAttribute("class", "fa fa-question");
-    icon.setAttribute("style", "color: red;font-size: 20px;");
-    textSpan.setAttribute("style", "color: red;padding-left:1em; vertical-align: top;");
-    textSpan.innerHTML = "Unknown";
+    icon.setAttribute('class', 'fa fa-question');
+    icon.setAttribute('style', 'color: red;font-size: 20px;');
+    textSpan.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
+    textSpan.innerHTML = 'Unknown';
   }
 
   element.appendChild(icon);
   element.appendChild(textSpan);
 }
 
-function handleStoreStockStatus(itemJson, storeId)
-{
-  appendStockStatus(itemJson, document.getElementById("sm-store" + storeId));
-  appendStockStatus(itemJson, document.getElementById("store" + storeId));
+function handleStoreStockStatus(itemJson, storeId) {
+  appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
+  appendStockStatus(itemJson, document.getElementById('store' + storeId));
 }
