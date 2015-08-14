@@ -132,6 +132,7 @@ function createProductTextLink(productId, linkName) {
   a.appendChild(linkText);
   a.title = linkName;
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
   return a;
 }
 
@@ -139,6 +140,7 @@ function createProductImageLink(productId, img) {
   var a = document.createElement('a');
   a.appendChild(img);
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
   return a;
 }
 
