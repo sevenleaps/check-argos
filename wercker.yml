@@ -33,6 +33,9 @@ deploy:
         name: git pull check-argos
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 git --git-dir=/home/vagrant/repos/check-argos/.git --work-tree=/home/vagrant/repos/check-argos pull
     - script:
+        name: rm root node_modules
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 sudo rm -r /root/node_modules
+    - script:
         name: rm check-argos node_modules
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 sudo rm -r /home/vagrant/repos/check-argos/node_modules
     - script:
