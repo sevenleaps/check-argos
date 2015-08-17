@@ -1,6 +1,12 @@
 (function () {
   'use strict';
   var request = require('request');
+  var moment = require('moment');
+  var mongodb = require('mongodb-then');
+  var connecitonURI = process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + process.env.MONGODB_CONNECTION_URI;
+  var db = mongodb(connecitonURI + 'checkargos', [
+    'product','price'
+  ]);
   var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
   var ProductsUtil = require('../../lib/util/index').Products;
 
@@ -13,10 +19,9 @@
     try {
       if (req.query && (req.query.q || req.query.isClearance))
       {
-        if(ProductsUtil.isValidProductId(req.query.q)) {
+        if (ProductsUtil.isValidProductId(req.query.q)) {
           searchProductNumber(req, res, next);
-        }
-        else {
+        } else {
           //should we check was this an effort at a productId?
           req.query.searchString = req.query.q;
           textSearch(req, res, next);
@@ -36,16 +41,48 @@
     ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body)
     {
       var productPageHtml = body;
-      //console.log(productPageHtml);
       if(ProductsUtil.isValidProductPage(productPageHtml))
       {
         var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
+        try {
+          updatePriceHistory(productInfoJson);
+        } catch (error) {
+          console.error(error);
+        }
         res.status(200).json(productInfoJson);
       }
       else
       {
         res.status(404).json({});
       }
+    });
+
+  }
+
+  function updatePriceHistory(productInfoJson) {
+    var productId = productInfoJson.productId.replace('/', '');
+    var productPrice = productInfoJson.price.replace('.', '');
+
+    var currentPrice = {
+      'productId': Number.parseInt(productId),
+      'price': Number.parseInt(productPrice),
+      'day': Number.parseInt(moment().format('YYYYMMDD'))
+    };
+    db.price.find({'productId': Number.parseInt(productId)}).sort({'$natural': -1}).limit(1).then(function (prices) {
+      if (prices.length === 0) {
+        // new product price history
+        return db.price.insertOne(currentPrice);
+      }
+
+      var isNewPrice = prices[0].price !== currentPrice.price;
+      var isDifferentDate = prices[0].price.day !== currentPrice.day;
+      if (isNewPrice  && isDifferentDate) {
+        // add new price
+        return db.price.insertOne(currentPrice);
+      }
+    }).catch(function (err) {
+      console.error('Error uupdating price history');
+      console.error(err);
     });
 
   }
@@ -86,6 +123,11 @@
           if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts !== 'Error')) {
             try {
               var productsJson = ProductsUtil.getProductsFromHtml(body);
+
+              productsJson.forEach(function updatePrice(item) {
+                updatePriceHistory(item);
+              });
+
               var returnObj = {
                 items: productsJson,
                 totalNumProducts: totalNumProducts
