@@ -1,17 +1,33 @@
 (function () {
   'use strict';
   var request = require('request');
+  var mongodb = require('mongodb-then');
+
+  var connecitonURI = process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + process.env.MONGODB_CONNECTION_URI;
+  var db = mongodb(connecitonURI + 'checkargos', [
+    'product','price'
+  ]);
 
   module.exports = exports = {
-    checkStock : checkStock
+    checkStock : checkStock,
+    getPriceHistory : getPriceHistory
   };
+
+  function getPriceHistory (req, res) {
+    db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
+      res.json(prices);
+    }).catch(function (error) {
+      console.error('Error retrieving prices' + JSON.stringify(error));
+      res.json([]);
+    });
+  }
 
   function checkStock(req, res, next) {
     try{
       checkStockStatus(req, res, next, true);
     }
     catch(ex){
-      console.error("Catch");
+      console.error('Catch');
       console.error(ex);
       res.status(500).send('Error with request');
     }
@@ -69,9 +85,8 @@
     {
       stockQuant = body.match(/([0-9]*) left to/)[1];
     }
-    catch(ex)
-    {
-      stockQuant = "Error";
+    catch(ex) {
+      stockQuant = 'Error';
     }
 
     return stockQuant;
