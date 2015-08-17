@@ -76,14 +76,14 @@
           url = buildSearchUrl(req.query);
         }
 
-        console.log("Generated URL for Argos" + url);
+        console.log('Generated URL for Argos' + url);
         request(url, function onResponse(error, response, body) {
           if (error) {
             return next(new ArgosResponseError(error));
           }
 
           var totalNumProducts = ProductsUtil.getTotalNumberOfProducts(body);
-          if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts != "Error")) {
+          if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts !== 'Error')) {
             try {
               var productsJson = ProductsUtil.getProductsFromHtml(body);
               var returnObj = {
@@ -97,7 +97,7 @@
           }
           else if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(req.query.subSectionText || req.query.subSectionNumber)){
             try{
-              console.log("Is a sub catagory page");
+              console.log('Is a sub catagory page');
               var catagoryInfo = ProductsUtil.getCatagoryInformationFromPath(response.request.path);
 
               req.query.sectionText = catagoryInfo.catagoryName;
@@ -170,7 +170,7 @@ function buildSubCatagorySearchUrl(params) {
     url = url + '/r_001/4|Price|' + params.minPrice + '+%3C%3D++%3C%3D+' + params.maxPrice + '|2';
     url = url + '/s/' + searchPreference + '.htm';
 
-    console.log('clearance ' + url)
+    console.log('clearance ' + url);
     return url.replace(/ /g, '+');
   }
 
