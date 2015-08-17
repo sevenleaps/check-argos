@@ -31,7 +31,7 @@
     }
   }
 
-  function searchProductNumber(req, res, next) {
+  function searchProductNumber(req, res) {
     var productNum = ProductsUtil.cleanUpProductId(req.query.q);
     ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body)
     {
