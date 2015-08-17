@@ -33,8 +33,11 @@ deploy:
         name: npm install check-argos
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 npm install /home/vagrant/repos/check-argos
     - script:
-        name: restart docker image check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 docker restart check-argos
+        name: stop docker image check-argos
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh stop
+    - script:
+        name: start docker image check-argos
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh start
   after-steps:
     - wantedly/pretty-slack-notify:
         webhook_url: $SLACK_WEBHOOK_URL
