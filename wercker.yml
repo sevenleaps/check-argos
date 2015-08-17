@@ -34,7 +34,7 @@ deploy:
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 npm install /home/vagrant/repos/check-argos
     - script:
         name: stop docker image check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh stop
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 docker restart check-argos
     - script:
         name: start docker image check-argos
         code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh start
