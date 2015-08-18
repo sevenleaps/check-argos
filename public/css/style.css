@@ -21,6 +21,10 @@
   width: 24%;
 }
 
+.custom-xs{
+  display:none;
+}
+
 /* larger than phone*/
 @media (min-width: 767px) {
   .vertical-align {
@@ -52,6 +56,10 @@
 
     .itemProductImage{
       width:70%;
+    }
+
+    .custom-xs{
+      display:inline-block!important;
     }
 }
 @media(min-width:768px) {

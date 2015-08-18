@@ -336,7 +336,7 @@ function appendStockStatus(itemJson, element) {
   var textSpan = document.createElement('span');
   textSpan.setAttribute('class', 'hidden-xs');
   var mobileTextSpan = document.createElement('span');
-  mobileTextSpan.setAttribute('class', 'visible-xs');
+  mobileTextSpan.setAttribute('class', 'custom-xs');
 
   if (itemJson.isStocked)
   {
@@ -344,7 +344,7 @@ function appendStockStatus(itemJson, element) {
     icon.setAttribute('style', 'color: green;font-size: 20px;');
     textSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
     textSpan.innerHTML = itemJson.stockQuantity + ' in stock';
-    mobileTextSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top; display: inline-block!important;');
+    mobileTextSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
     mobileTextSpan.innerHTML = itemJson.stockQuantity;
   }
   else if (itemJson.isOrderable)
