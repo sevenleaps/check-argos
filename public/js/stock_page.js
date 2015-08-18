@@ -275,7 +275,7 @@ function generateProductInfoRow(item)
   var h = document.createElement('H3');
   var titleATag = document.createElement('a');
   titleATag.setAttribute('id', 'productLinkA');
-  titleATag.setAttribute('href',productUrl);
+  titleATag.setAttribute('href', productUrl);
   titleATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
   titleATag.innerHTML = item.productName;
   h.appendChild(titleATag);
@@ -288,13 +288,44 @@ function generateProductInfoRow(item)
   priceATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkB\");');
   priceATag.innerHTML = 'Buy at Argos.ie - €' + item.price;
 
+  var highestPastPrice = document.createElement('DIV');
+  highestPastPrice.setAttribute('id', 'high');
+  highestPastPrice.setAttribute('style', 'text-align: center; font-size: 12px;');
+  highestPastPrice.innerHTML='Highest checking ...';
+  getPastPrices(item.productId);
+  var lowestPastPrice = document.createElement('DIV');
+  lowestPastPrice.setAttribute('id', 'low');
+  lowestPastPrice.setAttribute('style', 'text-align: center; font-size: 12px;');
+  lowestPastPrice.innerHTML='Lowest checking ...';
+
   productInfoDiv.appendChild(h);
+  productInfoDiv.appendChild(highestPastPrice);
+  productInfoDiv.appendChild(lowestPastPrice);
   productInfoDiv.appendChild(priceATag);
 
   row.appendChild(imageDiv);
   row.appendChild(productInfoDiv);
 
   return row;
+}
+
+function getPastPrices(productId) {
+  function reqListener () {
+    var prices = JSON.parse(this.responseText);
+    prices = prices.sort(function (a,b) {return b.price - a.price;});
+    var high = document.getElementById('high');
+    var low = document.getElementById('low');
+    low.innerHTML='Lowest price €' + prices[prices.length - 1].price/100 + ' ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+    high.innerHTML='Highest price €' + prices[0].price/100 + ' ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');;
+    console.log(prices);
+  }
+
+  var url = '/stockcheck/price/' + productId.replace('/', '');
+
+  var oReq = new XMLHttpRequest();
+  oReq.addEventListener('load', reqListener);
+  oReq.open('get', url, true);
+  oReq.send();
 }
 
 function appendStockStatus(itemJson, element) {
