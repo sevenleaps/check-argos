@@ -344,7 +344,7 @@ function appendStockStatus(itemJson, element) {
     icon.setAttribute('style', 'color: green;font-size: 20px;');
     textSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
     textSpan.innerHTML = itemJson.stockQuantity + ' in stock';
-    mobileTextSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
+    mobileTextSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top; display: inline-block!important;');
     mobileTextSpan.innerHTML = itemJson.stockQuantity;
   }
   else if (itemJson.isOrderable)
