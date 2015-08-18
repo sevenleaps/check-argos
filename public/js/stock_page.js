@@ -291,12 +291,12 @@ function generateProductInfoRow(item)
   var highestPastPrice = document.createElement('DIV');
   highestPastPrice.setAttribute('id', 'high');
   highestPastPrice.setAttribute('style', 'text-align: center; font-size: 12px;');
-  highestPastPrice.innerHTML='Highest checking ...';
+  highestPastPrice.innerHTML='Checking highest price ...';
   getPastPrices(item.productId);
   var lowestPastPrice = document.createElement('DIV');
   lowestPastPrice.setAttribute('id', 'low');
   lowestPastPrice.setAttribute('style', 'text-align: center; font-size: 12px;');
-  lowestPastPrice.innerHTML='Lowest checking ...';
+  lowestPastPrice.innerHTML='Checking lowest price ...';
 
   productInfoDiv.appendChild(h);
   productInfoDiv.appendChild(highestPastPrice);
@@ -315,8 +315,8 @@ function getPastPrices(productId) {
     prices = prices.sort(function (a,b) {return b.price - a.price;});
     var high = document.getElementById('high');
     var low = document.getElementById('low');
-    low.innerHTML='Lowest price €' + prices[prices.length - 1].price/100 + ' ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
-    high.innerHTML='Highest price €' + prices[0].price/100 + ' ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');;
+    low.innerHTML='Lo: ' + ' €' + prices[prices.length - 1].price/100 + ' - ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+    high.innerHTML='Hi: ' + ' €' + prices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
     console.log(prices);
   }
 
