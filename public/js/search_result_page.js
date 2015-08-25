@@ -59,6 +59,7 @@ function createPaginationIfNeeded(result, resultsDiv)
     var totalNum = result.totalNumProducts;
     if(totalNum > productsPerPage)
     {
+      var currentPage = 1;
       var numPages = (totalNum/productsPerPage) + 1;
       var params = retrieveParams();
       if(params.page != null || params.page != undefined)

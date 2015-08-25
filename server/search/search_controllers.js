@@ -81,7 +81,7 @@
         return db.price.insertOne(currentPrice);
       }
     }).catch(function (err) {
-      console.error('Error uupdating price history');
+      console.error('Error updating price history');
       console.error(err);
     });
 
