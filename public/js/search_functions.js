@@ -36,7 +36,7 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, store
   if(minPrice === null && maxPrice === null && catagoryId == 0 && page == null)
   {
     //no need for advanced search
-    searchByQuery(query)
+    searchByQuery(query);
   }
   else
   {
@@ -51,6 +51,20 @@ function advancedSearch (query, minPrice, maxPrice, catagoryId, clearance, store
     }else{
       window.history.pushState(null, null, urlForAdvancedQuery);
     }
+    searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance, page), clearance);
+  }
+}
+
+function advancedSearchNoHistory (query, minPrice, maxPrice, catagoryId, clearance, storeId, page)
+{
+  if(minPrice === null && maxPrice === null && catagoryId == 0 && page == null)
+  {
+    //no need for advanced search
+    searchByQueryNoHistory(query);
+  }
+  else
+  {
+    displaySpinner();
     searchViaAJAX(generateAdvancedSearchUrl(query, minPrice, maxPrice, catagoryId, clearance, page), clearance);
   }
 }

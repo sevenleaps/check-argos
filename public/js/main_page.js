@@ -1,16 +1,5 @@
 function initPage()
 {
-  document.getElementById('searchBox').addEventListener('keypress', function(event) {
-    if (!event){
-      event = window.event;
-    }
-    var keyCode = event.keyCode || event.which;
-    if (keyCode == '13'){
-      // Enter pressed
-      searchBoxSubmit(this.value);
-    }
-  });
-
   // $('body').css('min-height',$(document).height() + $('#searchBox').offset().top);
   //
   // $('#searchBox').on('focus', function() {
@@ -31,7 +20,7 @@ function initPage()
       var storeId = (params.storeId != null || params.storeId != undefined) ? params.storeId : 0;
       var page = (params.page) ? params.page : null;
       //will default to a simple search if needed
-      advancedSearch (params.search, minPrice, maxPrice, catagoryId, clearance, storeId, page);
+      advancedSearchNoHistory (params.search, minPrice, maxPrice, catagoryId, clearance, storeId, page);
       hideHomeScreen();
 
 		}

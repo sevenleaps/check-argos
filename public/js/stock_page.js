@@ -311,13 +311,15 @@ function generateProductInfoRow(item)
 
 function getPastPrices(productId) {
   function reqListener () {
-    var prices = JSON.parse(this.responseText);
-    prices = prices.sort(function (a,b) {return b.price - a.price;});
     var high = document.getElementById('high');
     var low = document.getElementById('low');
-    low.innerHTML='Lo: ' + ' €' + prices[prices.length - 1].price/100 + ' - ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
-    high.innerHTML='Hi: ' + ' €' + prices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
-    console.log(prices);
+    if(high !== null && low !== null){
+      var prices = JSON.parse(this.responseText);
+      prices = prices.sort(function (a,b) {return b.price - a.price;});
+      low.innerHTML='Lo: ' + ' €' + prices[prices.length - 1].price/100 + ' - ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+      high.innerHTML='Hi: ' + ' €' + prices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+      //console.log(prices);
+    }
   }
 
   var url = '/stockcheck/price/' + productId.replace('/', '');
@@ -375,6 +377,8 @@ function appendStockStatus(itemJson, element) {
 }
 
 function handleStoreStockStatus(itemJson, storeId) {
-  appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
-  appendStockStatus(itemJson, document.getElementById('store' + storeId));
+  if(document.getElementById('sm-store' + storeId) !== null && document.getElementById('store' + storeId) !== null){
+    appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
+    appendStockStatus(itemJson, document.getElementById('store' + storeId));
+  }
 }
