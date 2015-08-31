@@ -318,7 +318,6 @@ function getPastPrices(productId) {
       prices = prices.sort(function (a,b) {return b.price - a.price;});
       low.innerHTML='Lo: ' + ' €' + prices[prices.length - 1].price/100 + ' - ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
       high.innerHTML='Hi: ' + ' €' + prices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
-      //console.log(prices);
     }
   }
 

@@ -1,29 +1,52 @@
 
-function initChart(json)
-{
-  var ctx = $("#myChart").get(0).getContext("2d");
+function initChart(json) {
+  var ctx = $('#myChart').get(0).getContext('2d');
   // This will get the first returned node in the jQuery collection.
   var chart = new Chart(ctx).Scatter(generateData(json), generateOptions());
 
 }
 
-function generateData(json)
-{
-  var da = new Array();
-  for(var i = 0; i < json.length; i++) {
-    var element = json[i];
-    var source = new Object();
-    source.y = element.price/100;
-    source.x = moment(element.day.toString(), 'YYYYMMDD').toDate();
-    da.push(source);
-  }
+function generateData(prices) {
+  var dataPoints = prices.map(function (price) {
+    var source = {};
+    source.y = price.price/100;
+    source.x = moment(price.day.toString(), 'YYYYMMDD').toDate();
+    return source;
+  });
+
+  dataPoints = dataPoints.map(function (source, index, array) {
+    var sources = [source];
+    // if last element
+    if (array[index + 1] === undefined) {
+    } else {
+      var isDayApart = array[index + 1].x.getTime() - source.x.getTime() > 86400000;
+
+      if (isDayApart) {
+        var padSource = {};
+        padSource.y = source.y;
+        padSource.x = moment(array[index + 1].x).subtract(1, 'day').toDate();
+        sources.push(padSource);
+      }
+    }
+    return sources;
+  });
+
+  dataPoints = _.flatten(dataPoints);
+  var last = dataPoints.pop();
+  var today = {
+    y: last.y,
+    x: moment().toDate()
+  };
+  dataPoints.push(last);
+  dataPoints.push(today);
+
   var data = [
     {
       label: 'Price History',
       strokeColor: '#F16220',
       pointColor: '#F16220',
       pointStrokeColor: '#fff',
-      data: da
+      data: dataPoints
     }];
 
     return data;
@@ -32,16 +55,17 @@ function generateData(json)
 function generateOptions()
 {
   return {
+        datasetStroke: true,
 				bezierCurve: false,
 				showTooltips: true,
 				scaleShowHorizontalLines: true,
 				scaleShowLabels: true,
-				scaleLabel: "€ <%=value%>",
-				scaleArgLabel: "<%=value%>",
+				scaleLabel: '€ <%=value%>',
+				scaleArgLabel: '<%=value%>',
 				scaleBeginAtZero: false,
-        scaleType: "date",
+        scaleType: 'date',
         useUtc: true,
-        scaleDateFormat: "d/m/yy",
-        scaleDateTimeFormat: "d/m/yy"
+        scaleDateFormat: 'd mmm  yy',
+        scaleDateTimeFormat: 'd mmm yy'
 			};
 }

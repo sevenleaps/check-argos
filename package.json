@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "dependencies": {
     "express": "4.12.3",
+    "lodash": "3.10.1",
     "moment": "2.10.6",
     "mongodb-then": "0.1.2",
     "morgan": "1.5.2",
