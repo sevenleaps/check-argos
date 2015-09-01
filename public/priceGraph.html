@@ -18,15 +18,19 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
     <script>
+		var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
     var params = retrieveParams();
     getPastPrices(params.productId);
-
 
     function getPastPrices(productId) {
       function reqListener () {
         var prices = JSON.parse(this.responseText);
         initChart(prices);
+				var results = document.getElementById('results');
+
+				var link = createProductTextLink(productId.replace('/', ''), 'Buy on Argos € ' +  prices.pop().price / 100);
+				results.appendChild(link);
       }
 
       var url = '/stockcheck/price/' + productId.replace('/', '');
@@ -36,6 +40,15 @@
       oReq.open('get', url, true);
       oReq.send();
     }
+
+		function createProductTextLink(productId, linkName) {
+		  var a = document.createElement('a');
+		  var linkText = document.createTextNode(linkName);
+		  a.appendChild(linkText);
+		  a.title = linkName;
+		  a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+		  return a;
+		}
     </script>
     <script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -49,5 +62,6 @@
 	</head>
 	<body>
     <canvas id="myChart" width="400" height="400"></canvas>
+		<div id="results" class="container"></div>
   </body>
 </html>
