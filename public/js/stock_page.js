@@ -12,16 +12,8 @@ function displayStockPage(item)
   //generateStockInfo(item, resultsDiv);
 
   checkStockForAllStores(item);
-  DST('//www.anrdoezrs.net/am/7708057/include/allCj/generate/onLoad/impressions/page/am.js');
-
 }
 
-function DST(url) {
-  var s = document.createElement('script');
-    s.type='text/javascript';
-    s.src= url;
-    document.getElementsByTagName('head')[0].appendChild(s);
-}
 
 function checkStockForAllStores(item) {
   var productId = item.productId.replace('/', '');
@@ -269,6 +261,11 @@ function generateProductInfoRow(item)
   productInfoDiv.setAttribute('class', 'col-md-4 col-lg-4');
   productInfoDiv.setAttribute('style', 'text-align: center;');
 
+  var productInfoRow = document.createElement('DIV');
+  productInfoRow.setAttribute('class', 'row');
+  var productGraphRow = document.createElement('DIV');
+  productGraphRow.setAttribute('class', 'row');
+
   var productId = item.productId.replace('/', '');
   var productUrl = REFFERL_LINK + productId + '.htm';
 
@@ -297,27 +294,68 @@ function generateProductInfoRow(item)
   lowestPastPrice.setAttribute('id', 'low');
   lowestPastPrice.setAttribute('style', 'text-align: center; font-size: 12px;');
   lowestPastPrice.innerHTML='Checking lowest price ...';
+  // Price history
+  var canvas = document.createElement('canvas');
+  canvas.id = 'myChart';
+  canvas.length = 300;
+  canvas.height = 150;
 
-  productInfoDiv.appendChild(h);
-  productInfoDiv.appendChild(highestPastPrice);
-  productInfoDiv.appendChild(lowestPastPrice);
-  productInfoDiv.appendChild(priceATag);
+  var priceHistoryRow = document.createElement('DIV');
+  priceHistoryRow.setAttribute('class', 'visible-xs');
 
+  var priceHistory = document.createElement('a');
+  priceHistory.innerHTML = 'Graph price history';
+  priceHistory.setAttribute('id', 'priceHistory');
+  priceHistory.setAttribute('style','visibility:hidden');
+  priceHistory.setAttribute('onclick','toggle()');
+
+  productInfoRow.appendChild(h);
+  productInfoRow.appendChild(highestPastPrice);
+  productInfoRow.appendChild(lowestPastPrice);
+  productInfoRow.appendChild(priceATag);
+
+  priceHistoryRow.appendChild(priceHistory);
+
+  productGraphRow.appendChild(canvas);
+  productGraphRow.setAttribute('id', 'productGraphRow');
+  productGraphRow.setAttribute('class', 'row hidden-xs');
+
+  productInfoDiv.appendChild(productInfoRow);
+  productInfoDiv.appendChild(priceHistoryRow);
+  productInfoDiv.appendChild(productGraphRow);
   row.appendChild(imageDiv);
   row.appendChild(productInfoDiv);
 
   return row;
 }
 
+
+function toggle() {
+  if ( $('#productGraphRow').attr('class') == 'row hidden-xs' ) {
+    $('#myChart').css('visibility','visible');
+    $('#productGraphRow').attr('class','row');
+    initChart(prices);
+  } else {
+    $('#myChart').css('visibility','hidden');
+    $('#productGraphRow').attr('class','row hidden-xs');
+  }
+}
+var prices = [];
 function getPastPrices(productId) {
   function reqListener () {
     var high = document.getElementById('high');
     var low = document.getElementById('low');
     if(high !== null && low !== null){
-      var prices = JSON.parse(this.responseText);
-      prices = prices.sort(function (a,b) {return b.price - a.price;});
-      low.innerHTML='Lo: ' + ' €' + prices[prices.length - 1].price/100 + ' - ' + moment(prices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
-      high.innerHTML='Hi: ' + ' €' + prices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+      prices = JSON.parse(this.responseText);
+      if (!isBreakpoint('xs')) {
+        initChart(prices);
+      } else {
+        $('#priceHistory').css('visibility','visible');
+      }
+      var sortedPrices = prices.slice(0);
+      sortedPrices.sort(function (a,b) {return b.price - a.price;});
+      low.innerHTML='Lo: ' + ' €' + sortedPrices[prices.length - 1].price/100 + ' - ' + moment(sortedPrices[prices.length - 1].day.toString(), 'YYYYMMDD').format('DD MMM YY');
+      high.innerHTML='Hi: ' + ' €' + sortedPrices[0].price/100 + ' - ' + moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY');
     }
   }
 
@@ -327,6 +365,10 @@ function getPastPrices(productId) {
   oReq.addEventListener('load', reqListener);
   oReq.open('get', url, true);
   oReq.send();
+}
+
+function isBreakpoint( alias ) {
+    return $('.device-' + alias).is(':visible');
 }
 
 function appendStockStatus(itemJson, element) {

@@ -65,7 +65,7 @@ function generateOptions()
 				scaleBeginAtZero: false,
         scaleType: 'date',
         useUtc: true,
-        scaleDateFormat: 'd mmm  yy',
-        scaleDateTimeFormat: 'd mmm yy'
+        scaleDateFormat: 'mmm yy',
+        scaleDateTimeFormat: 'dd mmm yy'
 			};
 }
