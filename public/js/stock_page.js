@@ -124,7 +124,8 @@ function createProductTextLink(productId, linkName) {
   a.appendChild(linkText);
   a.title = linkName;
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
-  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
+  a.id = 'productLinkC';
+  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkC\");');
   return a;
 }
 
@@ -132,7 +133,8 @@ function createProductImageLink(productId, img) {
   var a = document.createElement('a');
   a.appendChild(img);
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
-  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
+  a.id = 'productLinkD';
+  a.setAttribute('onclick','logClickThrough('+ productId.replace('/', '')  +', \"productLinkD\");');
   return a;
 }
 
@@ -231,13 +233,16 @@ function logClickThrough(productID, id)
 {
   var href = $('#' + id).attr('href');
   var re = new RegExp('^http:\/\/www\.argos\.ie');
-  if (href.match(re))
-  {
+  if (href.match(re)) {
     ga('send', 'event', 'linkClick', 'argos', productID);
   }
   else
   {
     //$("#" + id).attr('href', "http://" + href);
+    keen.addEvent('clicked.referral',{
+      productId: productID,
+      linkType: id
+      })
     ga('send', 'event', 'linkClick', 'refferal', productID);
   }
 }
