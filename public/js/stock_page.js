@@ -125,7 +125,7 @@ function createProductTextLink(productId, linkName) {
   a.title = linkName;
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
   a.id = 'productLinkC';
-  a.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkC\");');
+  a.setAttribute('onclick','logClickThrough('+ productId.replace('/', '') +', \"productLinkC\");');
   return a;
 }
 
