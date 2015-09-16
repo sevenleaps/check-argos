@@ -125,7 +125,7 @@ function createProductTextLink(productId, linkName) {
   a.title = linkName;
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
   a.id = 'productLinkC';
-  a.setAttribute('onclick','logClickThrough('+ productId.replace('/', '') +', \"productLinkC\");');
+  a.setAttribute('onclick','logClickThrough("'+ productId.replace('/', '') +'", \"productLinkC\");');
   return a;
 }
 
@@ -134,7 +134,7 @@ function createProductImageLink(productId, img) {
   a.appendChild(img);
   a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
   a.id = 'productLinkD';
-  a.setAttribute('onclick','logClickThrough('+ productId.replace('/', '')  +', \"productLinkD\");');
+  a.setAttribute('onclick','logClickThrough("'+ productId.replace('/', '')  +'", \"productLinkD\");');
   return a;
 }
 
@@ -278,7 +278,7 @@ function generateProductInfoRow(item)
   var titleATag = document.createElement('a');
   titleATag.setAttribute('id', 'productLinkA');
   titleATag.setAttribute('href', productUrl);
-  titleATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkA\");');
+  titleATag.setAttribute('onclick','logClickThrough("'+ productId +'", \"productLinkA\");');
   titleATag.innerHTML = item.productName;
   h.appendChild(titleATag);
 
@@ -287,7 +287,7 @@ function generateProductInfoRow(item)
   var priceATag = document.createElement('a');
   priceATag.setAttribute('id', 'productLinkB');
   priceATag.setAttribute('href',productUrl);
-  priceATag.setAttribute('onclick','logClickThrough('+ productId +', \"productLinkB\");');
+  priceATag.setAttribute('onclick','logClickThrough("'+ productId +'", \"productLinkB\");');
   priceATag.innerHTML = 'Buy at Argos.ie - €' + item.price;
 
   var highestPastPrice = document.createElement('DIV');
