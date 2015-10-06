@@ -9,8 +9,15 @@ function initPage()
   try{
     params = retrieveParams();
 
+    if(params.popular)
+    {
+      displayPopularProductsPage();
+      return;
+    }
+
 		if(params.search != null)
 		{
+
       populateSearchBox(decodeURI(params.search));
 
       var minPrice = (params.minPrice != null || params.minPrice != undefined) ? params.minPrice : null;

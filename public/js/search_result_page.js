@@ -1,6 +1,35 @@
 var isClearancePage = false;
 var currentPage = 1;
 
+function displayPopularProductsPage()
+{
+  hideHomeScreen();
+  hideAboutScreen();
+  populateSearchBox("");
+  displaySpinner();
+  var pushStateUrl = "?popular=recent";
+  if(navigator.userAgent.indexOf("MSIE 9.") > -1){
+    //History not supported - Go to page
+    if(location.search !== pushStateUrl){
+      location.href = pushStateUrl;
+    }
+  }else{
+    window.history.pushState(null, null, pushStateUrl);
+  }
+  $.ajax("/popular/recent?limit=20").done(displayPopularProductsResultPage);
+  return false;
+}
+
+function displayPopularProductsResultPage(result)
+{
+  populateSearchBox("");
+  hideAboutScreen();
+  hideHomeScreen();
+  displayMessage("Recent Popular Products");
+  var resultsDiv = document.getElementById('results');
+  generateSearchResultsTable(result, resultsDiv);
+}
+
 function displayClearanceSearch()
 {
   hideHomeScreen();
