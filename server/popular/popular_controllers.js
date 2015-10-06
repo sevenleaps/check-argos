@@ -1,6 +1,8 @@
 (function () {
   'use strict';
   var request = require('request');
+  var async = require('async');
+  var ProductsUtil = require('../../lib/util/index').Products;
 
   module.exports = exports = {
     getPopular : getPopular
@@ -36,13 +38,46 @@
 
         productList.sort(function(a,b){ return b.occurancies - a.occurancies; });
 
-
-        res.status(200).json(productList);
+        getProductDetailsFromList(productList, res, req.query.limit);
+        //res.status(200).json(productList);
       }
       else {
         res.status(400);
       }
 
+    });
+  }
+  function getProductDetailsFromList(productList, res, limit)
+  {
+    if(limit && limit < productList.length)
+    {
+      productList.splice(limit, productList.length - limit);
+    }
+    else
+
+    console.log(productList);
+
+    async.each(productList, getProductInformation, function done (err) {
+      res.status(200).json(productList);
+    });
+
+  }
+
+  function getProductInformation(obj, callback)
+  {
+    var productHtml = ProductsUtil.getProductPageHtml(obj.productId, function onResponse(error, response, body)
+    {
+      var productPageHtml = body;
+      if(ProductsUtil.isValidProductPage(productPageHtml))
+      {
+        var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
+        obj.productName = productInfoJson.productName;
+        obj.price = productInfoJson.price;
+        obj.previousPrice = productInfoJson.previousPrice;
+        obj.productImageUrl = productInfoJson.productImageUrl;
+      }
+
+      callback();
     });
   }
 })();
