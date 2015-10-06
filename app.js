@@ -10,12 +10,14 @@
 
   routers.stockCheck = express.Router();
   routers.search = express.Router();
+  routers.popular = express.Router();
   require('./config.js')(app, routers);
 
   app.use(express.static(__dirname + '/public', '/'));
 
   require('./server/stock/stock_routes.js')(routers.stockCheck);
   require('./server/search/search_routes.js')(routers.search);
+  require('./server/popular/popular_routes.js')(routers.popular);
 
   module.exports = exports = app;
 }());

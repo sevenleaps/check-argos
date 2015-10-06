@@ -13,6 +13,7 @@
 
     app.use('/stockcheck', routes.stockCheck);
     app.use('/search', routes.search);
+    app.use('/popular', routes.popular);
     app.use(middleware.serverError);
     app.get('/StockCheckPage*', function(req, res) {
       console.log('Got legacy request:', req.url);
