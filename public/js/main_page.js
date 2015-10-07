@@ -11,7 +11,7 @@ function initPage()
 
     if(params.popular)
     {
-      displayPopularProductsPage();
+      displayPopularProductsPage(params.popular);
       return;
     }
 
