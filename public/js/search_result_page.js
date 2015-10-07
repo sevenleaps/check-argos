@@ -3,6 +3,7 @@ var currentPage = 1;
 
 function displayPopularProductsPage()
 {
+  ga('send', 'pageview', '/popular');
   hideHomeScreen();
   hideAboutScreen();
   populateSearchBox("");
