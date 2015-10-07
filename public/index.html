@@ -81,6 +81,16 @@
 		    // requestType: "jsonp"       // String (optional: jsonp, xhr, beacon)
 		  });
 		</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['altocloud-sdk.js']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//altocloud-sdk.com/ac.js','ac');
+	ac('init', 'cifgtuo4f000801pefa4ghm8a');
+	ac('pageview');
+</script>
+
 	</head>
 	<body onload="initPage()">
 
@@ -128,7 +138,7 @@
 								<div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
 									<form name="mainSearchForm" role="search" onSubmit="return searchBoxSubmitWithReturnFalse(document.mainSearchForm.search.value);">
 										<div class="input-group input-group-lg">
-											<input type="text" class="form-control" placeholder="Search by id or text" name="search" id="searchBox"/>
+											<input type="text" class="form-control" placeholder="Search by product id or text" name="search" id="searchBox"/>
 											<div class="input-group-btn">
 												 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
 											</div>
