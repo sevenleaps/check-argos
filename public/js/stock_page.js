@@ -21,6 +21,7 @@ function displayStockPage(item)
   else {
     displayProductMessage("Check in store for availability.", resultsDiv);
   }
+  ac('pageview');
 }
 
 function displayProductMessage(message, resultsDiv)
@@ -265,6 +266,10 @@ function logClickThrough(productID, id)
       linkType: id
       })
     ga('send', 'event', 'linkClick', 'refferal', productID);
+    ac('record', 'link.clicked', productID, {
+      'id': productID,
+      'linkType': id
+    });
   }
 }
 

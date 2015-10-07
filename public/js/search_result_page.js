@@ -17,6 +17,7 @@ function displayPopularProductsPage()
   }else{
     window.history.pushState(null, null, pushStateUrl);
   }
+  ac('pageview');
   $.ajax("/popular/recent?limit=20").done(displayPopularProductsResultPage);
   return false;
 }
@@ -45,6 +46,7 @@ function displayClearanceSearch()
   generateFilterSection(resultsDiv, true);
   disableFilterButtonByDropdown();
   $( "#filterButton").addClass('disabled');
+  ac('pageview');
   return false;
 }
 
@@ -82,6 +84,7 @@ function displaySearchResultPage(result)
     createPaginationIfNeeded(result, resultsDiv);
     populatePreviouslySearchedFilters();
   }
+  ac('pageview');
 }
 
 function createPaginationIfNeeded(result, resultsDiv)
