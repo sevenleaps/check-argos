@@ -22,11 +22,13 @@ function displayPopularProductsPage()
 
 function displayPopularProductsResultPage(result)
 {
+  itemsList = result;
   populateSearchBox("");
   hideAboutScreen();
   hideHomeScreen();
   displayMessage("Recent Popular Products");
   var resultsDiv = document.getElementById('results');
+  generateStoreFilter(resultsDiv);
   generateSearchResultsTable(result, resultsDiv);
 }
 
@@ -310,24 +312,29 @@ function generateFilterSection(resultsDiv, showStoreFilter)
 
   if(showStoreFilter)
   {
-    var outerRow = document.createElement('DIV');
-    outerRow.setAttribute("class", "row");
-    //outerRow.setAttribute("style", "padding-bottom: 1em;");
-
-    var storeSelecterDiv = document.createElement('DIV');
-    storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
-    storeSelecterDiv.setAttribute("style", "text-align: center; padding-top:10px");
-
-    var storeDropDown = generateStoreDropDown();
-    storeDropDown.setAttribute("id", storeDropDownId);
-    storeDropDown.onchange = function(){ onStoreSelectChange();};
-
-    storeSelecterDiv.appendChild(storeDropDown);
-    outerRow.appendChild(storeSelecterDiv);
-
-    resultsDiv.appendChild(outerRow);
+    generateStoreFilter(resultsDiv);
   }
 
+}
+
+function generateStoreFilter(resultsDiv)
+{
+  var outerRow = document.createElement('DIV');
+  outerRow.setAttribute("class", "row");
+  //outerRow.setAttribute("style", "padding-bottom: 1em;");
+
+  var storeSelecterDiv = document.createElement('DIV');
+  storeSelecterDiv.setAttribute("class", "col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8");
+  storeSelecterDiv.setAttribute("style", "text-align: center; padding-top:10px");
+
+  var storeDropDown = generateStoreDropDown();
+  storeDropDown.setAttribute("id", storeDropDownId);
+  storeDropDown.onchange = function(){ onStoreSelectChange();};
+
+  storeSelecterDiv.appendChild(storeDropDown);
+  outerRow.appendChild(storeSelecterDiv);
+
+  resultsDiv.appendChild(outerRow);
 }
 
 function generateSearchResultsTable(items, resultsDiv)

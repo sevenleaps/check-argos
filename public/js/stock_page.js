@@ -7,11 +7,32 @@ function displayStockPage(item)
 
   resultsDiv.appendChild(generateProductInfoRow(item));
 
-  generateStockTable(item, resultsDiv);
-  generateMobileStockTable(item, resultsDiv);
-  //generateStockInfo(item, resultsDiv);
+  if(item.availableForReservation)
+  {
+    generateStockTable(item, resultsDiv);
+    generateMobileStockTable(item, resultsDiv);
+    //generateStockInfo(item, resultsDiv);
+    checkStockForAllStores(item);
+  }
+  else if(item.availableForOnlinePurchase)
+  {
+    displayProductMessage("Item can be ordered online.", resultsDiv);
+  }
+  else {
+    displayProductMessage("Check in store for availability.", resultsDiv);
+  }
+}
 
-  checkStockForAllStores(item);
+function displayProductMessage(message, resultsDiv)
+{
+  var row = document.createElement('DIV');
+  row.setAttribute("class", "row");
+  row.setAttribute("style", "text-align: center;");
+
+  var h = document.createElement("H3");
+  h.innerHTML = message;
+  row.appendChild(h);
+  resultsDiv.appendChild(row);
 }
 
 
