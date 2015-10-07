@@ -53,14 +53,23 @@
     {
       productList.splice(limit, productList.length - limit);
     }
-    else
-
-    console.log(productList);
 
     async.each(productList, getProductInformation, function done (err) {
+      console.log("done");
+      removeItemsThatNoLongerExist(productList);
       res.status(200).json(productList);
     });
 
+  }
+
+  function removeItemsThatNoLongerExist(productList)
+  {
+    productList.forEach(function(item, index, object) {
+      if (!item.productName)
+      {
+        object.splice(index, 1);
+      }
+    });
   }
 
   function getProductInformation(obj, callback)
