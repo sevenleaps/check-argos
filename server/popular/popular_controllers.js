@@ -4,6 +4,18 @@
   var async = require('async');
   var ProductsUtil = require('../../lib/util/index').Products;
 
+  if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
   module.exports = exports = {
     getPopular : getPopular
   };
@@ -19,10 +31,16 @@
     }
   }
 
-  var TODAY_YESTERDAY_PRODUCTS_URL = "https://api.keen.io/3.0/projects/55f97c6590e4bd095c030e89/queries/select_unique?api_key=5d37952c0e6565119cafd26e7c0c6dfab710df97d3414d33c7d88e464c2aa24f5c52202bece7ee777f4cc0770c1e7e749efebc04fc310c8970a0e59a4659b6acf84382607dde8f30a035ae306f2c796b3f0947cc8d89dad5424366f92b9da120d1ec1d39f1ef91654dd768a42cbc1a33&event_collection=clicked.referral&target_property=keen.id&group_by=productId&timezone=UTC&timeframe=this_2_days&filters=%5B%5D";
+  var KEEN_IO_PRODUCTS_URL = "https://api.keen.io/3.0/projects/55f97c6590e4bd095c030e89/queries/select_unique?api_key=5d37952c0e6565119cafd26e7c0c6dfab710df97d3414d33c7d88e464c2aa24f5c52202bece7ee777f4cc0770c1e7e749efebc04fc310c8970a0e59a4659b6acf84382607dde8f30a035ae306f2c796b3f0947cc8d89dad5424366f92b9da120d1ec1d39f1ef91654dd768a42cbc1a33&event_collection=clicked.referral&target_property=keen.id&group_by=productId&timezone=UTC&timeframe=this_{0}_days&filters=%5B%5D";
 
   function getPopularProducts(req, res, next) {
-    request(TODAY_YESTERDAY_PRODUCTS_URL, function onResponse(error, response, body) {
+    var days = "2";
+    if(req.query.days)
+    {
+      days = req.query.days;
+    }
+    var keen_io_url = KEEN_IO_PRODUCTS_URL.format(days);
+    request(keen_io_url, function onResponse(error, response, body) {
 
       if(!error)
       {
@@ -38,7 +56,7 @@
 
         productList.sort(function(a,b){ return b.occurancies - a.occurancies; });
 
-        getProductDetailsFromList(productList, res, req.query.limit);
+        getProductDetailsFromList(productList, res, req.query.limit, req.query.offset);
         //res.status(200).json(productList);
       }
       else {
@@ -47,11 +65,23 @@
 
     });
   }
-  function getProductDetailsFromList(productList, res, limit)
+  function getProductDetailsFromList(productList, res, limit, offset)
   {
-    if(limit && limit < productList.length)
+    if(!offset)
     {
-      productList.splice(limit, productList.length - limit);
+      offset = 0;
+    }
+
+    if(limit)
+    {
+      console.log(offset + limit);
+      var cutOff = parseInt(offset) + parseInt(limit);
+      if(cutOff > productList.length)
+      {
+        cutOff = productList.length - parseInt(offset);
+      }
+
+      productList = productList.slice(offset, cutOff);
     }
 
     async.each(productList, getProductInformation, function done (err) {
