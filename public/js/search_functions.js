@@ -158,7 +158,13 @@ function handleResponseFromSearch(response, clearance)
   {
     if (!result.hasOwnProperty("totalNumProducts"))
     {
-      displayStockPage(result);
+      if (!result.hasOwnProperty("productId"))
+      {
+        displayMessage("No results found.");
+      }
+      else {
+        displayStockPage(result);
+      }
     }
     else
     {
