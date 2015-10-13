@@ -5,13 +5,18 @@ function initPage()
   // $('#searchBox').on('focus', function() {
   //   document.body.scrollTop = $(this).offset().top;
   // });
+  $(document).on('click','.navbar-collapse.in',function(e) {
+    if( $(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle' ) {
+        $(this).collapse('hide');
+    }
+});
 
   try{
     params = retrieveParams();
 
     if(params.popular)
     {
-      displayPopularProductsPage();
+      displayPopularProductsPage(params.popular);
       return;
     }
 
@@ -111,7 +116,11 @@ function manipulateHistory(event)
   }else{
     params = retrieveParams();
 
-    if(params.search !== null)
+    if(params.popular)
+    {
+      displayPopularProductsPage(params.popular);
+    }
+    else if(params.search !== null)
     {
       populateSearchBox(decodeURI(params.search));
       searchByQueryNoHistory(params.search);

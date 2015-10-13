@@ -7,7 +7,10 @@ function initChart(json) {
 }
 
 function generateData(prices) {
-  var dataPoints = prices.map(function (price) {
+  var dataPoints = prices.filter(function (price)
+  {
+    return !((price.price === 0) || (price.price === null)) ;
+  }).map(function (price) {
     var source = {};
     source.y = price.price/100;
     source.x = moment(price.day.toString(), 'YYYYMMDD').toDate();
