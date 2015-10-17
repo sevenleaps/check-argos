@@ -1,7 +1,7 @@
 var mongodb = require('mongodb-then');
 var moment = require('moment');
 
-//Useage - dataLoad.js fileURL dbPortNumber dbName
+//Useage - dataLoad.js fileURL dbPortNumber dbName offest(optional) 
 
 if(process.argv.length <= 4)
 {
@@ -13,6 +13,11 @@ else
   var fileUrl = process.argv[2];
   var dbPortNumber = process.argv[3];
   var dbName = process.argv[4];
+  var offset;
+  if(process.argv.length > 5 && process.argv[5])
+  {
+    offset = parseInt(process.argv[5]);
+  }
 
   var db = mongodb(process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + '@ds037244.mongolab.com:' + dbPortNumber + '/' + dbName, [
     'product','price'
@@ -27,6 +32,12 @@ else
   //end_parsed will be emitted once parsing finished
   converter.on('end_parsed', function (prices) {
 
+    if(offset)
+    {
+      prices = prices.slice(offset);
+      count = offset;
+    }
+
     insertTwenty(prices).catch(function (err) {
       console.log(err);
     });
@@ -34,6 +45,7 @@ else
   });
   //read from file
   fileStream.pipe(converter);
+  }
 
   function getTwenty(array) {
     var twenty = [];
@@ -49,14 +61,13 @@ else
   var count = 0;
   function insertTwenty(prices) {
     var twenty = getTwenty(prices);
+    //console.log(twenty);
     if (twenty.length === 0) {return;}
     return db.price.insertMany(twenty).then(function () {
       console.log('Great success!' + count);
       count = count + 20;
       return insertTwenty(prices);
     });
-  }
-
   var productId = "2627443"//productInfoJson.productId.replace('/', '');
 
   // db.price.find({'productId': Number.parseInt(productId)}).sort({'$natural': -1}).limit(1).then(function (array) {
