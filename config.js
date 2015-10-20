@@ -17,6 +17,7 @@
     app.use('/product', routes.product);
     app.use('/home', routes.home);
     app.use('/about', routes.about);
+    app.use('/clearance', routes.clearance);
     app.use(middleware.serverError);
     app.get('/StockCheckPage*', function(req, res) {
       console.log('Got legacy request:', req.url);

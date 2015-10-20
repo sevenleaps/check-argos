@@ -1,0 +1,121 @@
+[ { "code" : 4101,
+    "name" : "Arklow (Extra)"
+  },
+  { "code" : 943,
+    "name" : "Ashbourne Retail Park"
+  },
+  { "code" : 262,
+    "name" : "Athlone"
+  },
+  { "code" : 669,
+    "name" : "Blanchardstown West End"
+  },
+  { "code" : 4130,
+    "name" : "Carlow (Extra)"
+  },
+  { "code" : 807,
+    "name" : "Castlebar"
+  },
+  { "code" : 814,
+    "name" : "Cavan (Extra)"
+  },
+  { "code" : 4214,
+    "name" : "Clonmel (Extra)"
+  },
+  { "code" : 4113,
+    "name" : "Cork Mahon (Extra)"
+  },
+  { "code" : 45,
+    "name" : "Cork Queens Old Castle"
+  },
+  { "code" : 801,
+    "name" : "Cork Retail Park"
+  },
+  { "code" : 875,
+    "name" : "Drogheda (Extra)"
+  },
+  { "code" : 200,
+    "name" : "Dun Laoghaire"
+  },
+  { "code" : 931,
+    "name" : "Dundalk Retail Park (Extra)"
+  },
+  { "code" : 817,
+    "name" : "Dundrum"
+  },
+  { "code" : 547,
+    "name" : "Galway"
+  },
+  { "code" : 394,
+    "name" : "Ilac Centre Dublin"
+  },
+  { "code" : 397,
+    "name" : "Jervis Street Dublin"
+  },
+  { "code" : 201,
+    "name" : "Kilkenny"
+  },
+  { "code" : 899,
+    "name" : "Killarney (Extra)"
+  },
+  { "code" : 793,
+    "name" : "Letterkenny (Extra)"
+  },
+  { "code" : 687,
+    "name" : "Liffey Valley (Extra)"
+  },
+  { "code" : 915,
+    "name" : "Limerick Childers Road (Extra)"
+  },
+  { "code" : 393,
+    "name" : "Limerick Cruises Street"
+  },
+  { "code" : 583,
+    "name" : "Limerick The Crescent"
+  },
+  { "code" : 880,
+    "name" : "Longford (Extra)"
+  },
+  { "code" : 945,
+    "name" : "Monaghan (Extra)"
+  },
+  { "code" : 4218,
+    "name" : "Naas (Extra)"
+  },
+  { "code" : 832,
+    "name" : "Navan"
+  },
+  { "code" : 392,
+    "name" : "Nutgrove"
+  },
+  { "code" : 4150,
+    "name" : "Omni Park Dublin (Extra)"
+  },
+  { "code" : 4125,
+    "name" : "Portlaoise (Extra)"
+  },
+  { "code" : 4146,
+    "name" : "Sligo (Extra)"
+  },
+  { "code" : 584,
+    "name" : "St Stephens Green Dublin"
+  },
+  { "code" : 581,
+    "name" : "Swords (Extra)"
+  },
+  { "code" : 395,
+    "name" : "Tallaght"
+  },
+  { "code" : 11,
+    "name" : "Tralee (Extra)"
+  },
+  { "code" : 879,
+    "name" : "Tullamore (Extra)"
+  },
+  { "code" : 396,
+    "name" : "Waterford"
+  },
+  { "code" : 826,
+    "name" : "Wexford (Extra)"
+  }
+]
