@@ -1,0 +1,38 @@
+<div class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       </button>
+       <a class="navbar-brand hidden-xs" href="/" onclick="return showHomeScreen();">CheckArgos</a>
+       <a class="navbar-brand visible-xs" href="/" onclick="return showHomeScreen();">CA</a>
+       {{^hideNavSearch}}
+        <form id="navbarSearchForm" action="/search" name="searchForm" class="navbar-form pull-left" role="search">
+          <div class="input-group">
+             <input type="text" class="form-control" placeholder="Search" name="q" id="searchBox">{{searchQuery}}</input>
+             <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+             </div>
+          </div>
+       </form>
+      {{/hideNavSearch}}
+    </div>
+    <div class="navbar-collapse collapse">
+       <ul class="nav navbar-nav navbar-right">
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Popular <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#" onclick="return displayPopularProductsPage(1);">Today</a></li>
+              <li><a href="#" onclick="return displayPopularProductsPage(2);">Previous 2 Days</a></li>
+              <li><a href="#" onclick="return displayPopularProductsPage(7);">Previous Week</a></li>
+            </ul>
+        </li>
+          <li><a href="/" onclick="return displayClearanceSearch();">Clearance</a></li>
+          <li><a href="#about" onclick="return showAboutScreen();">About</a></li>
+       </ul>
+    </div>
+    <!--/.navbar-collapse -->
+  </div>
+</div>

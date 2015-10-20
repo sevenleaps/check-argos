@@ -1,0 +1,26 @@
+<div id="homeScreen" style="text-align:center; padding-top:3em; padding-bottom:3em">
+  <div class="row">
+    <h1 style="font-size: 50px; padding-bottom:0px">CheckArgos</h1>
+  </div>
+  <div class="row">
+    <h5 style="padding-top:0px">An Irish Argos Stock Checker.</h5>
+  </div>
+  <div class="row">
+    <div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+      <form name="mainSearchForm" role="search" action="/search">
+        <div class="input-group input-group-lg">
+          <input type="text" class="form-control" placeholder="Search by product id or text" name="q" id="searchBox"/>
+          <div class="input-group-btn">
+             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row"  style="padding-top:2em;">
+    <i class="fa fa-twitter"></i>
+    <span style="padding-top:0px">Follow us on twitter</span>
+    <br>
+    <a href="https://twitter.com/checkargos">@checkargos</a>
+  </div>
+</div>
