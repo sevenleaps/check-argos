@@ -1,11 +1,11 @@
 function home(req, res, next) {
-  res.render('home', {
+  res.render('common', {
     title: 'Checkargos.com - An Irish Stock Checker',
     hideNavSearch: true,
     partials : {
       common_head: 'common_head',
       navbar: 'navbar',
-      home_search: 'home_search'}
+      content: 'home_search'}
   });
 }
 

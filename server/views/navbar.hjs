@@ -11,7 +11,7 @@
        {{^hideNavSearch}}
         <form id="navbarSearchForm" action="/search" name="searchForm" class="navbar-form pull-left" role="search">
           <div class="input-group">
-             <input type="text" class="form-control" placeholder="Search" name="q" id="searchBox">{{searchQuery}}</input>
+             <input type="text" class="form-control" placeholder="Search" name="q" id="searchBox" value="{{searchQuery}}">
              <div class="input-group-btn">
                 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
              </div>

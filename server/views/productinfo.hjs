@@ -1,0 +1,23 @@
+<div class="row vertical-align" style="padding-bottom:1em;">
+  <div class="col-md-4 col-lg-4" style="text-align: center;">
+    <a title="{{ productName }}" href="{{ referl }}">
+      <img class="col-md-4 col-lg-4" style="text-align: center;" src="{{ productImageUrl }}">
+      </img>
+    </a>
+  </div>
+  <div class="col-md-4 col-lg-4" style="text-align: center;">
+    <H3>
+      <a id="productLinkA" href="{{ referl }}" onclick='logClickThrough({{ productId }}, "productLinkA")'>
+        {{ productName }}
+      </a>
+    </H3>
+    {{#prices}}
+      <div id="{{ type }}" style="text-align: center; font-size: 12px;">
+        {{shortName}}:  €{{ price }} - {{day}}
+      </div>
+    {{/prices}}
+    <a id="productLinkB" onlclick="logClickThrough({{ productId }}, "productLinkB")" href="{{ referl }}">
+      Buy at Argos.ie - €{{ price }}
+    </a>
+  </div>
+</div>

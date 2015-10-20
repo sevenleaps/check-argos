@@ -10,7 +10,8 @@
 
   module.exports = exports = {
     checkStock : checkStock,
-    getPriceHistory : getPriceHistory
+    getPriceHistory : getPriceHistory,
+    getPriceHistoryInternal : getPriceHistoryInternal
   };
 
   function getPriceHistory (req, res) {
@@ -21,6 +22,17 @@
       res.json([]);
     });
   }
+
+  function getPriceHistoryInternal (req, callback) {
+
+    db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
+      return callback(undefined, prices);
+    }).catch(function (error) {
+      console.error('Error retrieving prices' + JSON.stringify(error));
+      return callback(error);
+    });
+  }
+
 
   function checkStock(req, res, next) {
     try{

@@ -6,7 +6,7 @@
   {{> navbar}}
   <section id="first">
     <div class="container">
-       {{> home_search}}     
+       {{> content}}
     </div>
   </section>
   <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-55de13fd7465c024" async="async"></script>
