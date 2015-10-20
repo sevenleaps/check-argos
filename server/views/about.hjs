@@ -1,0 +1,31 @@
+<div id="aboutScreen" class="container">
+  <div class="row">
+    <h1>About</h1>
+  </div>
+  <div class="row">
+    <span>Checkargos is a site for checking stock of items in all Argos.ie stores. It was first launched in September 2011.</span>
+    <br>
+    <span>Please contact us at sevenleaps@gmail.com or @checkargos if you have any suggestions or conerns.</span>
+  </div>
+  <div class="row">
+    <h3>FAQ</h3>
+  </div>
+  <div class="row">
+    <h5>Is the stock data up to date?</h5>
+    <span>We query Argos' site for every request so the stock data is the same as it is on Argos' website.</span>
+  </div>
+  <div class="row">
+    <h5>Do you know when this product is coming into stock?</h5>
+    <span>No, We do not know more information about a products availablity than is on the Argos website.</span>
+  </div>
+  <div class="row">
+    <h5>Do you have anything to do with Argos?</h5>
+    <span>No, Checkargos are not associated with Argos.</span>
+  </div>
+  <div class="row">
+    <h5>Why are the links to Argos not directly to Argos?</h5>
+    <span>They are referal links, they are from the official Argos affialite program. </span>
+    <span>Idealy we would have liked to keep the links as direct Argos links but this was the only way to do them. </span>
+    <span>If you have any concerns about the links please contact us. </span>
+  </div>
+</div>
