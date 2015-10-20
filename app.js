@@ -7,10 +7,15 @@
   var express = require('express');
   var app = express();
   var routers = {};
+  var path = require('path');
+
+  app.set('views', path.join(__dirname, 'server/views'));
+  app.set('view engine', 'hjs');
 
   routers.stockCheck = express.Router();
   routers.search = express.Router();
   routers.popular = express.Router();
+  routers.product = express.Router();
   require('./config.js')(app, routers);
 
   app.use(express.static(__dirname + '/public', '/'));
@@ -18,6 +23,7 @@
   require('./server/stock/stock_routes.js')(routers.stockCheck);
   require('./server/search/search_routes.js')(routers.search);
   require('./server/popular/popular_routes.js')(routers.popular);
+  require('./server/product/product_routes.js')(routers.product);
 
   module.exports = exports = app;
 }());
