@@ -17,6 +17,7 @@
   routers.popular = express.Router();
   routers.product = express.Router();
   routers.home = express.Router();
+  routers.about = express.Router();
   require('./config.js')(app, routers);
 
   app.use(express.static(__dirname + '/public', '/'));
@@ -26,6 +27,7 @@
   require('./server/popular/popular_routes.js')(routers.popular);
   require('./server/product/product_routes.js')(routers.product);
   require('./server/home/home_routes.js')(routers.home);
+  require('./server/about/about_routes.js')(routers.about);
 
   module.exports = exports = app;
 }());
