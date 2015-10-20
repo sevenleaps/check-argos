@@ -20,4 +20,10 @@
       Buy at Argos.ie - €{{ price }}
     </a>
   </div>
+  <div class="row hidden-xs" id="productGraphRow">
+    <canvas id="myChart" height="300" width="600" style="width: 300px; height: 150px;"></canvas>
+    <script>
+      initChart({{{chartJSON}}});
+    </script>
+  </div>
 </div>
