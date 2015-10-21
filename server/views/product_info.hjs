@@ -1,29 +1,36 @@
 <div class="row vertical-align" style="padding-bottom:1em;">
   <div class="col-md-4 col-lg-4" style="text-align: center;">
     <a title="{{ productName }}" href="{{ referl }}">
-      <img class="col-md-4 col-lg-4" style="text-align: center;" src="{{ productImageUrl }}">
+      <img src="{{ productImageUrl }}">
       </img>
     </a>
   </div>
   <div class="col-md-4 col-lg-4" style="text-align: center;">
-    <H3>
-      <a id="productLinkA" href="{{ referl }}" onclick='logClickThrough({{ productId }}, "productLinkA")'>
-        {{ productName }}
+    <div class="row">
+      <h3>
+        <a id="productLinkA" href="{{ referl }}" onclick='logClickThrough({{ productId }}, "productLinkA")'>
+          {{ productName }}
+        </a>
+      </h3>
+      {{#prices}}
+        <div id="{{ type }}" style="text-align: center; font-size: 12px;">
+          {{shortName}}:  €{{ price }} - {{day}}
+        </div>
+      {{/prices}}
+      <a id="productLinkB" onlclick="logClickThrough({{ productId }}, "productLinkB")" href="{{ referl }}">
+        Buy at Argos.ie - €{{ price }}
       </a>
-    </H3>
-    {{#prices}}
-      <div id="{{ type }}" style="text-align: center; font-size: 12px;">
-        {{shortName}}:  €{{ price }} - {{day}}
-      </div>
-    {{/prices}}
-    <a id="productLinkB" onlclick="logClickThrough({{ productId }}, "productLinkB")" href="{{ referl }}">
-      Buy at Argos.ie - €{{ price }}
-    </a>
-  </div>
-  <div class="row hidden-xs" id="productGraphRow">
-    <canvas id="myChart" height="300" width="600" style="width: 300px; height: 150px;"></canvas>
-    <script>
-      initChart({{{chartJSON}}});
-    </script>
+    </div>
+    <div class="visible-xs">
+      <a id="priceHistory" style="visibility:hidden" onclick="toggle()">
+        Graph price history
+      </a>
+    </div>
+    <div class="row hidden-xs" id="productGraphRow">
+      <canvas id="myChart" height="300" width="600" style="width: 300px; height: 150px;"></canvas>
+      <script>
+        initChart({{{chartJSON}}});
+      </script>
+    </div>
   </div>
 </div>
