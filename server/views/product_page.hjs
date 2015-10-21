@@ -1,0 +1,2 @@
+{{> product_info}}
+{{> product_store_table}}

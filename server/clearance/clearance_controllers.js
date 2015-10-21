@@ -1,7 +1,7 @@
 function clearance(req, res, next) {
 
   var fs = require('fs');
-  var stores = JSON.parse(fs.readFileSync('server/assests/stores.json', 'utf8'));
+  var stores = JSON.parse(fs.readFileSync('server/assets/stores.json', 'utf8'));
   console.log(stores);
 
   res.render('common', {

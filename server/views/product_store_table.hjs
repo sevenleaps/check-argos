@@ -1,0 +1,23 @@
+<table class="table table-striped hidden-sm hidden-xs">
+  <tbody>
+    {{#stores}}
+      {{#tableRowStart}}
+      <tr>
+      {{/tableRowStart}}
+        {{> product_store_info}}
+      {{#tableRowEnd}}
+      </tr>
+      {{/tableRowEnd}}
+    {{/stores}}
+  </tbody>
+</table>
+
+<table class="table table-striped visible-sm visible-xs">
+  <tbody>
+    {{#stores}}
+      <tr>
+        {{> product_store_info}}
+      </tr>
+    {{/stores}}
+  </tbody>
+</table>
