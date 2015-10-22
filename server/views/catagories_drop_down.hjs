@@ -1,4 +1,4 @@
-<select class="form-control" id="catagoryDropDown">
+<select class="form-control" id="catagoryDropDown" name="catagory">
   <option value="0">-- Select a catagory --</option>
   {{#catagoryList}}
     <option value="{{code}}">{{name}}</option>

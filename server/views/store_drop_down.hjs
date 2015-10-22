@@ -1,4 +1,4 @@
-<select class="form-control" id="storeDropDown">
+<select class="form-control" id="storeDropDown" name="store">
   <option value="0">-- Check store for Stock --</option>
   {{#storeList}}
     <option value="{{code}}">{{name}}</option>
