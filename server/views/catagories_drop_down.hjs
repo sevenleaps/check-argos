@@ -1,0 +1,6 @@
+<select class="form-control" id="catagoryDropDown">
+  <option value="0">-- Select a catagory --</option>
+  {{#catagoryList}}
+    <option value="{{code}}">{{name}}</option>
+  {{/catagoryList}}
+</select>

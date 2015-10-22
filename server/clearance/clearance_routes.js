@@ -3,7 +3,7 @@
   var controller = require('./clearance_controllers.js');
 
   module.exports = exports = function (router) {
-    router.route('/:days')
+    router.route('/')
         .get(controller.clearance);
   };
 })();

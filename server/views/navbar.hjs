@@ -13,7 +13,7 @@
           <div class="input-group">
              <input type="text" class="form-control" placeholder="Search" name="q" id="searchBox" value="{{searchQuery}}">
              <div class="input-group-btn">
-                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="submit" class="btn btn-default"><span style="line-height: 1.42857143" class="glyphicon glyphicon-search"></span></button>
              </div>
           </div>
        </form>
