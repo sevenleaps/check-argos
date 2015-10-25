@@ -12,7 +12,8 @@
 
   module.exports = exports = {
     textSearch : textSearch,
-    search : search
+    search : search,
+    textSearchMethod : textSearchMethod
   };
 
   function search(req, res, next) {
@@ -85,6 +86,76 @@
       console.error(err);
     });
 
+  }
+
+  function textSearchMethod(params, callback, callbackParam)
+  {
+    var url;
+
+    if(params.subSectionText || params.subSectionNumber)
+    {
+      url = buildSubCatagorySearchUrl(params);
+    }
+    else
+    {
+      url = buildSearchUrl(params);
+    }
+
+    request(url, function onResponse(error, response, body) {
+      if (error) {
+        callback(error, null, callbackParam);
+      }
+      else {
+        var totalNumProducts = ProductsUtil.getTotalNumberOfProducts(body);
+        if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts !== 'Error')) {
+          try {
+            var productsJson = ProductsUtil.getProductsFromHtml(body);
+
+            productsJson.forEach(function updatePrice(item) {
+              updatePriceHistory(item);
+            });
+
+            var returnObj = {
+              items: productsJson,
+              totalNumProducts: totalNumProducts
+            };
+
+            callback( null, returnObj, callbackParam);
+           } catch (error) {
+             callback(error, null, callbackParam);
+           }
+        }
+        else if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(params.subSectionText || params.subSectionNumber)){
+          try{
+            console.log('Is a sub catagory page');
+            var catagoryInfo = ProductsUtil.getCatagoryInformationFromPath(response.request.path);
+
+            params.sectionText = catagoryInfo.catagoryName;
+            params.sectionNumber = catagoryInfo.catagoryNumber;
+            params.subSectionText = catagoryInfo.subCatagoryName;
+            params.subSectionNumber = catagoryInfo.subCatagoryNumber;
+
+            textSearchMethod(params, callback, callbackParam)
+
+          }
+          catch (error) {
+            callback(error, null, callbackParam);
+          }
+        }
+        else if(!ProductsUtil.isFoundNoProductsPage(body)) {
+          try{
+            var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
+            callback( null, productInfoJson, callbackParam);
+          }
+          catch (error) {
+            callback(error, null, callbackParam);
+          }
+        }
+        else {
+          callback( null, null, callbackParam);
+        }
+      }
+    });
   }
 
   function textSearch(req, res, next) {

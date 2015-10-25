@@ -1,4 +1,4 @@
-<form id="advancedSearchFilterForm" action="{{advancedSearchFilterFormAction}}" name="searchForm">
+<form id="advancedSearchFilterForm" action="{{advancedSearchFilter.formAction}}" name="searchForm">
   <div class="row">
     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
       <input class="form-control" name="minPrice" id="minPriceInput" placeholder="Min Price" type="number" value="{{inputs.minPrice}}">
@@ -10,13 +10,7 @@
       {{> catagories_drop_down}}
     </div>
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
-      <input id="filterButton" class="btn btn-primary {{#advancedSearchDisableButton}}disabled{{/advancedSearchDisableButton}}" type="submit"
-      {{#advancedSearchFilterButtonName}}
-        value="{{advancedSearchFilterButtonName}}"
-      {{/advancedSearchFilterButtonName}}
-      {{^advancedSearchFilterButtonName}}
-        value="Search"
-      {{/advancedSearchFilterButtonName}}>
+      <input id="filterButton" class="btn btn-primary {{#advancedSearchFilter.disableButton}}disabled{{/advancedSearchFilter.disableButton}}" type="submit" value="{{advancedSearchFilter.buttonText}}">
     </div>
   </div>
   <div class="row">
