@@ -37,14 +37,18 @@ function clearanceSearchPage(req, res, next) {
   params.subSectionText = 'Clearance+' + params.sectionText;
   params.subSectionNumber = clearanceSectionMap[params.sectionNumber];
 
-  search.textSearchMethod(params, clearanceSearchResult, res);
+  var callbackParams = {
+    response : res,
+    params : params
+  }
+  search.textSearchMethod(params, clearanceSearchResult, callbackParams);
 }
 
-function clearanceSearchResult(error, result, response)
+function clearanceSearchResult(error, result, callbackParams)
 {
   if(error)
   {
-    displayClearanceResultPage(null, response);
+    displayClearanceResultPage(null, callbackParams);
   }
   else
   {
@@ -52,22 +56,23 @@ function clearanceSearchResult(error, result, response)
     {
       if(result.hasOwnProperty("items"))
       {
-        displayClearanceResultPage(result.items, response);
+        displayClearanceResultPage(result.items, callbackParams);
       }
       else {
         //Show Product Page
       }
     }
     else {
-      displayClearanceResultPage(null, response);
+      displayClearanceResultPage(null, callbackParams);
     }
   }
 }
 
-function displayClearanceResultPage(items, response)
+function displayClearanceResultPage(items, callbackParams)
 {
+  var params = callbackParams.params;
+  var response = callbackParams.response;
   var stores = require('../assets/stores.json');
-
   var catagories = require('../assets/catagories.json');
 
   //console.log(response);
@@ -76,6 +81,15 @@ function displayClearanceResultPage(items, response)
     title: 'Checkargos.com - An Irish Stock Checker',
     storeList: stores,
     catagoryList: catagories,
+    selectedCatagory: function() {
+             if (this.code==params.sectionNumber) return "selected";
+             return "";
+        },
+    selectedStore: function() {
+                 if (this.code==params.store) return "selected";
+                 return "";
+            },
+    inputs : params,
     productList: items,
     hasProducts: (items && items.length > 0),
     clearanceMessageText: "Clearance Search",
