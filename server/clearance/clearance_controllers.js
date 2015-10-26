@@ -1,4 +1,10 @@
+module.exports = exports = {
+  clearance : clearance,
+  clearanceSearchPage : clearanceSearchPage
+};
+
 var search = require('../search/search_controllers.js');
+var hoganHelper = require('../utils/hogan_helper.js');
 
 function clearance(req, res, next) {
 
@@ -46,24 +52,17 @@ function clearanceSearchPage(req, res, next) {
 
 function clearanceSearchResult(error, result, callbackParams)
 {
-  if(error)
-  {
+  if(error || !result){
     displayClearanceResultPage(null, callbackParams);
   }
-  else
-  {
-    if(result)
-    {
-      if(result.hasOwnProperty("items"))
-      {
+  else{
+    if(result){
+      if(result.hasOwnProperty("items")){
         displayClearanceResultPage(result.items, callbackParams);
       }
       else {
         //Show Product Page
       }
-    }
-    else {
-      displayClearanceResultPage(null, callbackParams);
     }
   }
 }
@@ -77,27 +76,12 @@ function displayClearanceResultPage(items, callbackParams)
 
   //console.log(response);
 
-  response.render('common', {
+  var renderParams = {
     title: 'Checkargos.com - An Irish Stock Checker',
-    storeList: stores,
-    catagoryList: catagories,
-    selectedCatagory: function() {
-             if (this.code==params.sectionNumber) return "selected";
-             return "";
-        },
-    selectedStore: function() {
-                 if (this.code==params.store) return "selected";
-                 return "";
-            },
     inputs : params,
     productList: items,
     hasProducts: (items && items.length > 0),
     clearanceMessageText: "Clearance Search",
-    advancedSearchFilter : {
-      formAction : "/clearance/search",
-      disableButton: false,
-      buttonText: "Search"
-    },
     partials : {
       common_head: 'common_head',
       navbar: 'navbar',
@@ -106,10 +90,9 @@ function displayClearanceResultPage(items, callbackParams)
       catagories_drop_down: 'catagories_drop_down',
       store_drop_down: 'store_drop_down'
     }
-  });
-}
+  };
 
-module.exports = exports = {
-  clearance : clearance,
-  clearanceSearchPage : clearanceSearchPage
-};
+  renderParams = hoganHelper.populateRenderParamsWithAdvancedSearch(renderParams, params, "/clearance/search", false, "Search");
+
+  response.render('common', renderParams);
+}

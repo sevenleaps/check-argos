@@ -9,12 +9,75 @@
   ]);
   var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
   var ProductsUtil = require('../../lib/util/index').Products;
+  var hoganHelper = require('../utils/hogan_helper.js');
 
   module.exports = exports = {
     textSearch : textSearch,
     search : search,
+    searchPage : searchPage,
     textSearchMethod : textSearchMethod
   };
+
+  function searchPage(req, res, next) {
+
+    var catagoriesMap = require('../assets/catagories_map.json');
+    var params = req.query;
+    params.sectionNumber = req.query.catagory
+    params.sectionText = catagoriesMap[params.sectionNumber];
+    params.searchString = params.q;
+
+    var callbackParams = {
+      response : res,
+      params : params
+    }
+    textSearchMethod(params, searchPageResult, callbackParams);
+  }
+
+  function searchPageResult(error, result, callbackParams)
+  {
+    if(error || !result){
+      displaySearchResultPage(null, callbackParams);
+    }
+    else{
+      if(result){
+        if(result.hasOwnProperty("items")){
+          displaySearchResultPage(result.items, callbackParams);
+        }
+        else {
+          //Show Product Page
+        }
+      }
+    }
+  }
+
+  function displaySearchResultPage(items, callbackParams)
+  {
+    var params = callbackParams.params;
+    var response = callbackParams.response;
+    var stores = require('../assets/stores.json');
+    var catagories = require('../assets/catagories.json');
+
+    var renderParams = {
+      title: 'Checkargos.com - An Irish Stock Checker',
+      searchQuery : params.q,
+      inputs : params,
+      productList: items,
+      hasProducts: (items && items.length > 0),
+      partials : {
+        common_head: 'common_head',
+        navbar: 'navbar',
+        content: 'search_result',
+        advanced_search_filters: 'advanced_search_filters',
+        catagories_drop_down: 'catagories_drop_down',
+        product_list_table: 'product_list_table',
+        store_drop_down: 'store_drop_down'
+      }
+    };
+
+    renderParams = hoganHelper.populateRenderParamsWithAdvancedSearch(renderParams, params, "/search", false, "Update");
+
+    response.render('common', renderParams);
+  }
 
   function search(req, res, next) {
     try {
@@ -277,10 +340,10 @@ function buildSubCatagorySearchUrl(params) {
     url = url + '/p/'+ p;
     url = url + '/pp/' + pp;
 
-    params.minPrice = params.minPrice === undefined ? 0 : params.minPrice;
-    params.maxPrice = params.maxPrice === undefined ? 1000000 : params.maxPrice;
+    var minPrice = !params.minPrice ? 0 : params.minPrice;
+    var maxPrice = !params.maxPrice ? 1000000 : params.maxPrice;
 
-    url = url + '/r_001/4|Price|' + params.minPrice + '+%3C%3D++%3C%3D+' + params.maxPrice + '|2';
+    url = url + '/r_001/4|Price|' + minPrice + '+%3C%3D++%3C%3D+' + maxPrice + '|2';
     url = url + '/s/' + searchPreference + '.htm';
 
     console.log('clearance ' + url);
@@ -301,10 +364,11 @@ function buildSubCatagorySearchUrl(params) {
     url = (params.sortType) ? url + '&s=' + params.sortType : url;
     url = (params.sectionText && params.sectionNumber) ? url + '&c_1=1|category_root|' + params.sectionText + '|' + params.sectionNumber : url;
 
-    params.minPrice = params.minPrice === undefined ? 0 : params.minPrice;
-    params.maxPrice = params.maxPrice === undefined ? 1000000 : params.maxPrice;
+    var minPrice = !params.minPrice ? 0 : params.minPrice;
+    var maxPrice = !params.maxPrice ? 1000000 : params.maxPrice;
 
-    url = url + '&r_001=2|Price|' + params.minPrice + '+%3C%3D++%3C%3D+' + params.maxPrice + '|2';
+    url = url + '&r_001=2|Price|' + minPrice + '+%3C%3D++%3C%3D+' + maxPrice + '|2';
+    //console.log(url);
 
     return url.replace(/ /g, '+');
 

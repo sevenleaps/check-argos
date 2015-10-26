@@ -8,5 +8,8 @@
 
     router.route('/simple')
         .get(controller.search);
+
+      router.route('/')
+            .get(controller.searchPage);
   };
 })();

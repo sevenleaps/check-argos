@@ -1,4 +1,7 @@
 <form id="advancedSearchFilterForm" action="{{advancedSearchFilter.formAction}}" name="searchForm">
+  {{#inputs.q}}
+    <input type="hidden" name="q" value="{{inputs.q}}">
+  {{/inputs.q}}
   <div class="row">
     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
       <input class="form-control" name="minPrice" id="minPriceInput" placeholder="Min Price" type="number" value="{{inputs.minPrice}}">

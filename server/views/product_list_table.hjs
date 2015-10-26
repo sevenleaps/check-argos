@@ -14,7 +14,7 @@
           <img src="{{productImageUrl}}" class="itemProductImage">
         </td>
         <td style="vertical-align:middle;">
-          <a href="/search/{{productId}}">{{productName}}</a>
+          <a href="/product/{{productId}}">{{productName}}</a>
         </td>
         <td style="vertical-align:middle; text-align: center" class="">{{getPrecentageSaving}}</td>
         <td style="vertical-align:middle; text-align: center">{{price}}</td>
