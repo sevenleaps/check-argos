@@ -17,8 +17,100 @@
 }
 
   module.exports = exports = {
-    getPopular : getPopular
+    getPopular : getPopular,
+    popularPage: popularPage
   };
+
+  function popularPage(request, response, next) {
+    var limit = 20;
+    var offset = 0;
+    getPopularProductsList(request.params.days, limit, offset, function (error, products) {
+      if (error) {
+        displayPopularProductPage(request, response, []);
+      } else {
+        displayPopularProductPage(request, response, products);
+      }
+    });
+  }
+
+  function displayPopularProductPage(request, response, products)
+  {
+    var params = request.params;
+    var stores = require('../assets/stores.json');
+
+    var renderParams = {
+      title: 'Checkargos.com - An Irish Stock Checker',
+      popularPageMessage : "Recent Popular Products",
+      storeList: stores,
+      searchQuery : params.q,
+      inputs : params,
+      productList: products,
+      hasProducts: products.length > 0,
+      partials : {
+        common_head: 'common_head',
+        navbar: 'navbar',
+        content: 'popular_product_result',
+        advanced_search_filters: 'advanced_search_filters',
+        catagories_drop_down: 'catagories_drop_down',
+        product_list_table: 'product_list_table',
+        store_drop_down: 'store_drop_down'
+      }
+    };
+
+    response.render('common', renderParams);
+  }
+
+  function getPopularProductsList(days, limit, offset, callback)
+  {
+    var keen_io_url = KEEN_IO_PRODUCTS_URL.format(days);
+    request(keen_io_url, function onResponse(error, response, body) {
+
+      if(!error)
+      {
+        var productsIds = [];
+        var responseJson = JSON.parse(body);
+        console.log(JSON.stringify(body));
+        productsIds = responseJson.result.map(function(obj){
+          var newObj = {};
+
+          newObj.productId = obj.productId;
+          newObj.occurancies = obj.result.length;
+          return newObj;
+        });
+
+        productsIds.sort(function(a,b){ return b.occurancies - a.occurancies; });
+
+        getProductDetailsFromProductList(productsIds, limit, offset, callback);
+      }
+      else {
+        callback(error, null);
+      }
+
+    });
+  }
+
+  function getProductDetailsFromProductList(productIds, limit, offset, callback)
+  {
+    offset = offset || 0;
+
+    if(limit)
+    {
+      console.log(offset + limit);
+      var cutOff = parseInt(offset) + parseInt(limit);
+      if(cutOff > productIds.length)
+      {
+        cutOff = productIds.length - parseInt(offset);
+      }
+
+      productIds = productIds.slice(offset, cutOff);
+    }
+
+    async.each(productIds, getProductInformation, function done (err) {
+      removeItemsThatNoLongerExist(productIds);
+      callback(null, productIds);
+    });
+
+  }
 
   function getPopular(req, res, next) {
     try{
