@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  var productController = require('../product/product_controllers.js');
   var request = require('request');
   var moment = require('moment');
   var mongodb = require('mongodb-then');
@@ -27,6 +28,7 @@
     params.searchString = params.q;
 
     var callbackParams = {
+      request : req,
       response : res,
       params : params
     }
@@ -37,16 +39,14 @@
   {
     if(error || !result){
       displaySearchResultPage(null, callbackParams);
-    }
-    else{
-      if(result){
-        if(result.hasOwnProperty("items")){
-          displaySearchResultPage(result.items, callbackParams);
-        }
-        else {
-          //Show Product Page
-        }
-      }
+    } else if(result.hasOwnProperty("items")){
+      displaySearchResultPage(result.items, callbackParams);
+    } else if (result.hasOwnProperty("productId")) {
+      callbackParams.request.params.productId = result.productId;
+      productController.product(callbackParams.request, callbackParams.response);
+      console.log(result)
+    } else {
+      displaySearchResultPage(null, callbackParams);
     }
   }
 
