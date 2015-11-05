@@ -28,6 +28,7 @@ function getStoreList()
 }
 
 var stores = {
+          "Argos on eBay ROI (Extra)" : 4270,
           "Arklow (Extra)" : 4101,
 					"Ashbourne Retail Park" : 943,
 					"Athlone" : 262,
@@ -67,5 +68,6 @@ var stores = {
 					"Tralee (Extra)" : 11,
 					"Tullamore (Extra)" : 879,
 					"Waterford" : 396,
-					"Wexford (Extra)" : 826
+					"Wexford (Extra)" : 826,
+           "eBay Outlet In ROI (Extra)" : 4271 
         };
