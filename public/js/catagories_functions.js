@@ -46,3 +46,10 @@ var catagories = {
   14416987 : "Jewellery+and+watches",
   14417351 : "Gifts"
         };
+
+function updateHiddenSearch(value){
+  var hiddenInput = document.getElementById("updateHiddenSearch");
+  if(hiddenInput !== null){
+    hiddenInput.value = value;
+  }
+}

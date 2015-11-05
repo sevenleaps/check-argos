@@ -1,6 +1,6 @@
 <form id="advancedSearchFilterForm" action="{{advancedSearchFilter.formAction}}" name="searchForm">
   {{#inputs.q}}
-    <input type="hidden" name="q" value="{{inputs.q}}">
+    <input type="hidden" name="q" value="{{inputs.q}}" id="updateHiddenSearch">
   {{/inputs.q}}
   <div class="row">
     <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6" style="text-align: center;">
