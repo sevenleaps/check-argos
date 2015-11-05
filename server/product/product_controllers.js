@@ -1,7 +1,8 @@
 var request = require('request');
+var moment = require('moment');
 var stockController = require('../stock/stock_controllers.js');
-var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 var storesJSON = require('../assets/stores.json');
+var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
 function product(req, res){
   stockController.getPriceHistoryInternal(req, function onPrices(error, prices) {
@@ -45,13 +46,13 @@ function convertPricesToHighAndLow(prices) {
   return [{
     type: 'high',
     shortName: 'Hi',
-    price: prices[0].price,
-    day: prices[0].day
+    price: prices[0].price/100,
+    day: moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY')
   },{
     type: 'low',
     shortName: 'Lo',
-    price: prices[prices.length - 1].price,
-    day: prices[prices.length -1].day
+    price: prices[prices.length - 1].price/100,
+    day: moment(prices[prices.length -1].day.toString(), 'YYYYMMDD').format('DD MMM YY')
   }];
 }
 
