@@ -9,7 +9,6 @@ function product(req, res){
     if (error) {
       return res.render('error', error);
     }
-    console.log(prices);
     request('http://www.checkargos.com/search/simple?q=' + req.params.productId, function (error, response, productString){
       var productModel = { product: JSON.parse(productString)};
       var row = 0;
@@ -34,7 +33,8 @@ function product(req, res){
         product_info: 'product_info',
         product_store_info: 'product_store_info',
         product_store_info_small: 'product_store_info_small',
-        product_store_table: 'product_store_table'
+        product_store_table: 'product_store_table',
+        store_drop_down: 'store_drop_down'
       };
 
       console.log(JSON.stringify(productModel));

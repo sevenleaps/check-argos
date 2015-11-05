@@ -58,6 +58,10 @@
       width:70%;
     }
 
+    .product-id > td{
+      padding: 0px !important;
+    }
+
     .custom-xs{
       display:inline-block!important;
     }
