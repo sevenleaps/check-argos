@@ -19,7 +19,7 @@ function clearance(req, res, next) {
     clearanceMessageText: "Clearance Search",
     advancedSearchFilter : {
       formAction : "/clearance/search",
-      disableButton: false,
+      disableButton: true,
       buttonText: "Search"
     },
     partials : {
