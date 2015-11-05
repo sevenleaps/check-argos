@@ -11,6 +11,10 @@
     process.on('unhandledRejection', onUncaughtException);
     process.on('uncaughtException', onUncaughtException);
 
+    // api routes
+    app.use('/api/stockcheck', routes.stockCheck);
+
+
     app.use('/stockcheck', routes.stockCheck);
     app.use('/search', routes.search);
     app.use('/popular', routes.popular);

@@ -1,6 +1,5 @@
 (function () {
   'use strict';
-  var productController = require('../product/product_controllers.js');
   var request = require('request');
   var moment = require('moment');
   var mongodb = require('mongodb-then');
@@ -16,14 +15,15 @@
     textSearch : textSearch,
     search : search,
     searchPage : searchPage,
-    textSearchMethod : textSearchMethod
+    textSearchMethod : textSearchMethod,
+    searchInternal: searchInternal
   };
 
   function searchPage(req, res, next) {
 
     var catagoriesMap = require('../assets/catagories_map.json');
     var params = req.query;
-    params.sectionNumber = req.query.catagory
+    params.sectionNumber = req.query.catagory;
     params.sectionText = catagoriesMap[params.sectionNumber];
     params.searchString = params.q;
 
@@ -31,7 +31,7 @@
       request : req,
       response : res,
       params : params
-    }
+    };
     textSearchMethod(params, searchPageResult, callbackParams);
   }
 
@@ -39,12 +39,13 @@
   {
     if(error || !result){
       displaySearchResultPage(null, callbackParams);
-    } else if(result.hasOwnProperty("items")){
+    } else if(result.hasOwnProperty('items')){
       displaySearchResultPage(result.items, callbackParams);
-    } else if (result.hasOwnProperty("productId")) {
+    } else if (result.hasOwnProperty('productId')) {
       callbackParams.request.params.productId = result.productId;
-      productController.product(callbackParams.request, callbackParams.response);
-      console.log(result)
+      //no idea if this works here like this, blame me if this breaks something : conor.fennell
+      require('../product/product_controllers.js').product(callbackParams.request, callbackParams.response);
+      console.log(result);
     } else {
       displaySearchResultPage(null, callbackParams);
     }
@@ -54,8 +55,6 @@
   {
     var params = callbackParams.params;
     var response = callbackParams.response;
-    var stores = require('../assets/stores.json');
-    var catagories = require('../assets/catagories.json');
 
     var renderParams = {
       title: 'Checkargos.com - An Irish Stock Checker',
@@ -74,10 +73,33 @@
       }
     };
 
-    renderParams = hoganHelper.populateRenderParamsWithAdvancedSearch(renderParams, params, "/search", false, "Update");
+    renderParams = hoganHelper.populateRenderParamsWithAdvancedSearch(renderParams, params, '/search', false, 'Update');
 
     response.render('common', renderParams);
   }
+
+  function searchInternal(productId, callback) {
+    if (ProductsUtil.isValidProductId(productId)) {
+      var productNum = ProductsUtil.cleanUpProductId(productId);
+      ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body) {
+        var productPageHtml = body;
+        if (ProductsUtil.isValidProductPage(productPageHtml)) {
+          var product = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
+          try {
+            updatePriceHistory(product);
+          } catch (error) {
+            console.error(error);
+          }
+          return callback(null, product);
+        }
+        else {
+          return callback('Not a product id');
+        }
+      });
+    }
+  }
+
+
 
   function search(req, res, next) {
     try {
