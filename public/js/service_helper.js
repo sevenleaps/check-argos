@@ -70,7 +70,7 @@ function filterSearchRowByStockStatus(productId, storeId)
 	if (xmlreqs[pos].xmlhttp)
 	{
     xmlreqs[pos].freed = 0;
-    xmlreqs[pos].xmlhttp.open('GET', 'stockcheck/' + storeId + '/' + productId, true);
+    xmlreqs[pos].xmlhttp.open('GET', '/stockcheck/' + storeId + '/' + productId, true);
     xmlreqs[pos].xmlhttp.onload = function() {
       handleFilterRowResponse(pos, storeId, productId);
     };

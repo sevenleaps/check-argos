@@ -11,7 +11,7 @@
   </thead>
   <tbody>
     {{#productList}}
-      <tr id="productId{{productId}}" style="padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)">
+      <tr id="productId{{productId}}" class="product-id" style="padding-bottom: 1em; border-bottom:solid 1px rgba(0, 0, 0, 0.1)">
         <td>
           <img src="{{productImageUrl}}" class="itemProductImage">
         </td>
@@ -19,7 +19,7 @@
           <a href="/product/{{productId}}">{{productName}}</a>
         </td>
         <td style="vertical-align:middle; text-align: center" class="">{{getPrecentageSaving}}</td>
-        <td style="vertical-align:middle; text-align: center">{{price}}</td>
+        <td class="product-price" style="vertical-align:middle; text-align: center">{{price}}</td>
         <td style="vertical-align:middle; text-align: center" class="hide" name="stockStatusColumn" id="stockStatus{{productId}}"></td>
       </tr>
     {{/productList}}

@@ -36,7 +36,8 @@ function product(req, res){
           product_info: 'product_info',
           product_store_info: 'product_store_info',
           product_store_info_small: 'product_store_info_small',
-          product_store_table: 'product_store_table'
+          product_store_table: 'product_store_table',
+          store_drop_down: 'store_drop_down'
         };
         return res.render('common', productModel);
       }

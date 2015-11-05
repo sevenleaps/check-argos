@@ -510,6 +510,25 @@ function isValidItemData(itemJson)
   return true;
 }
 
+function onStoreDropDownChange(storeId){
+  restoreStockFilterOfItems();
+  var itemList = document.getElementsByClassName("product-id");
+  if(storeId != 0 && itemList.length > 0){
+    updateStockColumnVisilbity(true);
+    for(var i = 0; i < itemList.length; i++){
+      var itemPrice = itemList[i].getElementsByClassName("product-price");
+      if(itemPrice[0].innerHTML !== "."){
+        var productId = itemList[i].id.replace("productId", "");
+        filterSearchRowByStockStatus(productId, storeId)
+      }
+    }
+  }
+  else
+  {
+    updateStockColumnVisilbity(false);
+  }
+}
+
 function onStoreSelectChange()
 {
   var storeDropDown = document.getElementById(storeDropDownId);
