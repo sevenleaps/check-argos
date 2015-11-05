@@ -18,7 +18,7 @@
         <td style="vertical-align:middle;">
           <a href="/product/{{productId}}">{{productName}}</a>
         </td>
-        <td style="vertical-align:middle; text-align: center" class="">{{getPrecentageSaving}}</td>
+        <td style="vertical-align:middle; text-align: center" class="">{{percentageSaving}}</td>
         <td class="product-price" style="vertical-align:middle; text-align: center">{{price}}</td>
         <td style="vertical-align:middle; text-align: center" class="hide" name="stockStatusColumn" id="stockStatus{{productId}}"></td>
       </tr>

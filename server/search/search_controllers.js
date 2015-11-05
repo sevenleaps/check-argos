@@ -40,6 +40,16 @@
     if(error || !result){
       displaySearchResultPage(null, callbackParams);
     } else if(result.hasOwnProperty('items')){
+      var percentageSaving = 0;
+      for(var i = 0; i < result.items.length; i++){
+
+        percentageSaving = 0;
+        if(result.items[i].previousPrice != 0 && result.items[i].price != ".")
+        {
+          percentageSaving = ((1 - (result.items[i].price/result.items[i].previousPrice))* 100).toFixed(0);
+        }
+        result.items[i].percentageSaving = percentageSaving;
+      }
       displaySearchResultPage(result.items, callbackParams);
     } else if (result.hasOwnProperty('productId')) {
       callbackParams.request.params.productId = result.productId;
