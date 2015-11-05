@@ -1,7 +1,7 @@
 var request = require('request');
 var moment = require('moment');
 var stockController = require('../stock/stock_controllers.js');
-var storesJSON = require('../assets/stores.json');
+var stores = require('../assets/stores.json');
 var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
 function product(req, res){
@@ -11,11 +11,11 @@ function product(req, res){
     }
     console.log(prices);
     request('http://www.checkargos.com/search/simple?q=' + req.params.productId, function (error, response, productString){
-      var productModel = JSON.parse(productString);
+      var productModel = { product: JSON.parse(productString)};
       var row = 0;
-      productModel.productId = req.params.productId;
+      productModel.product.productId = req.params.productId;
       productModel.prices = convertPricesToHighAndLow(prices);
-      productModel.stores = storesJSON;
+      productModel.stores = stores;
       productModel.tableRowStart = function isEven(){
         row++;
         return row % 2 === 1 ? '<tr>' : '';
@@ -23,7 +23,7 @@ function product(req, res){
       productModel.tableRowEnd = function isEven(){
         return row % 2 === 0 ? '</tr>' : '';
       };
-      productModel.referl = REFFERL_LINK + productModel.productId.replace('/', '') + '.htm';
+      productModel.referl = REFFERL_LINK + productModel.product.productId.replace('/', '') + '.htm';
       productModel.title = 'Checkargos.com - An Irish Stock Checker';
       productModel.chartJSON = JSON.stringify(prices);
       productModel.searchQuery = productModel.productId;
@@ -33,6 +33,7 @@ function product(req, res){
         content: 'product_page',
         product_info: 'product_info',
         product_store_info: 'product_store_info',
+        product_store_info_small: 'product_store_info_small',
         product_store_table: 'product_store_table'
       };
 
