@@ -33,54 +33,44 @@ function clearance(req, res, next) {
   });
 }
 
-function clearanceSearchPage(req, res, next) {
+function clearanceSearchPage(request, response, next) {
 
   var catagoriesMap = require('../assets/catagories_map.json');
   var clearanceSectionMap = require('../assets/clearance_section_map.json');
-  var params = req.query;
-  params.sectionNumber = req.query.catagory
+  var params = request.query;
+  params.sectionNumber = request.query.catagory;
   params.sectionText = catagoriesMap[params.sectionNumber];
   params.subSectionText = 'Clearance+' + params.sectionText;
   params.subSectionNumber = clearanceSectionMap[params.sectionNumber];
 
-  var callbackParams = {
-    response : res,
-    params : params
-  }
-  search.textSearchMethod(params, clearanceSearchResult, callbackParams);
-}
-
-function clearanceSearchResult(error, result, callbackParams)
-{
-  if(error || !result){
-    displayClearanceResultPage(null, callbackParams);
-  }
-  else{
-    if(result){
-      if(result.hasOwnProperty("items")){
-        displayClearanceResultPage(result.items, callbackParams);
-      }
-      else {
-        //Show Product Page
+  search.textSearchMethod(params, function(error, result){
+    if(error || !result){
+      displayClearanceResultPage(request, response, null);
+    }
+    else{
+      if(result){
+        if(result.hasOwnProperty("items")){
+          displayClearanceResultPage(request, response, result.items);
+        }
+        else {
+          //Show Product Page
+        }
       }
     }
-  }
+  });
 }
 
-function displayClearanceResultPage(items, callbackParams)
+function displayClearanceResultPage(request, response, products)
 {
-  var params = callbackParams.params;
-  var response = callbackParams.response;
+  var params = request.query;
   var stores = require('../assets/stores.json');
   var catagories = require('../assets/catagories.json');
-
-  //console.log(response);
 
   var renderParams = {
     title: 'Checkargos.com - An Irish Stock Checker',
     inputs : params,
-    productList: items,
-    hasProducts: (items && items.length > 0),
+    productList: products,
+    hasProducts: (products && products.length > 0),
     clearanceMessageText: "Clearance Search",
     partials : {
       common_head: 'common_head',
