@@ -16,8 +16,11 @@
   <tbody>
     {{#stores}}
       <tr>
-        {{> product_store_info}}
+        {{> product_store_info_small}}
       </tr>
+      <script>
+        checkStockForSingleStore({{{product.productId}}}, {{{code}}});
+      </script>
     {{/stores}}
   </tbody>
 </table>

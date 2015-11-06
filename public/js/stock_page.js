@@ -1,25 +1,22 @@
 var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
-function displayStockPage(item)
-{
+function displayStockPage(item) {
   var resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
 
   resultsDiv.appendChild(generateProductInfoRow(item));
 
-  if(item.availableForReservation)
-  {
+  if (item.availableForReservation) {
     generateStockTable(item, resultsDiv);
     generateMobileStockTable(item, resultsDiv);
     //generateStockInfo(item, resultsDiv);
     checkStockForAllStores(item);
   }
-  else if(item.availableForOnlinePurchase)
-  {
-    displayProductMessage("Item can be ordered online.", resultsDiv);
+  else if (item.availableForOnlinePurchase) {
+    displayProductMessage('Item can be ordered online.', resultsDiv);
   }
   else {
-    displayProductMessage("Check in store for availability.", resultsDiv);
+    displayProductMessage('Check in store for availability.', resultsDiv);
   }
   ac('pageview');
 }
@@ -27,10 +24,10 @@ function displayStockPage(item)
 function displayProductMessage(message, resultsDiv)
 {
   var row = document.createElement('DIV');
-  row.setAttribute("class", "row");
-  row.setAttribute("style", "text-align: center;");
+  row.setAttribute('class', 'row');
+  row.setAttribute('style', 'text-align: center;');
 
-  var h = document.createElement("H3");
+  var h = document.createElement('H3');
   h.innerHTML = message;
   row.appendChild(h);
   resultsDiv.appendChild(row);
@@ -41,11 +38,11 @@ function checkStockForAllStores(item) {
   var productId = item.productId.replace('/', '');
 
   var stores = getStoreList();
-  for(var key in stores)
+  for(var store in stores)
   {
-    if (stores.hasOwnProperty(key))
+    if (stores.hasOwnProperty(store))
     {
-      checkStockForSingleStore(productId, stores[key]);
+      checkStockForSingleStore(productId, stores[store]);
     }
   }
 }
@@ -122,7 +119,7 @@ function generateMobileStockTable(item, resultsDiv) {
       stockStatusContent.setAttribute('id', 'store' + storeId);
       stockStatusContent.setAttribute('style', 'position: relative; height:25px; top:50%;');
 
-      var spinner = new Spinner(opts).spin(stockStatusContent);
+      new Spinner(opts).spin(stockStatusContent);
 
       stockStatusCell.appendChild(stockStatusContent);
 
@@ -209,7 +206,7 @@ function generateStockTable(item, resultsDiv)
       stockStatusContent.setAttribute('id', 'sm-store' + storeId);
       stockStatusContent.setAttribute('style', 'position: relative; height:25px; top:50%;');
 
-      var spinner = new Spinner(opts).spin(stockStatusContent);
+      new Spinner(opts).spin(stockStatusContent);
 
       stockStatusCell.appendChild(stockStatusContent);
       row.appendChild(storeNameCell);
@@ -449,8 +446,6 @@ function appendStockStatus(itemJson, element) {
 }
 
 function handleStoreStockStatus(itemJson, storeId) {
-  if(document.getElementById('sm-store' + storeId) !== null && document.getElementById('store' + storeId) !== null){
-    appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
-    appendStockStatus(itemJson, document.getElementById('store' + storeId));
-  }
+    document.getElementById('sm-store' + storeId) && appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
+    document.getElementById('store' + storeId) && appendStockStatus(itemJson, document.getElementById('store' + storeId));
 }

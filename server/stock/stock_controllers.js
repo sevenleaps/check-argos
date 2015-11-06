@@ -24,7 +24,6 @@
   }
 
   function getPriceHistoryInternal (req, callback) {
-
     db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
       return callback(undefined, prices);
     }).catch(function (error) {

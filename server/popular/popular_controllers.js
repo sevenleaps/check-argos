@@ -201,11 +201,16 @@
       var productPageHtml = body;
       if(ProductsUtil.isValidProductPage(productPageHtml))
       {
+        var percentageSaving = 0;
         var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
         obj.productName = productInfoJson.productName;
         obj.price = productInfoJson.price;
         obj.previousPrice = productInfoJson.previousPrice;
         obj.productImageUrl = productInfoJson.productImageUrl;
+        if(productInfoJson.previousPrice != 0 && productInfoJson.price != "."){
+          percentageSaving = ((1 - (obj.price/obj.previousPrice))* 100).toFixed(0);
+        }
+        obj.percentageSaving = percentageSaving;
       }
 
       callback();

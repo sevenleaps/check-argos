@@ -1,9 +1,10 @@
 <td class="storeNameCol">
-  <a title="{{name}}" href="{{referl}}" id="productLinkC" onclick="logClickThrough(&quot;{{productId}}&quot;, &quot;productLinkC&quot;);">
+  <a title="{{name}}" href="{{referl}}" id="productLinkC" onclick="logClickThrough(&quot;{{product.productId}}&quot;, &quot;productLinkC&quot;);">
     {{name}}
   </a>
 </td>
 <td class="stockStatusCol">
   <div id="sm-store{{code}}" style="position: relative; height:25px; top:50%;">
+    <i class="fa fa-spinner fa-pulse"></i>
   </div>
 </td>
