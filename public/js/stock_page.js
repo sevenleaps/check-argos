@@ -399,7 +399,22 @@ function isBreakpoint( alias ) {
     return $('.device-' + alias).is(':visible');
 }
 
-function appendStockStatus(itemJson, element) {
+function resetStockStatus(storeId)
+{
+  document.getElementById('sm-store' + storeId) && addSpinnerToStockStatus(document.getElementById('sm-store' + storeId));
+  document.getElementById('store' + storeId) && addSpinnerToStockStatus(document.getElementById('store' + storeId));
+}
+
+function addSpinnerToStockStatus(element)
+{
+  element.innerHTML = '';
+  var icon = document.createElement('i');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.setAttribute('class', 'fa fa-spinner fa-pulse');
+  element.appendChild(icon);
+}
+
+function appendStockStatus(itemJson, element, storeId) {
   element.innerHTML = '';
   var icon = document.createElement('i');
   icon.setAttribute('aria-hidden', 'true');
@@ -436,8 +451,34 @@ function appendStockStatus(itemJson, element) {
   {
     icon.setAttribute('class', 'fa fa-question');
     icon.setAttribute('style', 'color: red;font-size: 20px;');
-    textSpan.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
-    textSpan.innerHTML = 'Unknown';
+
+    var retryButton = document.createElement("button");
+    retryButton.setAttribute("class", "btn btn-default btn-xs");
+    retryButton.setAttribute('style', 'margin-left: 2em;');
+    retryButton.onclick = function() {
+        resetStockStatus(storeId);
+        checkStockForSingleStore(itemJson.productId, storeId);
+      };
+    retryButton.innerHTML = "Retry";
+    textSpan.appendChild(retryButton);
+
+    var retryButtonMobile = document.createElement("button");
+    retryButtonMobile.setAttribute("class", "btn btn-default btn-xs");
+    retryButtonMobile.setAttribute('style', 'margin-left: 1em;');
+    retryButtonMobile.onclick = function() {
+        resetStockStatus(storeId);
+        checkStockForSingleStore(itemJson.productId, storeId);
+      };
+
+    var retryIcon = document.createElement('i');
+    retryIcon.setAttribute('aria-hidden', 'true');
+    retryIcon.setAttribute('class', 'fa fa-refresh');
+
+    retryButtonMobile.appendChild(retryIcon);
+
+    mobileTextSpan.appendChild(retryButtonMobile);
+
+
   }
 
   element.appendChild(icon);
@@ -446,6 +487,6 @@ function appendStockStatus(itemJson, element) {
 }
 
 function handleStoreStockStatus(itemJson, storeId) {
-    document.getElementById('sm-store' + storeId) && appendStockStatus(itemJson, document.getElementById('sm-store' + storeId));
-    document.getElementById('store' + storeId) && appendStockStatus(itemJson, document.getElementById('store' + storeId));
+    document.getElementById('sm-store' + storeId) && appendStockStatus(itemJson, document.getElementById('sm-store' + storeId), storeId);
+    document.getElementById('store' + storeId) && appendStockStatus(itemJson, document.getElementById('store' + storeId), storeId);
 }
