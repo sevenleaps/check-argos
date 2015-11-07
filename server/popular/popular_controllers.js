@@ -40,7 +40,7 @@
 
     var renderParams = {
       title: 'Checkargos.com - An Irish Stock Checker',
-      popularPageMessage : "Recent Popular Products",
+      productListMessage : "Recent Popular Products",
       storeList: stores,
       searchQuery : params.q,
       inputs : params,
@@ -49,7 +49,7 @@
       partials : {
         common_head: 'common_head',
         navbar: 'navbar',
-        content: 'popular_product_result',
+        content: 'product_list_result',
         advanced_search_filters: 'advanced_search_filters',
         catagories_drop_down: 'catagories_drop_down',
         product_list_table: 'product_list_table',
@@ -80,7 +80,7 @@
 
         productsIds.sort(function(a,b){ return b.occurancies - a.occurancies; });
 
-        getProductDetailsFromProductList(productsIds, limit, offset, callback);
+        ProductsUtil.getProductDetailsFromProductList(productsIds, limit, offset, callback);
       }
       else {
         callback(error, null);
@@ -125,6 +125,7 @@
 
   var KEEN_IO_PRODUCTS_URL = "https://api.keen.io/3.0/projects/55f97c6590e4bd095c030e89/queries/select_unique?api_key=5d37952c0e6565119cafd26e7c0c6dfab710df97d3414d33c7d88e464c2aa24f5c52202bece7ee777f4cc0770c1e7e749efebc04fc310c8970a0e59a4659b6acf84382607dde8f30a035ae306f2c796b3f0947cc8d89dad5424366f92b9da120d1ec1d39f1ef91654dd768a42cbc1a33&event_collection=clicked.referral&target_property=keen.id&group_by=productId&timezone=UTC&timeframe=this_{0}_days&filters=%5B%5D";
 
+  //old route
   function getPopularProducts(req, res, next) {
     var days = "2";
     if(req.query.days)
