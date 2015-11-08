@@ -5,8 +5,23 @@
   var ProductsUtil = require('../../lib/util/index').Products;
 
   module.exports = exports = {
-    customProductList : customProductList
+    customProductList : customProductList,
+    createList : createList
   };
+
+  function createList(request, response, next)
+  {
+    var renderParams = {
+      title: 'Checkargos.com - An Irish Stock Checker',
+      partials : {
+        common_head: 'common_head',
+        navbar: 'navbar',
+        content: 'list_creator'
+      }
+    };
+
+    response.render('common', renderParams);
+  }
 
   function customProductList(request, response, next) {
     var limit = 50;

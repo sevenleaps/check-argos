@@ -6,5 +6,8 @@
     router.route('/:productIds')
       .get(controller.customProductList);
 
+      router.route('/')
+      .get(controller.createList);
+
   };
 })();

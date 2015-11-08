@@ -1,0 +1,47 @@
+<div style="text-align: center;">
+  <h3>Custom List Generator</h3>
+  <form id="productListForm" action="#">
+      <label name="text">Enter a product ID</label>
+      <input id="productId" type="number" />
+      <input class="btn btn-default" value="Add" type="submit" />
+  </form>
+  <div class="row row-centered">
+    <div class="col-md-8 col-lg-6 col-centered">
+      <table class="table table-striped" id="listTable">
+      </table>
+    </div>
+  </div>
+  <div class="row row-centered">
+    <form id="generateListForm" action="/list/">
+      <input class="btn btn-success" value="Generate List" type="submit" />
+    </form>
+  </div>
+</div>
+
+<script>
+
+(function($){
+  $('#productListForm').submit(function(e){
+      var val = $(this).find('#productId').val();
+      $(this).find('#productId').val("");
+      $('#listTable').append('<tr><td name="productId" style="width: 80%;">'+ val +'</td><td style="width: 20%;"><button class="btn btn-danger btn-sm">X</i></td></tr>');
+
+      $("button").click(function()
+      {
+        $(this).closest ('tr').remove ();
+      });
+      e.preventDefault();
+  });
+
+  $('#generateListForm').submit(function(e){
+
+    var productIds = $("td[name=productId]").map(function() {
+        return this.innerHTML;
+    }).get();
+
+    $('#generateListForm').attr('action', "/list/" + productIds.join());
+
+  });
+})(jQuery);
+
+</script>
