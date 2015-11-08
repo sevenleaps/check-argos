@@ -1,10 +1,16 @@
 <div style="text-align: center;">
   <h3>Custom List Generator</h3>
-  <form id="productListForm" action="#">
-      <label name="text">Enter a product ID</label>
-      <input id="productId" type="number" />
-      <input class="btn btn-default" value="Add" type="submit" />
-  </form>
+  <div class="row row-centered" style="padding-bottom: 1em;">
+    Enter in product Ids to create your own custom list.
+    <br>
+    (You can also paste in existing custom list links to edit them.)
+  </div>
+  <div class="row row-centered">
+    <form id="productListForm" action="#">
+        <input id="productId" type="text" />
+        <input class="btn btn-default" value="Add" type="submit" />
+    </form>
+  </div>
   <div class="row row-centered">
     <div class="col-md-8 col-lg-6 col-centered">
       <table class="table table-striped" id="listTable">
@@ -13,22 +19,61 @@
   </div>
   <div class="row row-centered">
     <form id="generateListForm" action="/list/">
-      <input class="btn btn-success" value="Generate List" type="submit" />
+      <input id="generateListButton" class="btn btn-success disabled" value="Generate List" type="submit" />
     </form>
   </div>
 </div>
 
 <script>
 
+function enableGenerateButton()
+{
+  var productIds = $("td[name=productId]").map(function() {
+      return this.innerHTML;
+  }).get();
+
+  if(productIds && productIds.length >= 1)
+  {
+    $('#generateListButton').removeClass("disabled");
+  }
+  else {
+    $('#generateListButton').addClass("disabled");
+  }
+}
+
 (function($){
+
   $('#productListForm').submit(function(e){
       var val = $(this).find('#productId').val();
       $(this).find('#productId').val("");
-      $('#listTable').append('<tr><td name="productId" style="width: 80%;">'+ val +'</td><td style="width: 20%;"><button class="btn btn-danger btn-sm">X</i></td></tr>');
+
+      var values = [];
+
+      if(val.indexOf("/list/") > -1)
+      {
+        //looks like user has pasted in an existing link, lets clean it up
+        var splitArray = val.split("/list/");
+        if(splitArray.length >= 1)
+        {
+          val = splitArray[1];
+        }
+
+      }
+
+      val = val.replace(/[ ?\/]/g, '');
+
+      values = val.split(",");
+
+      values.forEach(function(productId){
+        $('#listTable').append('<tr><td name="productId" style="width: 80%;">'+ productId +'</td><td style="width: 20%;"><button class="btn btn-danger btn-sm">X</i></td></tr>');
+    })
+
+      enableGenerateButton();
 
       $("button").click(function()
       {
         $(this).closest ('tr').remove ();
+        enableGenerateButton();
       });
       e.preventDefault();
   });
