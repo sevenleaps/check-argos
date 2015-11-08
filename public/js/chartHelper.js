@@ -63,7 +63,7 @@ function generateOptions()
 				showTooltips: true,
 				scaleShowHorizontalLines: true,
 				scaleShowLabels: true,
-				scaleLabel: '€ <%=value%>',
+				scaleLabel: '€ <%=Number(value).toFixed(2)%>',
 				scaleArgLabel: '<%=value%>',
 				scaleBeginAtZero: false,
         scaleType: 'date',
