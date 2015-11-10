@@ -130,9 +130,6 @@ function generateMobileStockTable(item, resultsDiv) {
     }
   }
 
-  if (row !== null) {
-    tableBody.appendChild(row);
-  }
   table.appendChild(tableBody);
   resultsDiv.appendChild(table);
 }
@@ -261,7 +258,7 @@ function logClickThrough(productID, id)
     keen.addEvent('clicked.referral',{
       productId: productID,
       linkType: id
-      })
+    });
     ga('send', 'event', 'linkClick', 'refferal', productID);
     ac('record', 'link.clicked', productID, {
       'id': productID,
@@ -405,79 +402,18 @@ function resetStockStatus(storeId)
   document.getElementById('store' + storeId) && addSpinnerToStockStatus(document.getElementById('store' + storeId));
 }
 
-function appendStockStatus(itemJson, element, storeId) {
-  element.innerHTML = '';
-  var icon = document.createElement('i');
-  icon.setAttribute('aria-hidden', 'true');
-
-  var textSpan = document.createElement('span');
-  textSpan.setAttribute('class', 'hidden-xs');
-  var mobileTextSpan = document.createElement('span');
-  mobileTextSpan.setAttribute('class', 'custom-xs');
-
-  if (itemJson.isStocked)
-  {
-    icon.setAttribute('class', 'fa fa-check');
-    icon.setAttribute('style', 'color: green;font-size: 20px;');
-    textSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
-    textSpan.innerHTML = itemJson.stockQuantity + ' in stock';
-    mobileTextSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
-    mobileTextSpan.innerHTML = itemJson.stockQuantity;
-  }
-  else if (itemJson.isOrderable)
-  {
-    icon.setAttribute('class', 'fa fa-truck');
-    icon.setAttribute('style', 'color: orange;font-size: 20px;');
-    textSpan.setAttribute('style', 'color: orange;padding-left:1em; vertical-align: top;');
-    textSpan.innerHTML = 'Orderable';
-  }
-  else if (itemJson.hasOutOfStockMessage)
-  {
-    icon.setAttribute('class', 'fa fa-close');
-    icon.setAttribute('style', 'color: red;font-size: 20px;');
-    textSpan.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
-    textSpan.innerHTML = 'Out of stock';
-  }
-  else
-  {
-    icon.setAttribute('class', 'fa fa-question');
-    icon.setAttribute('style', 'color: red;font-size: 20px;');
-
-    var retryButton = document.createElement("button");
-    retryButton.setAttribute("class", "btn btn-default btn-xs");
-    retryButton.setAttribute('style', 'margin-left: 2em;');
-    retryButton.onclick = function() {
-        resetStockStatus(storeId);
-        checkStockForSingleStore(itemJson.productId, storeId);
-      };
-    retryButton.innerHTML = "Retry";
-    textSpan.appendChild(retryButton);
-
-    var retryButtonMobile = document.createElement("button");
-    retryButtonMobile.setAttribute("class", "btn btn-default btn-xs");
-    retryButtonMobile.setAttribute('style', 'margin-left: 1em;');
-    retryButtonMobile.onclick = function() {
-        resetStockStatus(storeId);
-        checkStockForSingleStore(itemJson.productId, storeId);
-      };
-
-    var retryIcon = document.createElement('i');
-    retryIcon.setAttribute('aria-hidden', 'true');
-    retryIcon.setAttribute('class', 'fa fa-refresh');
-
-    retryButtonMobile.appendChild(retryIcon);
-
-    mobileTextSpan.appendChild(retryButtonMobile);
-
-
-  }
-
-  element.appendChild(icon);
-  element.appendChild(textSpan);
-  element.appendChild(mobileTextSpan);
-}
-
 function handleStoreStockStatus(itemJson, storeId) {
-    document.getElementById('sm-store' + storeId) && appendStockStatus(itemJson, document.getElementById('sm-store' + storeId), storeId);
-    document.getElementById('store' + storeId) && appendStockStatus(itemJson, document.getElementById('store' + storeId), storeId);
+
+  var element = document.getElementById('sm-store' + storeId);
+  element && appendStockStatus(itemJson, element, function(){
+    resetStockStatus(storeId);
+    checkStockForSingleStore(itemJson.productId, storeId);
+  }, true);
+
+  element = document.getElementById('store' + storeId);
+  element && appendStockStatus(itemJson, element, function(){
+    resetStockStatus(storeId);
+    checkStockForSingleStore(itemJson.productId, storeId);
+  }, false);
+
 }

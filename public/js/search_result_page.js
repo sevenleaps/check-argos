@@ -602,46 +602,10 @@ function resetStockStatusForProduct(productId)
 
 function handleItemRowsStockResponse(itemJson, storeId)
 {
-  var productId = itemJson.productId.replace("/", "");
-  var element = document.getElementById("stockStatus" + productId);
+  var element = document.getElementById("stockStatus" + itemJson.productId);
+  element && appendStockStatus(itemJson, element, function(){
+    resetStockStatusForProduct(itemJson.productId);
+    checkStockForSingleStore(itemJson.productId, storeId);
+  }, true);
 
-  var icon = document.createElement("i");
-  var retryDiv = document.createElement("DIV");
-
-  if (itemJson.isStocked)
-  {
-    icon.setAttribute("class", "fa fa-check");
-    icon.setAttribute("style", "color: green; font-size: 20px;");
-  }
-  else if (itemJson.isOrderable)
-  {
-    icon.setAttribute("class", "fa fa-truck");
-    icon.setAttribute("style", "color: orange;font-size: 20px;");
-  }
-  else if (itemJson.hasOutOfStockMessage)
-  {
-    icon.setAttribute("class", "fa fa-close");
-    icon.setAttribute("style", "color: red; font-size: 20px;");
-  }
-  else
-  {
-    icon.setAttribute("class", "fa fa-question");
-    icon.setAttribute("style", "color: red;font-size: 20px;");
-
-    // var retryButton = document.createElement("button");
-    // retryButton.setAttribute("class", "btn btn-default btn-xs");
-    // retryButton.setAttribute('style', 'margin-left: 1em;');
-    // retryButton.onclick = function() {
-    //     resetStockStatusForProduct(itemJson.productId);
-    //     checkStockForSingleStore(itemJson.productId, storeId);
-    //   };
-    //
-    // var retryIcon = document.createElement('i');
-    // retryIcon.setAttribute('aria-hidden', 'true');
-    // retryIcon.setAttribute('class', 'fa fa-refresh');
-    //
-    // retryButtonMobile.appendChild(retryIcon);
-  }
-
-  element.appendChild(icon);
 }

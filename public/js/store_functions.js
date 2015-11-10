@@ -22,6 +22,21 @@ function generateStoreDropDown()
 }
 
 
+function loadStoresTemplate(storeList, productId)
+{
+  referl = "http://somelink.com";
+  product = {
+    productId : productId
+  }
+  var product_store_info = $('/templates/product_store_info.hjs').html();
+  var product_store_info_small = $('/templates/product_store_info_small.hjs').html();
+
+  var  view = {"name" : "You"},
+    partials = {"li-templ": li},
+    ul1 = Mustache.render($('#ul-template').html(), view, partials),
+    ul2 = Mustache.render($('#ul-template2').html(), view, partials);;
+}
+
 function getStoreList()
 {
   return stores;
@@ -69,5 +84,5 @@ var stores = {
 					"Tullamore (Extra)" : 879,
 					"Waterford" : 396,
 					"Wexford (Extra)" : 826,
-           "eBay Outlet In ROI (Extra)" : 4271 
+           "eBay Outlet In ROI (Extra)" : 4271
         };

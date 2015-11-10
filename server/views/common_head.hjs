@@ -47,6 +47,7 @@
 <script src="/js/store_functions.js"></script>
 <script src="/js/catagories_functions.js"></script>
 <script src="/js/service_helper.js"></script>
+<script src="/js/stock_check.js"></script>
 
 <script src="/chartJs/Chart.Core.min.js"></script>
 <script src="/chartJs/Chart.Scatter.min.js"></script>
@@ -57,7 +58,7 @@
 <noscript>
   <link rel="stylesheet" href="/css/style.css" />
 </noscript>
-    
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
