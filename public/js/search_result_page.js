@@ -519,6 +519,8 @@ function onStoreDropDownChange(storeId){
       var itemPrice = itemList[i].getElementsByClassName("product-price");
       if(itemPrice[0].innerHTML !== "."){
         var productId = itemList[i].id.replace("productId", "");
+        var element = document.getElementById("stockStatus" + productId);
+        element.innerHTML = "";
         filterSearchRowByStockStatus(productId, storeId)
       }
     }
