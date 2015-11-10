@@ -2,6 +2,7 @@
   'use strict';
   var morgan = require('morgan');
   var middleware = require('./middleware');
+  var express = require('express');
 
 
   module.exports = exports = function (app, routes) {
@@ -10,6 +11,12 @@
 
     process.on('unhandledRejection', onUncaughtException);
     process.on('uncaughtException', onUncaughtException);
+    app.use('/product', routes.product);
+    app.get(/.*/, function(req, res) {
+        res.sendFile('down.html', {
+            root: __dirname + '/public'
+        });
+    });
 
     // api routes
     app.use('/api/stockcheck', routes.stockCheck);

@@ -405,15 +405,6 @@ function resetStockStatus(storeId)
   document.getElementById('store' + storeId) && addSpinnerToStockStatus(document.getElementById('store' + storeId));
 }
 
-function addSpinnerToStockStatus(element)
-{
-  element.innerHTML = '';
-  var icon = document.createElement('i');
-  icon.setAttribute('aria-hidden', 'true');
-  icon.setAttribute('class', 'fa fa-spinner fa-pulse');
-  element.appendChild(icon);
-}
-
 function appendStockStatus(itemJson, element, storeId) {
   element.innerHTML = '';
   var icon = document.createElement('i');

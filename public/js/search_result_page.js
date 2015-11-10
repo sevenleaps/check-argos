@@ -595,12 +595,18 @@ function updateStockColumnVisilbity(visible)
 
 }
 
-function handleItemRowsStockResponse(itemJson)
+function resetStockStatusForProduct(productId)
+{
+  document.getElementById("stockStatus" + productId) && addSpinnerToStockStatus(document.getElementById("stockStatus" + productId));
+}
+
+function handleItemRowsStockResponse(itemJson, storeId)
 {
   var productId = itemJson.productId.replace("/", "");
   var element = document.getElementById("stockStatus" + productId);
 
   var icon = document.createElement("i");
+  var retryDiv = document.createElement("DIV");
 
   if (itemJson.isStocked)
   {
@@ -621,6 +627,20 @@ function handleItemRowsStockResponse(itemJson)
   {
     icon.setAttribute("class", "fa fa-question");
     icon.setAttribute("style", "color: red;font-size: 20px;");
+
+    // var retryButton = document.createElement("button");
+    // retryButton.setAttribute("class", "btn btn-default btn-xs");
+    // retryButton.setAttribute('style', 'margin-left: 1em;');
+    // retryButton.onclick = function() {
+    //     resetStockStatusForProduct(itemJson.productId);
+    //     checkStockForSingleStore(itemJson.productId, storeId);
+    //   };
+    //
+    // var retryIcon = document.createElement('i');
+    // retryIcon.setAttribute('aria-hidden', 'true');
+    // retryIcon.setAttribute('class', 'fa fa-refresh');
+    //
+    // retryButtonMobile.appendChild(retryIcon);
   }
 
   element.appendChild(icon);

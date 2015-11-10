@@ -86,7 +86,7 @@ function handleFilterRowResponse(pos, storeId, productId)
 		if (xmlreqs[pos].xmlhttp.status === 200 || xmlreqs[pos].xmlhttp.status === 304)
 		{
       var result =  JSON.parse(xmlreqs[pos].xmlhttp.responseText);
-      handleItemRowsStockResponse(result)
+      handleItemRowsStockResponse(result, storeId);
 		}
 
 		xmlreqs[pos].freed = 1;
