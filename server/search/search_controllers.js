@@ -52,10 +52,12 @@
       }
       displaySearchResultPage(result.items, callbackParams);
     } else if (result.hasOwnProperty('productId')) {
-      callbackParams.request.params.productId = result.productId;
+
+      callbackParams.response.redirect('/product/'+result.productId);
+      //callbackParams.request.params.productId = result.productId;
       //no idea if this works here like this, blame me if this breaks something : conor.fennell
-      require('../product/product_controllers.js').product(callbackParams.request, callbackParams.response);
-      console.log(result);
+      //require('../product/product_controllers.js').product(callbackParams.request, callbackParams.response);
+      //console.log(result);
     } else {
       displaySearchResultPage(null, callbackParams);
     }
