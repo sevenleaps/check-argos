@@ -6,8 +6,8 @@
        <span class="icon-bar"></span>
        <span class="icon-bar"></span>
        </button>
-       <a class="navbar-brand hidden-xs" href="/home">CheckArgos</a>
-       <a class="navbar-brand visible-xs" href="/home">CA</a>
+       <a class="navbar-brand hidden-xs" href="/">CheckArgos</a>
+       <a class="navbar-brand visible-xs" href="/">CA</a>
        {{^hideNavSearch}}
         <form id="navbarSearchForm" action="/search" name="searchForm" class="navbar-form pull-left" role="search">
           <div class="input-group">
@@ -33,7 +33,7 @@
         Put this back in when Clearance works again
         <li><a href="/clearance">Clearance</a></li>
         -->
-        <li><a target="_blank" href="http://rover.ebay.com/rover/1/5282-53468-19255-0/1?icep_ff3=10&pub=5575136079&toolid=10001&campid=5337775664&customid=&icep_uq=&icep_sellerId=argos_ireland&icep_ex_kw=&icep_sortBy=12&icep_catId=&icep_minPrice=&icep_maxPrice=&ipn=psmain&icep_vectorid=229543&kwid=902099&mtid=824&kw=lg">Argos Ebay</a></li>
+        <li><a target="_blank" href="http://rover.ebay.com/rover/1/5282-53468-19255-0/1?icep_ff3=10&pub=5575136079&toolid=10001&campid=5337775664&customid=&icep_uq=&icep_sellerId=argos_ireland&icep_ex_kw=&icep_sortBy=12&icep_catId=&icep_minPrice=&icep_maxPrice=&ipn=psmain&icep_vectorid=229543&kwid=902099&mtid=824&kw=lg">Argos Ebay</a><img style="text-decoration:none;border:0;padding:0;margin:0;" src="http://rover.ebay.com/roverimp/1/5282-53468-19255-0/1?ff3=10&pub=5575136079&toolid=10001&campid=5337775664&customid=&mpt=[CACHEBUSTER]"></li>
         <li><a href="/list">Create List</a></li>
         <li><a href="/about">About</a></li>
        </ul>
