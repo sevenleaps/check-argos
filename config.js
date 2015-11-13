@@ -28,7 +28,7 @@
     app.use('/search', routes.search);
     app.use('/popular', routes.popular);
     app.use('/product', routes.product);
-    app.use('/home', routes.home);
+    app.use('/', routes.home);
     app.use('/about', routes.about);
     app.use('/clearance', routes.clearance);
     app.use('/list', routes.list);
