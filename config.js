@@ -16,11 +16,11 @@
     app.use('/assets', express.static(__dirname + '/server/assets'));
     app.use('/product', routes.product);
     app.use('/stockcheck', routes.stockCheck);
-    app.get(/.*/, function(req, res) {
-        res.sendFile('down.html', {
-            root: __dirname + '/public'
-        });
-    });
+    // app.get(/.*/, function(req, res) {
+    //     res.sendFile('down.html', {
+    //         root: __dirname + '/public'
+    //     });
+    // });
 
     // api routes
     app.use('/api/stockcheck', routes.stockCheck);
