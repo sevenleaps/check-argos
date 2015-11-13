@@ -13,6 +13,7 @@
     process.on('uncaughtException', onUncaughtException);
 
     app.use('/templates', express.static(__dirname + '/server/views'));
+    app.use('/assets', express.static(__dirname + '/server/assets'));
     app.use('/product', routes.product);
     app.use('/stockcheck', routes.stockCheck);
     app.get(/.*/, function(req, res) {

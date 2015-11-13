@@ -1,26 +1,31 @@
-<table class="table table-striped hidden-sm hidden-xs">
-  <tbody>
-    {{#stores}}
-      {{#tableRowStart}}
-      <tr>
-      {{/tableRowStart}}
-        {{> product_store_info}}
-      {{#tableRowEnd}}
-      </tr>
-      {{/tableRowEnd}}
-    {{/stores}}
-  </tbody>
-</table>
+<div class="row row-centered" style="padding-bottom: 1em;">
+  <a id="editStoreListLink" href="#">Edit Store List</a>
+</div>
+<div class="row row-centered">
+  <table class="table table-striped hidden-sm hidden-xs">
+    <tbody>
+      {{#stores}}
+        {{#tableRowStart}}
+        <tr>
+        {{/tableRowStart}}
+          {{> product_store_info}}
+        {{#tableRowEnd}}
+        </tr>
+        {{/tableRowEnd}}
+      {{/stores}}
+    </tbody>
+  </table>
 
-<table class="table table-striped visible-sm visible-xs">
-  <tbody>
-    {{#stores}}
-      <tr>
-        {{> product_store_info_small}}
-      </tr>
-      <script>
-        checkStockForSingleStore({{{product.productId}}}, {{{code}}});
-      </script>
-    {{/stores}}
-  </tbody>
-</table>
+  <table class="table table-striped visible-sm visible-xs">
+    <tbody>
+      {{#stores}}
+        <tr>
+          {{> product_store_info_small}}
+        </tr>
+        <script>
+          checkStockForSingleStore({{{product.productId}}}, {{{code}}});
+        </script>
+      {{/stores}}
+    </tbody>
+  </table>
+</div>

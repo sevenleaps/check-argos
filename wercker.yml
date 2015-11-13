@@ -28,16 +28,16 @@ deploy:
         hide-from-log: true
     - script:
         name: git pull check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 git --git-dir=/home/vagrant/repos/check-argos/.git --work-tree=/home/vagrant/repos/check-argos pull
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 178.62.37.165 git --git-dir=/home/vagrant/repos/check-argos/.git --work-tree=/home/vagrant/repos/check-argos pull
     - script:
         name: npm install check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 sudo npm --prefix /home/vagrant/repos/check-argos install /home/vagrant/repos/check-argos
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 178.62.37.165 sudo npm --prefix /home/vagrant/repos/check-argos install /home/vagrant/repos/check-argos
     - script:
         name: stop docker image check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh stop
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 178.62.37.165 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh stop
     - script:
         name: start docker image check-argos
-        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 188.226.243.167 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh start
+        code: ssh -i $PRIVATEKEY_PATH -l root -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 178.62.37.165 /home/vagrant/repos/provisioning/ops/apps/check-argos.sh start
   after-steps:
     - wantedly/pretty-slack-notify:
         webhook_url: $SLACK_WEBHOOK_URL

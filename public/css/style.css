@@ -26,6 +26,11 @@
 .itemProductImage{
 }
 
+.stockStatusCol{
+  width:24%;
+  text-align: center;
+}
+
 .storeNameCol{
   width: 76%;
 }
@@ -56,6 +61,10 @@
 
   .stockStatusCol{
     width: 15%;
+  }
+
+  .stockStatusCol{
+    width:15%;
   }
 }
 

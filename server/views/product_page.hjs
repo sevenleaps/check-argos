@@ -1,2 +1,20 @@
 {{> product_info}}
-{{> product_store_table}}
+<div id="stockTableDiv">
+</div>
+<input type="hidden" id="productIdHidden" value="{{product.productId}}"/>
+<script>
+  $( document ).ready(function() {
+
+    var productIdCode = {{product.productId}};
+
+      var customStores = getCustomStores();
+      if(customStores)
+      {
+        loadStoresTemplate(customStores, {{product.productId}});
+      }
+      else
+      {
+        loadStorePickerTemplate();
+      }
+  });
+</script>

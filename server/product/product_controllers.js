@@ -15,6 +15,7 @@ function product(req, res){
       } else {
         var productModel = { product: product};
         var row = 0;
+        productModel.additionalHeadRows = ['<script type="text/javascript" src="assets/stores.json"></script>'];
         productModel.product.productId = req.params.productId;
         productModel.prices = convertPricesToHighAndLow(prices);
         productModel.stores = stores;
