@@ -201,7 +201,10 @@ function getCustomStores()
 function saveCustomStoresList()
 {
 
-  currentCustomStoresCodes.sort();
+  if($(this).hasClass("disabled"))
+  {
+    return;
+  }
   var customStoreObject = currentCustomStoresCodes.map(function(code) {
       var store = {
         code: code
@@ -211,6 +214,8 @@ function saveCustomStoresList()
 
       return store;
     });
+
+  customStoreObject.sort(function(a,b){return a.name.localeCompare(b.name);});
   setCustomStores(customStoreObject);
   $("#stockTableDiv").html("");
   loadStoresTemplate(customStoreObject, $("#productIdHidden").val());
