@@ -26,7 +26,7 @@
             <ul class="dropdown-menu">
               <li><a href="/popular/1">Today</a></li>
               <li><a href="/popular/2">Previous 2 Days</a></li>
-              <li><a href="/popular/2">Previous Week</a></li>
+              <li><a href="/popular/7">Previous Week</a></li>
             </ul>
         </li>
         <!--
