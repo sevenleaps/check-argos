@@ -34,14 +34,13 @@ var currentCustomStoresCodes;
 
 function setButtonEnabled()
 {
-  var button = $("#storeSaveButton");
   if(currentCustomStoresCodes && currentCustomStoresCodes.length > 0 && currentCustomStoresCodes.length <= 10)
   {
-    button.removeClass("disabled");
+    $(".storeSaveButton").removeClass("disabled");
   }
   else
   {
-    button.addClass("disabled");
+    $(".storeSaveButton").addClass("disabled");
   }
 }
 
@@ -91,7 +90,7 @@ function loadStorePickerTemplate()
     var storePicker = Mustache.render(store_selector[0], view, partials);
     $("#stockTableDiv").html(storePicker);
 
-    $("#storeSaveButton").click(saveCustomStoresList);
+    $(".storeSaveButton").click(saveCustomStoresList);
     setButtonEnabled();
     $('input:checkbox').each(function (){
       if($.inArray(this.value, currentCustomStoresCodes) > -1)
@@ -101,7 +100,7 @@ function loadStorePickerTemplate()
     });
     $('.storeSelectorRow').on('click', function() {
       var checkbox = $(this).find('input');
-      checkbox.prop("checked", !checkbox.prop("checked")); 
+      checkbox.prop("checked", !checkbox.prop("checked"));
       toggleCheckBox(checkbox);
     });
     $('.storeSelectorRow input').on('click', function( e ) {

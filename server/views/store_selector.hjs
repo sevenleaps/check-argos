@@ -2,12 +2,12 @@
   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-centered">
     <div class="row row-centered">
       <p>Select up to 10 stores you want to check stock from.</p>
-      <p>This selection will be remebered next time (and can be changed).</p>
+      <p>This selection will be remembered next time (and can be changed).</p>
     </div>
   </div>
   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-centered">
     <div class="row row-centered">
-      <button id="storeSaveButton" class="btn btn-success">Save</button>
+      <button class="btn btn-success storeSaveButton">Save</button>
     </div>
   </div>
 </div>
@@ -35,4 +35,12 @@
       {{/stores}}
     </tbody>
   </table>
+</div>
+
+<div class="row row-centered" style="padding-bottom: 1em;">
+  <div class="visible-sm visible-xs col-sm-12 col-xs-12 col-centered">
+    <div class="row row-centered">
+      <button class="btn btn-success storeSaveButton">Save</button>
+    </div>
+  </div>
 </div>
