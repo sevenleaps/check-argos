@@ -28,15 +28,35 @@
     app.use('/search', routes.search);
     app.use('/popular', routes.popular);
     app.use('/product', routes.product);
-    app.use('/', routes.home);
+    app.use('/', function(req, res, next) {
+      if(req.query.search)
+      {
+        res.redirect('/search?q=' + req.query.search);
+      }
+      else if(req.query.popular){
+        var days = req.query.popular;
+        if(isNaN(days))
+        {
+          days = "2";
+        }
+        res.redirect('/popular/' + days);
+      }
+      else if(req.query.isClearance)
+      {
+        //Eventually do something here when clearance is back.
+        routes.home(req, res, next);
+      }
+      else {
+        routes.home(req, res, next);
+      }
+    });
+
     app.use('/about', routes.about);
     app.use('/clearance', routes.clearance);
     app.use('/list', routes.list);
     app.use(middleware.serverError);
     app.get('/StockCheckPage*', function(req, res) {
-      console.log('Got legacy request:', req.url);
-      console.log('Product ID:', req.query.productId);
-      res.redirect('/?search=' + req.query.productId);
+      res.redirect('/search?q=' + req.query.search);
     });
     app.get('/ebay', function(req, res) {
       console.log('Got legacy for ebay');
