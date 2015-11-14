@@ -19,8 +19,10 @@
   </div>
   <div class="row"  style="padding-top:2em;">
     <i class="fa fa-twitter"></i>
-    <span style="padding-top:0px">Follow us on twitter</span>
-    <br>
-    <a href="https://twitter.com/checkargos">@checkargos</a>
+    <span style="padding-top:0px">Follow us <a href="https://twitter.com/checkargos">@checkargos</a></span>
+  </div>
+  <div class="row"  style="padding-top:1em;">
+    <i class="fa fa-facebook"></i>
+    <span style="padding-top:0px">Like us on <a href="http://facebook.com/checkargosireland">facebook</a></span>
   </div>
 </div>
