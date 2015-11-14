@@ -13,6 +13,14 @@ function product(req, res){
       if (error) {
         return res.render('error', {message : error});
       } else {
+
+        //Add todays price
+        prices.push({
+          productId: product.productId,
+          price: product.price * 100,
+          day: moment().format("YYYYMMDD")
+        });
+
         var productModel = { product: product};
         var row = 0;
         productModel.additionalHeadRows = ['<script type="text/javascript" src="assets/stores.json"></script>'];

@@ -12,11 +12,6 @@
           {{ product.productName }}
         </a>
       </h3>
-      {{#prices}}
-        <div id="{{ type }}" style="text-align: center; font-size: 12px;">
-          {{shortName}}:  €{{ price }} - {{day}}
-        </div>
-      {{/prices}}
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referl }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>

@@ -35,13 +35,13 @@ function generateData(prices) {
   });
 
   dataPoints = _.flatten(dataPoints);
-  var last = dataPoints.pop();
-  var today = {
-    y: last.y,
-    x: moment().toDate()
-  };
-  dataPoints.push(last);
-  dataPoints.push(today);
+  // var last = dataPoints.pop();
+  // var today = {
+  //   y: last.y,
+  //   x: moment().toDate()
+  // };
+  // dataPoints.push(last);
+  // dataPoints.push(today);
 
   var data = [
     {
