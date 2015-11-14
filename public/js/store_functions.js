@@ -47,15 +47,15 @@ function setButtonEnabled()
 
 function loadStorePickerTemplate()
 {
-  async1 =  $.ajax({//ajax call 1
+  storeSelectorAsync =  $.ajax({//ajax call 1
     url:"/templates/store_selector.hjs"
   });
 
-  async2 =  $.ajax({//ajax call 1
+  storeSelectorSectionAsync =  $.ajax({//ajax call 1
     url:"/templates/store_selector_section.hjs"
   });
 
-  async3 = $.ajax({//ajax call 1
+  storesAsync = $.ajax({//ajax call 1
     url:"/assets/stores.json"
   });
 
@@ -67,10 +67,6 @@ function loadStorePickerTemplate()
     });
   }
 
-  var isStoreSelected = function(){
-    //console.log(typeof this.value);
-    return (jQuery.inArray(this.code, currentCustomStoresCodes) > -1);
-  };
   var row = 0;
   var tableRowStart = function isOdd(){
     row++;
@@ -80,46 +76,60 @@ function loadStorePickerTemplate()
     return row % 2 === 0 ? '</tr>' : '';
   };
 
-  $.when(async3, async2, async1).done(function(stores, store_selector_section, store_selector) {
+  $.when(storesAsync, storeSelectorSectionAsync, storeSelectorAsync).done(function(stores, store_selector_section, store_selector) {
 
-    var  view = {"isStoreSelected" : isStoreSelected,
-                  "tableRowStart" : tableRowStart,
-                  "tableRowEnd" : tableRowEnd,
-                "stores": stores[0]};
+    var  view = {
+      "tableRowStart" : tableRowStart,
+      "tableRowEnd" : tableRowEnd,
+      "stores": stores[0]
+    };
+
     var partials = {
       "store_selector_section" : store_selector_section[0]
-      };
+    };
+
     var storePicker = Mustache.render(store_selector[0], view, partials);
     $("#stockTableDiv").html(storePicker);
+
     $("#storeSaveButton").click(saveCustomStoresList);
     setButtonEnabled();
-    $('input:checkbox').each(function ()
-    {
+    $('input:checkbox').each(function (){
       if($.inArray(this.value, currentCustomStoresCodes) > -1)
       {
         $(this).prop( "checked", true );
       }
     });
-    $('input:checkbox').change(function () {
-        var index = currentCustomStoresCodes.indexOf(this.value);
-        if(this.checked)
-        {
-          if(index == -1)
-          {
-            currentCustomStoresCodes.push(this.value);
-          }
-        }
-        else
-        {
-          if(index > -1)
-          {
-            currentCustomStoresCodes.splice(index, 1);
-          }
-        }
-
-        setButtonEnabled();
+    $('.storeSelectorRow').on('click', function() {
+      var checkbox = $(this).find('input');
+      checkbox.prop("checked", !checkbox.prop("checked")); 
+      toggleCheckBox(checkbox);
+    });
+    $('.storeSelectorRow input').on('click', function( e ) {
+        e.stopPropagation();
+        toggleCheckBox($(this));
        });
   });
+}
+
+function toggleCheckBox(checkbox)
+{
+  var index = currentCustomStoresCodes.indexOf(checkbox.val());
+  if(checkbox.prop('checked'))
+  {
+    if(index == -1)
+    {
+      currentCustomStoresCodes.push(checkbox.val());
+    }
+  }
+  else
+  {
+    if(index > -1)
+    {
+      currentCustomStoresCodes.splice(index, 1);
+    }
+  }
+
+  setButtonEnabled();
 }
 
 function loadStoresTemplate(storeList, productId)

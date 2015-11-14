@@ -29,7 +29,7 @@
   <table class="table table-striped visible-sm visible-xs">
     <tbody>
       {{#stores}}
-        <tr>
+        <tr class="storeSelectorRow">
           {{> store_selector_section}}
         </tr>
       {{/stores}}

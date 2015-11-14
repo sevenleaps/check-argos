@@ -1,4 +1,4 @@
-<td class="stockStatusCol">
+<td class="stockStatusCol storeSelectorRow">
   <input type="checkbox" name="storeChecked" value="{{code}}" {{#isStoreSelected}}checked{{/isStoreSelected}}>
 </td>
 <td id="storeName{{code}}" class="storeNameCol">
