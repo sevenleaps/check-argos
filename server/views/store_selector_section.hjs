@@ -1,6 +1,6 @@
-<td class="stockStatusCol storeSelectorRow">
-  <input type="checkbox" name="storeChecked" value="{{code}}" {{#isStoreSelected}}checked{{/isStoreSelected}}>
-</td>
-<td id="storeName{{code}}" class="storeNameCol">
-  {{name}}
+<td class="storeSelectorRow">
+  <span class="stockStatusColSelection">
+    <input type="checkbox" name="storeChecked" id="storeChecked{{code}}" value="{{code}}" {{#isStoreSelected}}checked{{/isStoreSelected}}>
+  </span>
+  <div id="storeName{{code}}" class="storeNameColSelection">{{name}}</div>
 </td>
