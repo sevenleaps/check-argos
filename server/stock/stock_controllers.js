@@ -2,6 +2,7 @@
   'use strict';
   var request = require('request');
   var mongodb = require('mongodb-then');
+  var cache = require('memory-cache');
 
   var connecitonURI = process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + process.env.MONGODB_CONNECTION_URI;
   var db = mongodb(connecitonURI + 'checkargos', [
@@ -13,6 +14,9 @@
     getPriceHistory : getPriceHistory,
     getPriceHistoryInternal : getPriceHistoryInternal
   };
+
+  var inStockTTL = 60000;
+  var outOfStockTTL = 360000;
 
   function getPriceHistory (req, res) {
     db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
@@ -32,7 +36,6 @@
     });
   }
 
-
   function checkStock(req, res, next) {
     try{
       checkStockStatus(req, res, next, true);
@@ -45,37 +48,44 @@
   }
 
   function checkStockStatus(req, res, next, retry) {
-    var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
-    request(url, function onResponse(error, response, body) {
-      var stockStatus = {
-        productId: req.params.productId,
-        storeId: req.params.storeId,
-        stockQuantity: 0
-      };
+    var cacheTime = inStockTTL;
+    var stockStatus = cache.get(''+req.params.storeId+req.params.productId);
+    if(stockStatus == null){
+      var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
+      request(url, function onResponse(error, response, body) {
 
-      if (isNearStoreIncluded(body)) {
-        body = getFirstStoreSource(body);
-      }
+        stockStatus = {
+          productId: req.params.productId,
+          storeId: req.params.storeId,
+          stockQuantity: 0
+        };
 
-      stockStatus.isStocked = isStocked(body);
-      stockStatus.isOrderable = isOrderable(body);
-      stockStatus.hasOutOfStockMessage = hasOutOfStockMessage(body);
+        if (isNearStoreIncluded(body)) {
+          body = getFirstStoreSource(body);
+        }
 
-      if (isStocked(body)) {
-        stockStatus.stockQuantity = getStockQuantity(body);
-        console.error("After");
-      }
+        stockStatus.isStocked = isStocked(body);
+        stockStatus.isOrderable = isOrderable(body);
+        stockStatus.hasOutOfStockMessage = hasOutOfStockMessage(body);
 
+        if (isStocked(body)) {
+          stockStatus.stockQuantity = getStockQuantity(body);
+        }
 
-      var tryAgain = retry && !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
-
-      if (tryAgain) {
-        checkStockStatus(req, res, next, false);
-      } else {
-        res.status(200).json(stockStatus);
-      }
-
-    });
+        var tryAgain = retry && !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
+        if (tryAgain) {
+          checkStockStatus(req, res, next, false);
+        } else {
+          if(stockStatus.hasOutOfStockMessage){
+            cacheTime = outOfStockTTL;
+          }
+          cache.put(''+req.params.storeId+req.params.productId, stockStatus, cacheTime);
+          res.status(200).json(stockStatus);
+        }
+      });
+    }else{
+      res.status(200).json(stockStatus);
+   }
   }
 
   function isNearStoreIncluded(body) {
