@@ -21,27 +21,12 @@ function generateStoreDropDown()
   return select;
 }
 
-var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var REFFERL_LINK = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
 function showStoreSelector(event)
 {
-  event.preventDefault();
   $("#stockTableDiv").html("");
   loadStorePickerTemplate();
-}
-
-var currentCustomStoresCodes;
-
-function setButtonEnabled()
-{
-  if(currentCustomStoresCodes && currentCustomStoresCodes.length > 0 && currentCustomStoresCodes.length <= 10)
-  {
-    $(".storeSaveButton").removeClass("disabled");
-  }
-  else
-  {
-    $(".storeSaveButton").addClass("disabled");
-  }
 }
 
 function loadStorePickerTemplate()
@@ -59,27 +44,16 @@ function loadStorePickerTemplate()
   });
 
   var customStores = getCustomStores();
-  currentCustomStoresCodes = [];
+  var currentCustomStoresCodes = [];
   if(customStores){
-    currentCustomStoresCodes = getCustomStores().map(function(store) {
+    currentCustomStoresCodes = customStores.map(function(store) {
       return store.code;
     });
   }
 
-  var row = 0;
-  var tableRowStart = function isOdd(){
-    row++;
-    return row % 2 === 1 ? '<tr>' : '';
-  };
-  var tableRowEnd = function isEven(){
-    return row % 2 === 0 ? '</tr>' : '';
-  };
-
   $.when(storesAsync, storeSelectorSectionAsync, storeSelectorAsync).done(function(stores, store_selector_section, store_selector) {
 
     var  view = {
-      "tableRowStart" : tableRowStart,
-      "tableRowEnd" : tableRowEnd,
       "stores": stores[0]
     };
 
@@ -91,44 +65,30 @@ function loadStorePickerTemplate()
     $("#stockTableDiv").html(storePicker);
 
     $(".storeSaveButton").click(saveCustomStoresList);
-    setButtonEnabled();
+
     $('input:checkbox').each(function (){
       if($.inArray(this.value, currentCustomStoresCodes) > -1)
       {
         $(this).prop( "checked", true );
       }
     });
-    $('.storeSelectorRow').on('click', function() {
-      var checkbox = $(this).find('input');
-      checkbox.prop("checked", !checkbox.prop("checked"));
-      toggleCheckBox(checkbox);
+    $('.storeSelectorRowSelection').on('click', function() {
+      var checkedStoreInput = $(".storeSelectorRowSelection > input:checked");
+      displayIfTooManyStoreSelectedOrNoneSelected(checkedStoreInput);
     });
-    $('.storeSelectorRow input').on('click', function( e ) {
-        e.stopPropagation();
-        toggleCheckBox($(this));
-       });
   });
 }
 
-function toggleCheckBox(checkbox)
-{
-  var index = currentCustomStoresCodes.indexOf(checkbox.val());
-  if(checkbox.prop('checked'))
-  {
-    if(index == -1)
-    {
-      currentCustomStoresCodes.push(checkbox.val());
-    }
+function displayIfTooManyStoreSelectedOrNoneSelected(checkedStoreInput){
+  if(checkedStoreInput.length > 10 || checkedStoreInput.length <= 0){
+    $('.storeSelectorRowSelection').addClass("errorStoreSelection");
+    $("#select-store-instructions").addClass("errorStoreSelectionText");
+    $(".storeSaveButton").addClass("disabled");
+  }else{
+    $('.storeSelectorRowSelection').removeClass("errorStoreSelection");
+    $("#select-store-instructions").removeClass("errorStoreSelectionText");
+    $(".storeSaveButton").removeClass("disabled");
   }
-  else
-  {
-    if(index > -1)
-    {
-      currentCustomStoresCodes.splice(index, 1);
-    }
-  }
-
-  setButtonEnabled();
 }
 
 function loadStoresTemplate(storeList, productId)
@@ -198,33 +158,34 @@ function getCustomStores()
 {
   if(localStorage.customStoresJson)
   {
-    //console.log(localStorage.customStoresJson);
     return JSON.parse(localStorage.customStoresJson);
   }
   else {
     return null;
   }
-
 }
 
 function saveCustomStoresList()
 {
-
-  if($(this).hasClass("disabled"))
+  var checkedStoreInput = $(".storeSelectorRowSelection > input:checked");
+  var customStoreObject = [];
+  displayIfTooManyStoreSelectedOrNoneSelected(checkedStoreInput);
+  if(checkedStoreInput.length > 10 || checkedStoreInput.length <= 0)
   {
     return;
   }
-  var customStoreObject = currentCustomStoresCodes.map(function(code) {
-      var store = {
-        code: code
-      };
-
-      store.name = $("#storeName" + code).html();
-
-      return store;
+  $.each($(".storeSelectorRowSelection > input:checked+label"), function(key, htmlElement){
+    var element= $(htmlElement);
+    var storeCode = element.parent().find("input:checked").val();
+    customStoreObject.push({
+      code: storeCode,
+      name: element.text()
     });
+  });
 
-  customStoreObject.sort(function(a,b){return a.name.localeCompare(b.name);});
+  customStoreObject.sort(function(a,b){
+    return a.name.localeCompare(b.name);
+  });
   setCustomStores(customStoreObject);
   $("#stockTableDiv").html("");
   loadStoresTemplate(customStoreObject, $("#productIdHidden").val());
@@ -235,67 +196,52 @@ function setCustomStores(storesList)
   localStorage.customStoresJson = JSON.stringify(storesList);
 }
 
-function getCustomStoreList()
-{
-  return [
-    { "code" : 4101,
-      "name" : "Arklow (Extra)"
-    },
-    { "code" : 943,
-      "name" : "Ashbourne Retail Park"
-    },
-    { "code" : 262,
-      "name" : "Athlone"
-    }
-  ];
-}
-
 function getStoreList()
 {
   return stores;
 }
 
 var stores = {
-          "Argos on eBay ROI (Extra)" : 4270,
-          "Arklow (Extra)" : 4101,
-					"Ashbourne Retail Park" : 943,
-					"Athlone" : 262,
-					"Blanchardstown West End" : 669,
-					"Carlow (Extra)" : 4130,
-					"Castlebar" : 807,
-					"Cavan (Extra)" : 814,
-					"Clonmel (Extra)" : 4214,
-					"Cork Mahon (Extra)" : 4113,
-					"Cork Queens Old Castle" : 45,
-					"Cork Retail Park" : 801,
-					"Drogheda (Extra)" : 875,
-					"Dun Laoghaire" : 200,
-					"Dundalk Retail Park (Extra)" : 931,
-					"Dundrum" : 817,
-					"Galway" : 547,
-					"Ilac Centre Dublin" : 394,
-					"Jervis Street Dublin" : 397,
-					"Kilkenny" : 201,
-					"Killarney (Extra)" : 899,
-					"Letterkenny (Extra)" : 793,
-					"Liffey Valley (Extra)" : 687,
-					"Limerick Childers Road (Extra)" : 915,
-					"Limerick Cruises Street" : 393,
-					"Limerick The Crescent" : 583,
-					"Longford (Extra)" : 880,
-					"Monaghan (Extra)" : 945,
-					"Naas (Extra)" : 4218,
-					"Navan" : 832,
-					"Nutgrove" : 392,
-					"Omni Park Dublin (Extra)" : 4150,
-					"Portlaoise (Extra)" : 4125,
-					"Sligo (Extra)" : 4146,
-					"St Stephens Green Dublin" : 584,
-					"Swords (Extra)" : 581,
-					"Tallaght" : 395,
-					"Tralee (Extra)" : 11,
-					"Tullamore (Extra)" : 879,
-					"Waterford" : 396,
-					"Wexford (Extra)" : 826,
-           "eBay Outlet In ROI (Extra)" : 4271
-        };
+  "Argos on eBay ROI (Extra)" : 4270,
+  "Arklow (Extra)" : 4101,
+	"Ashbourne Retail Park" : 943,
+	"Athlone" : 262,
+	"Blanchardstown West End" : 669,
+	"Carlow (Extra)" : 4130,
+	"Castlebar" : 807,
+	"Cavan (Extra)" : 814,
+	"Clonmel (Extra)" : 4214,
+	"Cork Mahon (Extra)" : 4113,
+	"Cork Queens Old Castle" : 45,
+	"Cork Retail Park" : 801,
+	"Drogheda (Extra)" : 875,
+	"Dun Laoghaire" : 200,
+	"Dundalk Retail Park (Extra)" : 931,
+	"Dundrum" : 817,
+	"Galway" : 547,
+	"Ilac Centre Dublin" : 394,
+	"Jervis Street Dublin" : 397,
+	"Kilkenny" : 201,
+	"Killarney (Extra)" : 899,
+	"Letterkenny (Extra)" : 793,
+	"Liffey Valley (Extra)" : 687,
+	"Limerick Childers Road (Extra)" : 915,
+	"Limerick Cruises Street" : 393,
+	"Limerick The Crescent" : 583,
+	"Longford (Extra)" : 880,
+	"Monaghan (Extra)" : 945,
+	"Naas (Extra)" : 4218,
+	"Navan" : 832,
+	"Nutgrove" : 392,
+	"Omni Park Dublin (Extra)" : 4150,
+	"Portlaoise (Extra)" : 4125,
+	"Sligo (Extra)" : 4146,
+	"St Stephens Green Dublin" : 584,
+	"Swords (Extra)" : 581,
+	"Tallaght" : 395,
+	"Tralee (Extra)" : 11,
+	"Tullamore (Extra)" : 879,
+	"Waterford" : 396,
+	"Wexford (Extra)" : 826,
+   "eBay Outlet In ROI (Extra)" : 4271
+};

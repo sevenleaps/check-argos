@@ -42,7 +42,13 @@
 }
 
 .storeNameColSelection{
+  font-weight: normal;
+  font-size: medium;
+}
+
+.storeSelectorRowSelection{
   display:inline-block;
+  padding: 1% 1%;
 }
 
 .stockStatusColSelection{
@@ -52,6 +58,61 @@
 
 .custom-xs{
   display:none;
+}
+
+.storeSelectorRowSelection > label {
+  display:block;
+  border:solid 1px gray;
+  line-height:40px;
+  min-height:20px;
+  max-height:40px;
+  max-width: 400px;
+  min-width: 250px;
+  border-radius:40px;
+  -webkit-font-smoothing: antialiased; 
+  margin-top:10px;
+  font-family:Arial,Helvetica,sans-serif;
+  color:gray;
+  text-align:center;
+}
+
+.errorStoreSelection > input:checked + label.selectedStore:before{
+  content: "\2718" !important;
+}
+
+.errorStoreSelection > input:checked + label {
+  border: solid 2px red !important;
+  color: red !important;
+}
+
+.errorStoreSelectionText{
+  font-weight: bold;
+  color: red;
+}
+
+.storeSelectorRowSelection > input[type=checkbox] {
+  display: none;
+}
+
+.storeSelectorRowSelection > input:checked + label {
+  border: solid 2px green;
+  color: green;
+  font-weight: bold;
+}
+
+.storeSelectorRowSelection > input:checked + label.selectedStore:before {
+  content: "\2713";
+  float: left;
+  left: 5%;
+  position: relative;
+}
+
+.storeSelectorRowSelection > input:checked + label.selectedStore {
+  visibility: visible;
+}
+
+.storeSelectorRowSelection > input.checkbox:checked + label:before {
+  content: "";
 }
 
 /* larger than phone*/
@@ -72,11 +133,6 @@
 
   .stockStatusCol{
     width: 15%;
-  }
-
-  .stockStatusColSelection{
-    padding-left: 12%;
-    padding-right: 12%;
   }
 
   .row-centered {

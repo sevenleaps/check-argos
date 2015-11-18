@@ -1,7 +1,7 @@
 <div class="row row-centered" style="padding-bottom: 1em;">
   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-centered">
     <div class="row row-centered">
-      <p>Select up to 10 stores you want to check stock from.</p>
+      <p id="select-store-instructions">Select up to 10 stores you want to check stock from.</p>
       <p>This selection will be remembered next time (and can be changed).</p>
     </div>
   </div>
@@ -12,29 +12,9 @@
   </div>
 </div>
 <div class="row row-centered">
-  <table class="table table-striped hidden-sm hidden-xs">
-    <tbody>
-      {{#stores}}
-        {{#tableRowStart}}
-        <tr>
-        {{/tableRowStart}}
-          {{> store_selector_section}}
-        {{#tableRowEnd}}
-        </tr>
-        {{/tableRowEnd}}
-      {{/stores}}
-    </tbody>
-  </table>
-
-  <table class="table table-striped visible-sm visible-xs">
-    <tbody>
-      {{#stores}}
-        <tr class="storeSelectorRow">
-          {{> store_selector_section}}
-        </tr>
-      {{/stores}}
-    </tbody>
-  </table>
+  {{#stores}}
+    {{> store_selector_section}}
+  {{/stores}}
 </div>
 
 <div class="row row-centered" style="padding-bottom: 1em;">
