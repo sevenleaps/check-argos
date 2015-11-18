@@ -56,7 +56,7 @@
     app.use('/list', routes.list);
     app.use(middleware.serverError);
     app.get('/StockCheckPage*', function(req, res) {
-      res.redirect('/search?q=' + req.query.search);
+      res.redirect('/search?q=' + req.query.productId);
     });
     app.get('/ebay', function(req, res) {
       console.log('Got legacy for ebay');
