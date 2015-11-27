@@ -15,8 +15,8 @@
     getPriceHistoryInternal : getPriceHistoryInternal
   };
 
-  var inStockTTL = 60000;
-  var outOfStockTTL = 360000;
+  var inStockTTL = 90000;
+  var outOfStockTTL = 420000;
 
   function getPriceHistory (req, res) {
     db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
@@ -50,7 +50,7 @@
   function checkStockStatus(req, res, next, retry) {
     var cacheTime = inStockTTL;
     var stockStatus = cache.get(''+req.params.storeId+req.params.productId);
-    if(stockStatus == null){
+    if(stockStatus === null){
       var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
       request(url, function onResponse(error, response, body) {
 
@@ -72,14 +72,18 @@
           stockStatus.stockQuantity = getStockQuantity(body);
         }
 
-        var tryAgain = retry && !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
+        var badRequest = !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
+
+        var tryAgain = retry && badRequest;
         if (tryAgain) {
           checkStockStatus(req, res, next, false);
         } else {
-          if(stockStatus.hasOutOfStockMessage){
+          if(stockStatus.hasOutOfStockMessage || stockStatus.isOrderable ){
             cacheTime = outOfStockTTL;
           }
-          cache.put(''+req.params.storeId+req.params.productId, stockStatus, cacheTime);
+          if (!badRequest) {
+            cache.put(''+req.params.storeId+req.params.productId, stockStatus, cacheTime);
+          }
           res.status(200).json(stockStatus);
         }
       });
