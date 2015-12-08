@@ -10,7 +10,6 @@ build:
           password: $DOCKER_PASSWORD
           cmd: /pipeline/source/node_modules/forever/bin/forever /pipeline/source/app.js
           tag: check-argos
-          ports: $PORT
           repository: sevenleap/apps
           registry: https://registry.hub.docker.com
 
