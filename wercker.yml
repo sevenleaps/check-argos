@@ -9,8 +9,8 @@ build:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD
           cmd: /pipeline/source/node_modules/forever/bin/forever /pipeline/source/server.js
-          tag: check-argos
-          repository: sevenleap/apps
+          tag: $DOCKER_IMAGE_TAG
+          repository: $DOCKER_USERNAME/$DOCKER_IMAGE_NAME
           registry: https://registry.hub.docker.com
 
 deploy:
