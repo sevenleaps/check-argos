@@ -30,7 +30,7 @@ deploy:
     - script:
         name: stop login pull start
         code: |
-          ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME "docker ps -a | grep -q $DOCKER_IMAGE_TAG && docker rm -f $DOCKER_IMAGE_TAG"
+          ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME "docker ps -a | grep -q $DOCKER_IMAGE_TAG && docker rm -f $DOCKER_IMAGE_TAG || echo \"$DOCKER_IMAGE_TAG not running\" "
           ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME docker login -e $DOCKER_EMAIL -p $DOCKER_PASSWORD -u $DOCKER_USERNAME
           ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME docker pull $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
           ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME docker run -d -e \"MONGODB_USERNAME=$MONGODB_USERNAME\" -e \"MONGODB_PASSWORD=$MONGODB_PASSWORD\" -e \"MONGODB_CONNECTION_URI=$MONGODB_CONNECTION_URI\" --name $DOCKER_IMAGE_TAG $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
