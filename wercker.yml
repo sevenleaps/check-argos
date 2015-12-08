@@ -10,7 +10,7 @@ build:
           password: $DOCKER_PASSWORD
           cmd: /pipeline/source/node_modules/forever/bin/forever /pipeline/source/app.js
           tag: check-argos
-          ports: $PORT
+          ports: $PORT:$PORT
           repository: sevenleap/apps
           registry: https://registry.hub.docker.com
 
@@ -36,5 +36,6 @@ deploy:
           ssh -i $PRIVATEKEY_PATH -l root  $HOSTNAME docker run -d -e \"MONGODB_USERNAME=$MONGODB_USERNAME\" -e \"MONGODB_PASSWORD=$MONGODB_PASSWORD\" -e \"MONGODB_CONNECTION_URI=$MONGODB_CONNECTION_URI\" --name $DOCKER_IMAGE_TAG $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
 
   after-steps:
-    - wantedly/pretty-slack-notify:
-        webhook_url: $SLACK_WEBHOOK_URL
+    - slack-notifier:
+            url: $SLACK_WEBHOOK_URL
+            username: wercker
