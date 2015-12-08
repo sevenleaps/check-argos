@@ -8,7 +8,7 @@ build:
     - internal/docker-push:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD
-          cmd: /pipeline/source/node_modules/forever/bin/forever /pipeline/source/app.js
+          cmd: /pipeline/source/node_modules/forever/bin/forever /pipeline/source/server.js
           tag: check-argos
           repository: sevenleap/apps
           registry: https://registry.hub.docker.com
