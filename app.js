@@ -20,6 +20,7 @@
   routers.about = express.Router();
   routers.clearance = express.Router();
   routers.list = express.Router();
+  routers.utilPages = express.Router();
   require('./config.js')(app, routers);
 
   app.use(express.static(__dirname + '/public', '/'));
@@ -32,6 +33,7 @@
   require('./server/about/about_routes.js')(routers.about);
   require('./server/clearance/clearance_routes.js')(routers.clearance);
   require('./server/list/list_routes.js')(routers.list);
+  require('./server/util-pages/util_pages_routes.js')(routers.utilPages);
 
   module.exports = exports = app;
 }());

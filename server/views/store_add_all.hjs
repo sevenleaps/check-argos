@@ -1,0 +1,13 @@
+<div id="Result">
+  Adding all stores....
+</div>
+<script>
+  $( document ).ready(function() {
+
+    $.getJSON( "/assets/stores.json", function( stores ) {
+      setCustomStores(stores);
+      $("#Result").html("Succesfully added all " + stores.length + " stores.");
+    });
+
+  });
+</script>

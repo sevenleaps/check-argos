@@ -16,6 +16,7 @@
     app.use('/assets', express.static(__dirname + '/server/assets'));
     app.use('/product', routes.product);
     app.use('/stockcheck', routes.stockCheck);
+    app.use('/utilPages', routes.utilPages);
     // app.get(/.*/, function(req, res) {
     //     res.sendFile('down.html', {
     //         root: __dirname + '/public'
