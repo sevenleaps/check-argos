@@ -166,7 +166,7 @@
       'price': Number.parseInt(productPrice),
       'day': Number.parseInt(moment().format('YYYYMMDD'))
     };
-    db.price.find({'productId': Number.parseInt(productId)}).sort({'$natural': -1}).limit(1).then(function (prices) {
+    db.price.find({'productId': Number.parseInt(productId)}).sort({'day': -1}).limit(1).then(function (prices) {
       if (prices.length === 0) {
         // new product price history
         return db.price.insertOne(currentPrice);
