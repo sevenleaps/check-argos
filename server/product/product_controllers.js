@@ -2,7 +2,9 @@ var moment = require('moment');
 var searchController = require('../search/search_controllers.js');
 var stockController = require('../stock/stock_controllers.js');
 var stores = require('../assets/stores.json');
-var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+//var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var CJ_ID = '7708057';
+
 
 function product(req, res){
   stockController.getPriceHistoryInternal(req, function onPrices(error, prices) {
@@ -34,7 +36,17 @@ function product(req, res){
         productModel.tableRowEnd = function isEven(){
           return row % 2 === 0 ? '</tr>' : '';
         };
-        productModel.referl = REFFERL_LINK + productModel.product.productId.replace('/', '') + '.htm';
+        var cleansedProductId = productModel.product.productId.replace('/', '')
+        // temporary until it is fized
+        var REFFERL_LINK = 'http://www.argos.ie/static/Product/partNumber/'
+        + cleansedProductId
+        + ".htm?cmpid=COJUN&storeId=10152&_%24ja=tsid%3A30390|prd%3A"
+        + CJ_ID +
+        "&referredURL=http%3A%2F%2Fwww.argos.ie%2Fstatic%2FProduct%2FpartNumber%2F"
+        + cleansedProductId
+        + ".htm&referrer=COJUN";
+
+        productModel.referl = REFFERL_LINK;
         productModel.title = 'Checkargos.com - An Irish Stock Checker';
         productModel.chartJSON = JSON.stringify(prices);
         productModel.searchQuery = product.productId;
