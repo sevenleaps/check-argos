@@ -40,7 +40,7 @@ function product(req, res){
         // temporary until it is fized
         var REFFERL_LINK = 'http://www.argos.ie/static/Product/partNumber/'
         + cleansedProductId
-        + ".htm?cmpid=COJUN&storeId=10152&_%24ja=tsid%3A30390|prd%3A"
+        + ".htm?cmpid=COJUN&storeId=10152&_%24ja=tsid%3A30390%7Cprd%3A"
         + CJ_ID +
         "&referredURL=http%3A%2F%2Fwww.argos.ie%2Fstatic%2FProduct%2FpartNumber%2F"
         + cleansedProductId
