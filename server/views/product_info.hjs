@@ -6,7 +6,7 @@
     </a>
   </div>
   <div class="col-md-4 col-lg-4" style="text-align: center;">
-    <div class="row">
+    <div class="row visible-md visible-lg">
       <h3>
         <a id="productLinkA" href="{{ referl }}" onclick='logClickThrough({{ product.productId }}, "productLinkA")'>
           {{ product.productName }}
@@ -16,6 +16,18 @@
         Buy at Argos.ie - €{{ product.price }}
       </a>
     </div>
+    <!-- Below #### TEMP FIX FOR ARGOS MOBILE ISSUE ##### -->
+    <div class="row visible-xs visible-sm">
+      <h3>
+        <a id="productLinkA" href="{{ tempReferl }}" onclick='logClickThrough({{ product.productId }}, "productLinkA")'>
+          {{ product.productName }}
+        </a>
+      </h3>
+      <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ tempReferl }}">
+        Buy at Argos.ie - €{{ product.price }}
+      </a>
+    </div>
+    <!-- Above #### TEMP FIX FOR ARGOS MOBILE ISSUE ##### -->
     <div class="visible-xs">
       <a id="priceHistory" style="visibility:hidden" onclick="toggle()">
         Graph price history

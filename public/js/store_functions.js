@@ -23,6 +23,13 @@ function generateStoreDropDown()
 
 var REFFERL_LINK = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
+var TEMP_REFFERL_LINK = '';
+
+function setTempRefferal(tempRefferalLink)
+{
+  TEMP_REFFERL_LINK = tempRefferalLink;
+}
+
 function showStoreSelector(event)
 {
   $("#stockTableDiv").html("");
@@ -139,6 +146,7 @@ function loadStoresTemplate(storeList, productId)
   $.when(async3, async2, async1).done(function(product_store_table, product_store_info_small, product_store_info) {
 
     var  view = {"referl" : referl,
+                "tempRefferal" : TEMP_REFFERL_LINK,
                   "tableRowStart" : tableRowStart,
                   "tableRowEnd" : tableRowEnd,
                   "product" : product,
