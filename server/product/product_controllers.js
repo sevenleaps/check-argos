@@ -46,7 +46,7 @@ function product(req, res){
         + cleansedProductId
         + ".htm&referrer=COJUN";
 
-        productModel.referl = REFFERL_LINK;
+        productModel.referl = REFFERL_LINK + cleansedProductId + ".htm";
         productModel.tempReferl = TEMP_REFFERL_LINK;
         productModel.title = 'Checkargos.com - An Irish Stock Checker';
         productModel.chartJSON = JSON.stringify(prices);
