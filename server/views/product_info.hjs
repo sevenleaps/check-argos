@@ -78,7 +78,6 @@
               url: TRACKER_URL,
               type: 'POST',
               data: JSON.stringify(tracker),
-              dataType: 'json',
               contentType: 'application/json; charset=utf-8'
             })
             .done(function success() {
