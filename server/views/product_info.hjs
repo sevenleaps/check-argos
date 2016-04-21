@@ -60,26 +60,33 @@
           $('#modal').modal('show')                // initializes and invokes show immediately
         }
 
-        var product = {{{jsonProduct}}}
+        var productSwawk = {{{jsonProduct}}}
 
         function createTracker(submit) {
           gaswawk('send', 'event', 'tracked', 'ARGOS_IE', product.productId);
           submit.preventDefault();
           var email = $('#email').val();
           var tracker = {
-            price: product.price,
-            productId: product.productId,
+            currency: 'EUR',
+            price: parseFloat(productSwawk.price) * 100 ,
+            productId: productSwawk.productId,
             email: email,
             website: 'ARGOS_IE',
           }
           var TRACKER_URL = 'http://tracker.swawk.com/tracker/v1/tracker';
-          $.post(TRACKER_URL, tracker)
+          $.ajax({
+              url: TRACKER_URL,
+              type: 'POST',
+              data: JSON.stringify(tracker),
+              dataType: 'json',
+              contentType: 'application/json; charset=utf-8'
+            })
             .done(function success() {
-              gaswawk('send', 'event', 'tracked.success', 'ARGOS_IE', product.productId);
+              gaswawk('send', 'event', 'tracked.success', 'ARGOS_IE', productSwawk.productId);
               $('#modal').modal('hide');
             })
             .fail(function error(err) {
-              gaswawk('send', 'event', 'tracked.fail', 'ARGOS_IE', product.productId);
+              gaswawk('send', 'event', 'tracked.fail', 'ARGOS_IE', productSwawk.productId);
               alert('Something went wrong, email sevenleaps@gmail.com.')
             });
         }

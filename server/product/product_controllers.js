@@ -15,7 +15,6 @@ function product(req, res){
       if (error) {
         return res.render('error', {message : error});
       } else {
-
         //Add todays price
         prices.push({
           productId: product.productId,
@@ -37,7 +36,6 @@ function product(req, res){
           return row % 2 === 0 ? '</tr>' : '';
         };
         var cleansedProductId = productModel.product.productId.replace('/', '')
-
 
         productModel.referral = REFERRAL_LINK + cleansedProductId + ".htm";
         productModel.title = 'Checkargos.com - An Irish Stock Checker';
