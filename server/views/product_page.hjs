@@ -6,11 +6,9 @@
   $( document ).ready(function() {
 
     var productIdCode = {{product.productId}};
-    setTempRefferal("{{tempReferl}}");
 
     var customStores = getCustomStores();
-    if(customStores)
-    {
+    if (customStores) {
       loadStoresTemplate(customStores, {{product.productId}});
     }
     else

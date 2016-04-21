@@ -1,5 +1,5 @@
 <td class="storeNameCol">
-  <a title="{{name}}" href="{{tempRefferal}}" id="productLinkC" onclick="logClickThrough(\"{{product.productId}}\", \"productLinkC\";);">
+  <a title="{{name}}" href="{{referral}}" id="productLinkC" onclick="logClickThrough(\"{{product.productId}}\", \"productLinkC\";);">
     {{name}}
   </a>
 </td>

@@ -21,14 +21,7 @@ function generateStoreDropDown()
   return select;
 }
 
-var REFFERL_LINK = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
-
-var TEMP_REFFERL_LINK = '';
-
-function setTempRefferal(tempRefferalLink)
-{
-  TEMP_REFFERL_LINK = tempRefferalLink;
-}
+var REFERRAL_LINK = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
 function showStoreSelector(event)
 {
@@ -100,7 +93,7 @@ function displayIfTooManyStoreSelectedOrNoneSelected(checkedStoreInput){
 
 function loadStoresTemplate(storeList, productId)
 {
-  referl = REFFERL_LINK + productId + '.htm';
+  referral = REFERRAL_LINK + productId + '.htm';
   product = {
     productId : productId
   }
@@ -145,16 +138,19 @@ function loadStoresTemplate(storeList, productId)
 
   $.when(async3, async2, async1).done(function(product_store_table, product_store_info_small, product_store_info) {
 
-    var  view = {"referl" : referl,
-                "tempRefferal" : TEMP_REFFERL_LINK,
-                  "tableRowStart" : tableRowStart,
-                  "tableRowEnd" : tableRowEnd,
-                  "product" : product,
-                "stores": storeList};
+    var view = {
+      "referral" : referral,
+      "tableRowStart" : tableRowStart,
+      "tableRowEnd" : tableRowEnd,
+      "product" : product,
+      "stores": storeList
+    };
+
     var partials = {
       "product_store_info" : product_store_info[0],
       "product_store_info_small" : product_store_info_small[0]
-      };
+    };
+
     var stockTable = Mustache.render(product_store_table[0], view, partials);
     $("#stockTableDiv").html(stockTable);
     $("#editStoreListLink").click(showStoreSelector);

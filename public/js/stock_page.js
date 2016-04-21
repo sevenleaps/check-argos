@@ -1,4 +1,4 @@
-var REFFERL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
 function displayStockPage(item) {
   var resultsDiv = document.getElementById('results');
@@ -139,7 +139,7 @@ function createProductTextLink(productId, linkName) {
   var linkText = document.createTextNode(linkName);
   a.appendChild(linkText);
   a.title = linkName;
-  a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  a.href = REFERRAL_LINK + productId.replace('/', '') + '.htm';
   a.id = 'productLinkC';
   a.setAttribute('onclick','logClickThrough("'+ productId.replace('/', '') +'", \"productLinkC\");');
   return a;
@@ -148,7 +148,7 @@ function createProductTextLink(productId, linkName) {
 function createProductImageLink(productId, img) {
   var a = document.createElement('a');
   a.appendChild(img);
-  a.href = REFFERL_LINK + productId.replace('/', '') + '.htm';
+  a.href = REFERRAL_LINK + productId.replace('/', '') + '.htm';
   a.id = 'productLinkD';
   a.setAttribute('onclick','logClickThrough("'+ productId.replace('/', '')  +'", \"productLinkD\");');
   return a;
@@ -292,7 +292,7 @@ function generateProductInfoRow(item)
   productGraphRow.setAttribute('class', 'row');
 
   var productId = item.productId.replace('/', '');
-  var productUrl = REFFERL_LINK + productId + '.htm';
+  var productUrl = REFERRAL_LINK + productId + '.htm';
 
   var h = document.createElement('H3');
   var titleATag = document.createElement('a');
