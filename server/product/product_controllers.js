@@ -42,6 +42,7 @@ function product(req, res){
         productModel.referral = REFERRAL_LINK + cleansedProductId + ".htm";
         productModel.title = 'Checkargos.com - An Irish Stock Checker';
         productModel.chartJSON = JSON.stringify(prices);
+        productModel.jsonProduct = JSON.stringify(product);
         productModel.searchQuery = product.productId;
         productModel.partials = {
           common_head: 'common_head',
