@@ -68,7 +68,7 @@
           var email = $('#email').val();
           var tracker = {
             currency: 'EUR',
-            price: parseFloat(productSwawk.price) * 100 ,
+            price: Math.round(parseFloat(productSwawk.price) * 100) ,
             productId: productSwawk.productId,
             email: email,
             website: 'ARGOS_IE',
