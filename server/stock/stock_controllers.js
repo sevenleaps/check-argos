@@ -1,13 +1,7 @@
 (function () {
   'use strict';
   var request = require('request');
-  var mongodb = require('mongodb-then');
   var cache = require('memory-cache');
-
-  var connecitonURI = process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + process.env.MONGODB_CONNECTION_URI;
-  var db = mongodb(connecitonURI + 'checkargos', [
-    'product','price'
-  ]);
 
   module.exports = exports = {
     checkStock : checkStock,
@@ -19,20 +13,28 @@
   var outOfStockTTL = 420000;
 
   function getPriceHistory (req, res) {
-    db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
-      res.json(prices);
-    }).catch(function (error) {
-      console.error('Error retrieving prices' + JSON.stringify(error));
-      res.json([]);
+    var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
+    request(url, function onHistory(err, res, body) {
+      var prices = JSON.parse(body) || [];
+      if (err) {
+        console.error('Error retrieving prices' + JSON.stringify(error));
+        res.json([]);
+      } else {
+        res.json(prices);
+      }
     });
   }
 
   function getPriceHistoryInternal (req, callback) {
-    db.price.find({'productId': Number.parseInt(req.params.productId)}).sort({'day': 1}).then(function (prices) {
-      return callback(undefined, prices);
-    }).catch(function (error) {
-      console.error('Error retrieving prices' + JSON.stringify(error));
-      return callback(error);
+    var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
+    request(url, function onHistory(err, res, body) {
+      var prices = JSON.parse(body) || [];
+      if (err) {
+        console.error('Error retrieving prices' + JSON.stringify(err));
+        return callback(error);
+      } else {
+        return callback(undefined, prices);
+      }
     });
   }
 

@@ -1,9 +1,6 @@
 (function () {
   'use strict';
   var assert = require('assert');
-  assert.ok(process.env.MONGODB_USERNAME, 'MONGODB_USERNAME is missing');
-  assert.ok(process.env.MONGODB_PASSWORD, 'MONGODB_PASSWORD is missing');
-  assert.ok(process.env.MONGODB_CONNECTION_URI, 'MONGODB_CONNECTION_URI is missing');
   var express = require('express');
   var app = express();
   var routers = {};

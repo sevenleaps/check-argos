@@ -17,16 +17,17 @@ function product(req, res){
       } else {
         //Add todays price
         prices.push({
-          productId: product.productId,
+          id: product.productId,
           price: product.price * 100,
-          day: moment().format("YYYYMMDD")
+          timestamp: new Date().getTime(),
         });
+
+        console.log(prices);
 
         var productModel = { product: product};
         var row = 0;
         productModel.additionalHeadRows = ['<script type="text/javascript" src="assets/stores.json"></script>'];
         productModel.product.productId = req.params.productId;
-        productModel.prices = convertPricesToHighAndLow(prices);
         productModel.stores = stores;
         productModel.tableRowStart = function isEven(){
           row++;
@@ -56,20 +57,6 @@ function product(req, res){
       }
     });
   });
-}
-
-function convertPricesToHighAndLow(prices) {
-  return [{
-    type: 'high',
-    shortName: 'Hi',
-    price: prices[0].price/100,
-    day: moment(prices[0].day.toString(), 'YYYYMMDD').format('DD MMM YY')
-  },{
-    type: 'low',
-    shortName: 'Lo',
-    price: prices[prices.length - 1].price/100,
-    day: moment(prices[prices.length -1].day.toString(), 'YYYYMMDD').format('DD MMM YY')
-  }];
 }
 
 module.exports = exports = {

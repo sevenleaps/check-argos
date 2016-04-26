@@ -1,12 +1,9 @@
 (function () {
   'use strict';
   var request = require('request');
+  var rp = require('request-promise');
   var moment = require('moment');
-  var mongodb = require('mongodb-then');
-  var connecitonURI = process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + process.env.MONGODB_CONNECTION_URI;
-  var db = mongodb(connecitonURI + 'checkargos', [
-    'product','price'
-  ]);
+
   var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
   var ProductsUtil = require('../../lib/util/index').Products;
   var hoganHelper = require('../utils/hogan_helper.js');
@@ -157,31 +154,28 @@
 
   }
 
-  function updatePriceHistory(productInfoJson) {
-    var productId = productInfoJson.productId.replace('/', '');
-    var productPrice = productInfoJson.price.replace('.', '');
+  function updatePriceHistory(product) {
+    var id = product.productId.replace('/', '');
+    var price = Math.round(parseFloat(product.price) * 100);
 
-    var currentPrice = {
-      'productId': Number.parseInt(productId),
-      'price': Number.parseInt(productPrice),
-      'day': Number.parseInt(moment().format('YYYYMMDD'))
+    var price = {
+      id: id,
+      price: Number.parseInt(price),
+      timestamp: new Date().getTime(),
+      site: 'ARGOS_IE',
+      producer: 'check-argos',
+      currency: 'EUR',
     };
-    db.price.find({'productId': Number.parseInt(productId)}).sort({'day': -1}).limit(1).then(function (prices) {
-      if (prices.length === 0) {
-        // new product price history
-        return db.price.insertOne(currentPrice);
-      }
 
-      var isNewPrice = prices[0].price !== currentPrice.price;
-      var isDifferentDate = prices[0].price.day !== currentPrice.day;
-      if (isNewPrice  && isDifferentDate) {
-        // add new price
-        return db.price.insertOne(currentPrice);
-      }
+    rp({
+      method: 'POST',
+      uri: 'http://pricehistory.swawk.com/v1/price',
+      body: price,
+      json: true,
     }).catch(function (err) {
       console.error('Error updating price history');
       console.error(err);
-    });
+    })
 
   }
 

@@ -13,7 +13,7 @@ function generateData(prices) {
   }).map(function (price) {
     var source = {};
     source.y = price.price/100;
-    source.x = moment(price.day.toString(), 'YYYYMMDD').toDate();
+    source.x = new Date(price.timestamp);
     return source;
   });
 
@@ -21,6 +21,7 @@ function generateData(prices) {
     var sources = [source];
     // if last element
     if (array[index + 1] === undefined) {
+      // do nothing
     } else {
       var isDayApart = array[index + 1].x.getTime() - source.x.getTime() > 86400000;
 
@@ -35,13 +36,7 @@ function generateData(prices) {
   });
 
   dataPoints = _.flatten(dataPoints);
-  // var last = dataPoints.pop();
-  // var today = {
-  //   y: last.y,
-  //   x: moment().toDate()
-  // };
-  // dataPoints.push(last);
-  // dataPoints.push(today);
+
 
   var data = [
     {
