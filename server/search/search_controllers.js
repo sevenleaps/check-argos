@@ -155,13 +155,14 @@
   }
 
   function updatePriceHistory(product) {
-    if (product.price) {
+    var productPrice = Math.round(parseFloat(product.price) * 100);
+
+    if (product.price && !isNaN(productPrice)) {
       var id = product.productId.replace('/', '');
-      var price = Math.round(parseFloat(product.price) * 100);
 
       var price = {
         id: id,
-        price: Number.parseInt(price),
+        price: Number.parseInt(productPrice),
         timestamp: new Date().getTime(),
         site: 'ARGOS_IE',
         producer: 'check-argos',
