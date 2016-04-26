@@ -155,27 +155,29 @@
   }
 
   function updatePriceHistory(product) {
-    var id = product.productId.replace('/', '');
-    var price = Math.round(parseFloat(product.price) * 100);
+    if (product.price) {
+      var id = product.productId.replace('/', '');
+      var price = Math.round(parseFloat(product.price) * 100);
 
-    var price = {
-      id: id,
-      price: Number.parseInt(price),
-      timestamp: new Date().getTime(),
-      site: 'ARGOS_IE',
-      producer: 'check-argos',
-      currency: 'EUR',
-    };
+      var price = {
+        id: id,
+        price: Number.parseInt(price),
+        timestamp: new Date().getTime(),
+        site: 'ARGOS_IE',
+        producer: 'check-argos',
+        currency: 'EUR',
+      };
 
-    rp({
-      method: 'POST',
-      uri: 'http://pricehistory.swawk.com/v1/price',
-      body: price,
-      json: true,
-    }).catch(function (err) {
-      console.error('Error updating price history');
-      console.error(err);
-    })
+      rp({
+        method: 'POST',
+        uri: 'http://pricehistory.swawk.com/v1/price',
+        body: price,
+        json: true,
+      }).catch(function (err) {
+        console.error('Error updating price history');
+        console.error(err);
+      });
+    }
 
   }
 
