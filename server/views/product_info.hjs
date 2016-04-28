@@ -60,6 +60,15 @@
           $('#modal').modal('show')                // initializes and invokes show immediately
         }
 
+        function swawkStock(product, store) {
+          console.log(product, store);
+          // gaswawk('send', 'event', 'opened', 'ARGOS_IE', product.productId);
+
+          $('#modal').modal()                      // initialized with defaults
+          $('#modal').modal({ keyboard: false })   // initialized with no keyboard
+          $('#modal').modal('show')                // initializes and invokes show immediately
+        }
+
         var productSwawk = {{{jsonProduct}}}
 
         function createTracker(submit) {

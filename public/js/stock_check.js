@@ -14,39 +14,37 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
 
   var textSpan = document.createElement('span');
 
-  if (itemJson.isStocked)
-  {
+  if (itemJson.isStocked) {
     icon.setAttribute('class', 'fa fa-check');
-    icon.setAttribute('style', 'color: green;font-size: 20px;');
-    textSpan.setAttribute('style', 'color: green;padding-left:1em; vertical-align: top;');
+    icon.setAttribute('style', 'color: green;font-size: 20px; float:right;');
+    textSpan.setAttribute('style', 'float:right; color: green;padding-left:1em; padding-right:1em; vertical-align: top;');
 
-    if(!smallVersion)
-    {
-      textSpan.innerHTML = itemJson.stockQuantity + ' in stock';
-    }
-    else {
-      textSpan.innerHTML = itemJson.stockQuantity;
-    }
-  }
-  else if (itemJson.isOrderable)
-  {
+    textSpan.innerHTML = itemJson.stockQuantity;
+
+  } else if (itemJson.isOrderable) {
     icon.setAttribute('class', 'fa fa-truck');
     icon.setAttribute('style', 'color: orange;font-size: 20px;');
     if(!smallVersion)
     {
-      textSpan.setAttribute('style', 'color: orange;padding-left:1em; vertical-align: top;');
+      textSpan.setAttribute('style', 'color: orange;padding-right:1em; vertical-align: top;');
       textSpan.innerHTML = 'Orderable';
     }
-  }
-  else if (itemJson.hasOutOfStockMessage)
-  {
-    icon.setAttribute('class', 'fa fa-close');
+  } else if (itemJson.hasOutOfStockMessage) {
+    $('#swagnote').show();
     icon.setAttribute('style', 'color: red;font-size: 20px;');
-    if(!smallVersion)
-    {
-      textSpan.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
-      textSpan.innerHTML = 'Out of stock';
-    }
+    var zero = document.createElement('span');
+    zero.setAttribute('style', 'color: red;padding-left:1em; padding-right:1em; vertical-align: top;');
+    zero.innerHTML = '0';
+
+    var button = document.createElement('button');
+    button.innerText = 'Notify';
+
+    var div = document.createElement('div');
+    div.setAttribute('style', 'float: right');
+    div.appendChild(button);
+    div.appendChild(zero);
+
+    textSpan = div;
   }
   else
   {
@@ -77,6 +75,6 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
 
   }
 
-  element.appendChild(icon);
   element.appendChild(textSpan);
+  element.appendChild(icon);
 }

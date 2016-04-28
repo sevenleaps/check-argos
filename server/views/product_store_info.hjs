@@ -4,7 +4,7 @@
   </a>
 </td>
 <td class="stockStatusCol">
-  <div id="store{{code}}" style="position: relative; height:25px; top:50%;">
+  <div id="store{{code}}" style="position: relative; height:25px; top:50%; float:right;">
     <i class="fa fa-spinner fa-pulse"></i>
   </div>
 </td>
