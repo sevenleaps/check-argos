@@ -118,7 +118,7 @@
           <fieldset class="form-group">
             <label for="email">Enter the email address you want to get notified on.</label>
             <medium style="color:red; display: none;" id="error-email" for="email">Error: Invalid email</medium>
-            <input class="form-control" id="email" placeholder="Enter email" required>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" required>
             <small class="text-muted">We'll never share your email with anyone else.</small>
           </fieldset>
            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
