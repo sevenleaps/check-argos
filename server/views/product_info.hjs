@@ -69,8 +69,9 @@
         function swawkStock(product, store, storeName) {
           gaswawk('send', 'event', 'opened.stock.ARGOS_IE', product.productId, store);
 
-          $('#stock-form').removeAttr('onsubmit')
-            .submit(function(event){
+          $('#stock-form').removeAttr('onsubmit');
+          $('#stock-form').unbind('submit');
+          $('#stock-form').submit(function(event){
                 createStockTracker(store, storeName, event);
             });
 
