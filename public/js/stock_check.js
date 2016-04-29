@@ -37,11 +37,15 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
     zero.innerHTML = '0';
 
     var button = document.createElement('button');
-    button.innerText = 'Notify';
+    button.onclick = function () {swawkStock(itemJson.productId, itemJson.storeId, inverseStores[itemJson.storeId])}
+    button.setAttribute('style', 'font-size: smaller');
+    button.setAttribute('class', 'swawk-stock');
+    button.innerText = 'Swawk stock';
+
 
     var div = document.createElement('div');
     div.setAttribute('style', 'float: right');
-    div.appendChild(button);
+    GLOBAL_FEATURE_FLAG && div.appendChild(button);
     div.appendChild(zero);
 
     textSpan = div;
@@ -49,7 +53,7 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
   else
   {
     icon.setAttribute('class', 'fa fa-question');
-    icon.setAttribute('style', 'color: red;font-size: 20px;');
+    icon.setAttribute('style', 'color: red; padding-left:1em; font-size: 20px;');
 
     var retryButton = document.createElement("button");
 

@@ -34,11 +34,11 @@
 }
 
 .storeNameCol, .storeNameColSelection{
-  width: 64%;
+  width: 55%%;
 }
 
 .stockStatusCol{
-  width: 46%;
+  width: 45%;
 }
 
 .storeNameColSelection{
@@ -127,12 +127,12 @@
 
 /* larger than phone & tablet */
 @media (min-width: 992px) {
-  .storeNameCol{
-    width: 35%;
+  .storeNameCol {
+    width: 25%;
   }
 
   .stockStatusCol{
-    width: 15%;
+    width: 25%;
   }
 
   .row-centered {

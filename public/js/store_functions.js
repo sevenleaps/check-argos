@@ -249,3 +249,9 @@ var stores = {
 	"Wexford (Extra)" : 826,
    "eBay Outlet In ROI (Extra)" : 4271
 };
+
+var inverseStores = {};
+
+for (store in stores) {
+  inverseStores[stores[store]] = store;
+}
