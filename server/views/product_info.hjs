@@ -66,8 +66,8 @@
           $('#pricemodal').modal('show')
         }
 
-        function swawkStock(product, store, storeName) {
-          gaswawk('send', 'event', 'opened.stock.ARGOS_IE', product.productId, store);
+        function swawkStock(id, store, storeName) {
+          gaswawk('send', 'event', 'opened.stock.ARGOS_IE', id, store);
 
           $('#stock-form').removeAttr('onsubmit');
           $('#stock-form').unbind('submit');
