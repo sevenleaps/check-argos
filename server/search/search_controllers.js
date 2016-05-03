@@ -27,7 +27,7 @@
 
     var isProductId = ProductsUtil.isValidProductId(params.searchString);
     if(isProductId){
-      res.redirect('/product/'+params.searchString);
+      res.redirect('/product/' + ProductsUtil.cleanUpProductId(params.searchString));
     }
     else {
       var callbackParams = {
