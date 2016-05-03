@@ -3,6 +3,7 @@
   var request = require('request');
   var rp = require('request-promise');
   var moment = require('moment');
+  var Promise = require('bluebird');
 
   var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
   var ProductsUtil = require('../../lib/util/index').Products;
@@ -24,40 +25,45 @@
     params.sectionText = catagoriesMap[params.sectionNumber];
     params.searchString = params.q;
 
-    var callbackParams = {
-      request : req,
-      response : res,
-      params : params
-    };
-    textSearchMethod(params, searchPageResult, callbackParams);
+    var isProductId = ProductsUtil.isValidProductId(params.searchString);
+    if(isProductId){
+      res.redirect('/product/'+params.searchString);
+    }
+    else {
+      var callbackParams = {
+        request : req,
+        response : res,
+        params : params
+      };
+      textSearchMethod(params)
+      .then(function textSearchResult(result){
+        //Check if its a list of products
+        if(result && result.hasOwnProperty('items')) {
+          result.items.forEach(function eachResult(item){
+            item.percentageSaving = calculatePrecentageSaving(item.price, item.previousPrice);
+          });
+          displaySearchResultPage(result.items, callbackParams);
+        }
+        else if (result && result.hasOwnProperty('productId')){
+          res.redirect('/product/'+result.productId);
+        } else {
+          displaySearchResultPage(null, callbackParams);
+        }
+      })
+      .catch(function textSearchFail(err){
+        console.log(err);
+        displaySearchResultPage(null, callbackParams);
+      });
+    }
   }
 
-  function searchPageResult(error, result, callbackParams)
-  {
-    if(error || !result){
-      displaySearchResultPage(null, callbackParams);
-    } else if(result.hasOwnProperty('items')){
-      var percentageSaving = 0;
-      for(var i = 0; i < result.items.length; i++){
-
-        percentageSaving = 0;
-        if(result.items[i].previousPrice != 0 && result.items[i].price != ".")
-        {
-          percentageSaving = ((1 - (result.items[i].price/result.items[i].previousPrice))* 100).toFixed(0);
-        }
-        result.items[i].percentageSaving = percentageSaving;
-      }
-      displaySearchResultPage(result.items, callbackParams);
-    } else if (result.hasOwnProperty('productId')) {
-
-      callbackParams.response.redirect('/product/'+result.productId);
-      //callbackParams.request.params.productId = result.productId;
-      //no idea if this works here like this, blame me if this breaks something : conor.fennell
-      //require('../product/product_controllers.js').product(callbackParams.request, callbackParams.response);
-      //console.log(result);
-    } else {
-      displaySearchResultPage(null, callbackParams);
+  function calculatePrecentageSaving(price, previousPrice){
+    var percentageSaving = 0;
+    if(previousPrice !== 0 && price !== '.')
+    {
+      percentageSaving = ((1 - (price / previousPrice))* 100).toFixed(0);
     }
+    return percentageSaving;
   }
 
   function displaySearchResultPage(items, callbackParams)
@@ -182,24 +188,21 @@
 
   }
 
-  function textSearchMethod(params, callback, callbackParam)
-  {
-    var url;
+function textSearchMethod(params)
+{
+  return new Promise(function search(resolve, reject) {
 
-    if(params.subSectionText || params.subSectionNumber)
-    {
+    var url;
+    if(params.subSectionText || params.subSectionNumber){
       url = buildSubCatagorySearchUrl(params);
-    }
-    else
-    {
+    } else {
       url = buildSearchUrl(params);
     }
 
-    request(url, function onResponse(error, response, body) {
-      if (error) {
-        callback(error, null, callbackParam);
-      }
-      else {
+    request(url, function onResponse(err, response, body) {
+      if (err) {
+        reject(err);
+      } else {
         var totalNumProducts = ProductsUtil.getTotalNumberOfProducts(body);
         if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts !== 'Error')) {
           try {
@@ -214,13 +217,13 @@
               totalNumProducts: totalNumProducts
             };
 
-            callback( null, returnObj, callbackParam);
-           } catch (error) {
-             callback(error, null, callbackParam);
-           }
-        }
-        else if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(params.subSectionText || params.subSectionNumber)){
-          try{
+            resolve(returnObj);
+
+          } catch (err) {
+             reject(err);
+          }
+        } else if (ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(params.subSectionText || params.subSectionNumber)){
+          try {
             console.log('Is a sub catagory page');
             var catagoryInfo = ProductsUtil.getCatagoryInformationFromPath(response.request.path);
 
@@ -229,28 +232,32 @@
             params.subSectionText = catagoryInfo.subCatagoryName;
             params.subSectionNumber = catagoryInfo.subCatagoryNumber;
 
-            textSearchMethod(params, callback, callbackParam)
+            // Need to append catagory details and do the search again
+            textSearchMethod(params)
+            .then(resolve, reject);
 
           }
-          catch (error) {
-            callback(error, null, callbackParam);
+          catch (err) {
+            reject(err);
           }
         }
         else if(!ProductsUtil.isFoundNoProductsPage(body)) {
           try{
             var productInfoJson = ProductsUtil.getProductInformationFromProductPage(body);
-            callback( null, productInfoJson, callbackParam);
+            resolve(productInfoJson);
           }
-          catch (error) {
-            callback(error, null, callbackParam);
+          catch (err) {
+            reject(err);
           }
         }
         else {
-          callback( null, null, callbackParam);
+          resolve(null);
         }
       }
     });
-  }
+
+  });
+}
 
   function textSearch(req, res, next) {
     try{

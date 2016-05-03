@@ -1,6 +1,18 @@
-<select class="form-control" id="catagoryDropDown" name="catagory">
+<select class="form-control" id="catagoryDropDown" {{#elementToUpdate}}onChange="updateElementOnChange()"{{/elementToUpdate}} name="catagory">
   <option value="0">-- Select a catagory --</option>
   {{#catagoryList}}
     <option value="{{code}}" {{selectedCatagory}}>{{name}}</option>
   {{/catagoryList}}
 </select>
+{{#elementToUpdate}}
+  <script>
+    function updateElementOnChange(){
+        var selectedIndex = $('#catagoryDropDown').selectedIndex;
+        if (selectedIndex !== 0){
+          $('#{{elementToUpdate}}').removeClass('disabled');
+        } else {
+          $('#{{elementToUpdate}}').addClass('disabled');
+        }
+    }
+  </script>
+{{/elementToUpdate}}

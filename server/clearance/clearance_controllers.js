@@ -17,6 +17,7 @@ function clearance(req, res, next) {
     storeList: stores,
     catagoryList: catagories,
     clearanceMessageText: "Clearance Search",
+    elementToUpdate: "filterButton",
     advancedSearchFilter : {
       formAction : "/clearance/search",
       disableButton: true,
@@ -33,30 +34,28 @@ function clearance(req, res, next) {
   });
 }
 
-function clearanceSearchPage(request, response, next) {
+function clearanceSearchPage(req, res, next) {
 
   var catagoriesMap = require('../assets/catagories_map.json');
   var clearanceSectionMap = require('../assets/clearance_section_map.json');
-  var params = request.query;
-  params.sectionNumber = request.query.catagory;
+  var params = req.query;
+  params.sectionNumber = params.catagory;
   params.sectionText = catagoriesMap[params.sectionNumber];
   params.subSectionText = 'Clearance+' + params.sectionText;
   params.subSectionNumber = clearanceSectionMap[params.sectionNumber];
 
-  search.textSearchMethod(params, function(error, result){
-    if(error || !result){
-      displayClearanceResultPage(request, response, null);
+  search.textSearchMethod(params)
+  .then(function textSearchResult(result){
+    if(result && result.hasOwnProperty("items")) {
+      displayClearanceResultPage(req, res, result.items);
+    } else if (result && result.hasOwnProperty('productId')) {
+        res.redirect('/product/'+result.productId);
+    } else {
+      displayClearanceResultPage(req, res, null);
     }
-    else{
-      if(result){
-        if(result.hasOwnProperty("items")){
-          displayClearanceResultPage(request, response, result.items);
-        }
-        else {
-          //Show Product Page
-        }
-      }
-    }
+  })
+  .catch(function textSearchFail(err) {
+    displayClearanceResultPage(req, res, null);
   });
 }
 
@@ -72,12 +71,14 @@ function displayClearanceResultPage(request, response, products)
     productList: products,
     hasProducts: (products && products.length > 0),
     clearanceMessageText: "Clearance Search",
+    elementToUpdate: "filterButton",
     partials : {
       common_head: 'common_head',
       navbar: 'navbar',
       content: 'clearance_result',
       advanced_search_filters: 'advanced_search_filters',
       catagories_drop_down: 'catagories_drop_down',
+      product_list_table: 'product_list_table',
       store_drop_down: 'store_drop_down'
     }
   };
