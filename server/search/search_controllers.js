@@ -208,6 +208,9 @@ function textSearchMethod(params)
           try {
             var productsJson = ProductsUtil.getProductsFromHtml(body);
 
+            productsJson = productsJson.filter(function filterBadProducts(item){
+              return item.price !== '.';
+            });
             productsJson.forEach(function updatePrice(item) {
               updatePriceHistory(item);
             });

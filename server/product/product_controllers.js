@@ -9,11 +9,11 @@ var CJ_ID = '7708057';
 function product(req, res){
   stockController.getPriceHistoryInternal(req, function onPrices(error, prices) {
     if (error) {
-      return res.render('error', {message : error});
+      return displayErrorPage(res, error, req.params.productId)
     }
     searchController.searchInternal(req.params.productId, function (error, product){
       if (error) {
-        return res.render('error', {message : error});
+        return displayErrorPage(res, error, req.params.productId)
       } else {
         //Add todays price
         prices.push({
@@ -53,6 +53,18 @@ function product(req, res){
         return res.render('common', productModel);
       }
     });
+  });
+}
+
+function displayErrorPage(res, error, productId) {
+  return res.render('common', {
+    message : error,
+    searchQuery : productId,
+    partials: {
+      common_head: 'common_head',
+      navbar: 'navbar',
+      content: 'error'
+    }
   });
 }
 
