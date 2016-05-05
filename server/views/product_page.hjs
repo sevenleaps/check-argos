@@ -1,19 +1,27 @@
 {{> product_info}}
-<div id="stockTableDiv">
-</div>
-<input type="hidden" id="productIdHidden" value="{{product.productId}}"/>
-<script>
-  $( document ).ready(function() {
 
-    var productIdCode = {{product.productId}};
+{{#product.availableForOnlinePurchase}}
+  <div style="width: 100%;" >
+    <p style="color:green;padding-right:10%; padding-top:20px; font-size: 125%; text-align: center;">Is available for online delivery</p>
+  </div>
+{{/product.availableForOnlinePurchase}}
+{{^product.availableForOnlinePurchase}}
+  <div id="stockTableDiv">
+  </div>
+  <input type="hidden" id="productIdHidden" value="{{product.productId}}"/>
+  <script>
+    $( document ).ready(function() {
 
-    var customStores = getCustomStores();
-    if (customStores) {
-      loadStoresTemplate(customStores, {{product.productId}});
-    }
-    else
-    {
-      loadStorePickerTemplate();
-    }
-  });
-</script>
+      var productIdCode = {{product.productId}};
+
+      var customStores = getCustomStores();
+      if (customStores) {
+        loadStoresTemplate(customStores, {{product.productId}});
+      }
+      else
+      {
+        loadStorePickerTemplate();
+      }
+    });
+  </script>
+{{/product.availableForOnlinePurchase}}

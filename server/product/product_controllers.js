@@ -34,7 +34,6 @@ function product(req, res){
           return row % 2 === 0 ? '</tr>' : '';
         };
         var cleansedProductId = productModel.product.productId.replace('/', '')
-
         productModel.referral = REFERRAL_LINK + cleansedProductId + ".htm";
         productModel.title = 'Checkargos.com - An Irish Stock Checker';
         productModel.chartJSON = JSON.stringify(prices);
