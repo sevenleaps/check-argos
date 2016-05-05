@@ -53,7 +53,7 @@ function processStockChange(pos, storeId)
 	}
 }
 
-function filterSearchRowByStockStatus(productId, storeId)
+function filterSearchRowByStockStatus(productId, storeId, isPopular)
 {
 	var pos = -1;
 	for (var i=0; i<xmlreqs.length; i++)
@@ -72,21 +72,21 @@ function filterSearchRowByStockStatus(productId, storeId)
     xmlreqs[pos].freed = 0;
     xmlreqs[pos].xmlhttp.open('GET', '/stockcheck/' + storeId + '/' + productId, true);
     xmlreqs[pos].xmlhttp.onload = function() {
-      handleFilterRowResponse(pos, storeId, productId);
+      handleFilterRowResponse(pos, storeId, productId, isPopular);
     };
 
     xmlreqs[pos].xmlhttp.send();
 	}
 }
 
-function handleFilterRowResponse(pos, storeId, productId)
+function handleFilterRowResponse(pos, storeId, productId, isPopular)
 {
 	if (typeof(xmlreqs[pos]) !== 'undefined' && xmlreqs[pos].freed === 0 && xmlreqs[pos].xmlhttp.readyState === 4)
 	{
 		if (xmlreqs[pos].xmlhttp.status === 200 || xmlreqs[pos].xmlhttp.status === 304)
 		{
       var result =  JSON.parse(xmlreqs[pos].xmlhttp.responseText);
-      handleItemRowsStockResponse(result, storeId);
+      handleItemRowsStockResponse(result, storeId, isPopular);
 		}
 
 		xmlreqs[pos].freed = 1;

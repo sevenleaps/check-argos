@@ -7,7 +7,7 @@ function addSpinnerToStockStatus(element)
   element.appendChild(icon);
 }
 
-function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
+function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPopular) {
   element.innerHTML = '';
   var icon = document.createElement('i');
   icon.setAttribute('aria-hidden', 'true');
@@ -45,7 +45,7 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion) {
 
     var div = document.createElement('div');
     div.setAttribute('style', 'float: right');
-    GLOBAL_FEATURE_FLAG && div.appendChild(button);
+    isPopular || div.appendChild(button);
     div.appendChild(zero);
 
     textSpan = div;

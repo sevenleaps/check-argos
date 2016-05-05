@@ -521,7 +521,7 @@ function onStoreDropDownChange(storeId){
         var productId = itemList[i].id.replace("productId", "");
         var element = document.getElementById("stockStatus" + productId);
         element.innerHTML = "";
-        filterSearchRowByStockStatus(productId, storeId)
+        filterSearchRowByStockStatus(productId, storeId, true)
       }
     }
   }
@@ -600,12 +600,10 @@ function resetStockStatusForProduct(productId)
   document.getElementById("stockStatus" + productId) && addSpinnerToStockStatus(document.getElementById("stockStatus" + productId));
 }
 
-function handleItemRowsStockResponse(itemJson, storeId)
-{
+function handleItemRowsStockResponse(itemJson, storeId, isPopular) {
   var element = document.getElementById("stockStatus" + itemJson.productId);
   element && appendStockStatus(itemJson, element, function(){
     resetStockStatusForProduct(itemJson.productId);
     checkStockForSingleStore(itemJson.productId, storeId);
-  }, true);
-
+  }, true, isPopular);
 }
