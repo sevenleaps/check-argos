@@ -1,8 +1,10 @@
 (function () {
   'use strict';
-  var request = require('request');
-  var async = require('async');
-  var ProductsUtil = require('../../lib/util/index').Products;
+  const request = require('request');
+  const async = require('async');
+  const ProductsUtil = require('../../lib/util/index').Products;
+  const cache = require('memory-cache');
+  const THIRTY_MINUTES = 1800000;
 
   if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -24,13 +26,19 @@
   function popularPage(request, response, next) {
     var limit = 20;
     var offset = 0;
-    getPopularProductsList(request.params.days, limit, offset, function (error, products) {
-      if (error) {
-        displayPopularProductPage(request, response, []);
-      } else {
-        displayPopularProductPage(request, response, products);
-      }
-    });
+    var cachedProducts = cache.get(`popular${request.params.days}`);
+    if (cache.get(`popular${request.params.days}`)) {
+      displayPopularProductPage(request, response, cachedProducts);
+    } else {
+      getPopularProductsList(request.params.days, limit, offset, function (error, products) {
+        if (error) {
+          displayPopularProductPage(request, response, []);
+        } else {
+          cache.put(`popular${request.params.days}`, products, THIRTY_MINUTES);
+          displayPopularProductPage(request, response, products);
+        }
+      });
+    }
   }
 
   function displayPopularProductPage(request, response, products)
