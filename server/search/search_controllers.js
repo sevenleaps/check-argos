@@ -139,25 +139,22 @@
 
   function searchProductNumber(req, res) {
     var productNum = ProductsUtil.cleanUpProductId(req.query.q);
-    ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body)
-    {
-      var productPageHtml = body;
-      if(ProductsUtil.isValidProductPage(productPageHtml))
-      {
-        var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
+    var product = {
+      productId: productNum
+    };
+
+    ProductsUtil.getProductInformation(product, function productInformation(){
+      if(product.price){
         try {
-          updatePriceHistory(productInfoJson);
+          updatePriceHistory(product);
         } catch (error) {
           console.error(error);
         }
-        res.status(200).json(productInfoJson);
-      }
-      else
-      {
+        res.status(200).json(product);
+      } else {
         res.status(404).json({});
       }
     });
-
   }
 
   function updatePriceHistory(product) {

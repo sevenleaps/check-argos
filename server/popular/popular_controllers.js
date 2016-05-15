@@ -185,7 +185,7 @@
       productList = productList.slice(offset, cutOff);
     }
 
-    async.each(productList, getProductInformation, function done (err) {
+    async.each(productList, ProductsUtil.getProductInformation, function done (err) {
       console.log("done");
       removeItemsThatNoLongerExist(productList);
       res.status(200).json(productList);
@@ -203,26 +203,4 @@
     });
   }
 
-  function getProductInformation(obj, callback)
-  {
-    var productHtml = ProductsUtil.getProductPageHtml(obj.productId, function onResponse(error, response, body)
-    {
-      var productPageHtml = body;
-      if(ProductsUtil.isValidProductPage(productPageHtml))
-      {
-        var percentageSaving = 0;
-        var productInfoJson = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
-        obj.productName = productInfoJson.productName;
-        obj.price = productInfoJson.price;
-        obj.previousPrice = productInfoJson.previousPrice;
-        obj.productImageUrl = productInfoJson.productImageUrl;
-        if(productInfoJson.previousPrice != 0 && productInfoJson.price != "."){
-          percentageSaving = ((1 - (obj.price/obj.previousPrice))* 100).toFixed(0);
-        }
-        obj.percentageSaving = percentageSaving;
-      }
-
-      callback();
-    });
-  }
 })();
