@@ -53,13 +53,13 @@ var showSwawk =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/*istanbul ignore next*/"use strict";
+	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
 
-	/*istanbul ignore next*/__webpack_require__(2);
+	__webpack_require__(2);
 
-	/*istanbul ignore next*/__webpack_require__(294);
+	__webpack_require__(294);
 
-	/*istanbul ignore next*/__webpack_require__(296);
+	__webpack_require__(296);
 
 	/* eslint max-len: 0 */
 
@@ -7314,8 +7314,9 @@ var showSwawk =
 
 	  var hasOwn = Object.prototype.hasOwnProperty;
 	  var undefined; // More compressible than void 0.
-	  var iteratorSymbol =
-	    typeof Symbol === "function" && Symbol.iterator || "@@iterator";
+	  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+	  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+	  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
 	  var inModule = typeof module === "object";
 	  var runtime = global.regeneratorRuntime;
@@ -7385,7 +7386,7 @@ var showSwawk =
 	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
 	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
 	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-	  GeneratorFunction.displayName = "GeneratorFunction";
+	  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
 
 	  // Helper for defining the .next, .throw, and .return methods of the
 	  // Iterator interface in terms of a single ._invoke method.
@@ -7412,6 +7413,9 @@ var showSwawk =
 	      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
 	    } else {
 	      genFun.__proto__ = GeneratorFunctionPrototype;
+	      if (!(toStringTagSymbol in genFun)) {
+	        genFun[toStringTagSymbol] = "GeneratorFunction";
+	      }
 	    }
 	    genFun.prototype = Object.create(Gp);
 	    return genFun;
@@ -7431,46 +7435,54 @@ var showSwawk =
 	  }
 
 	  function AsyncIterator(generator) {
-	    // This invoke function is written in a style that assumes some
-	    // calling function (or Promise) will handle exceptions.
-	    function invoke(method, arg) {
-	      var result = generator[method](arg);
-	      var value = result.value;
-	      return value instanceof AwaitArgument
-	        ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
-	        : Promise.resolve(value).then(function(unwrapped) {
-	            // When a yielded Promise is resolved, its final value becomes
-	            // the .value of the Promise<{value,done}> result for the
-	            // current iteration. If the Promise is rejected, however, the
-	            // result for this iteration will be rejected with the same
-	            // reason. Note that rejections of yielded Promises are not
-	            // thrown back into the generator function, as is the case
-	            // when an awaited Promise is rejected. This difference in
-	            // behavior between yield and await is important, because it
-	            // allows the consumer to decide what to do with the yielded
-	            // rejection (swallow it and continue, manually .throw it back
-	            // into the generator, abandon iteration, whatever). With
-	            // await, by contrast, there is no opportunity to examine the
-	            // rejection reason outside the generator function, so the
-	            // only option is to throw it from the await expression, and
-	            // let the generator function handle the exception.
-	            result.value = unwrapped;
-	            return result;
+	    function invoke(method, arg, resolve, reject) {
+	      var record = tryCatch(generator[method], generator, arg);
+	      if (record.type === "throw") {
+	        reject(record.arg);
+	      } else {
+	        var result = record.arg;
+	        var value = result.value;
+	        if (value instanceof AwaitArgument) {
+	          return Promise.resolve(value.arg).then(function(value) {
+	            invoke("next", value, resolve, reject);
+	          }, function(err) {
+	            invoke("throw", err, resolve, reject);
 	          });
+	        }
+
+	        return Promise.resolve(value).then(function(unwrapped) {
+	          // When a yielded Promise is resolved, its final value becomes
+	          // the .value of the Promise<{value,done}> result for the
+	          // current iteration. If the Promise is rejected, however, the
+	          // result for this iteration will be rejected with the same
+	          // reason. Note that rejections of yielded Promises are not
+	          // thrown back into the generator function, as is the case
+	          // when an awaited Promise is rejected. This difference in
+	          // behavior between yield and await is important, because it
+	          // allows the consumer to decide what to do with the yielded
+	          // rejection (swallow it and continue, manually .throw it back
+	          // into the generator, abandon iteration, whatever). With
+	          // await, by contrast, there is no opportunity to examine the
+	          // rejection reason outside the generator function, so the
+	          // only option is to throw it from the await expression, and
+	          // let the generator function handle the exception.
+	          result.value = unwrapped;
+	          resolve(result);
+	        }, reject);
+	      }
 	    }
 
 	    if (typeof process === "object" && process.domain) {
 	      invoke = process.domain.bind(invoke);
 	    }
 
-	    var invokeNext = invoke.bind(generator, "next");
-	    var invokeThrow = invoke.bind(generator, "throw");
-	    var invokeReturn = invoke.bind(generator, "return");
 	    var previousPromise;
 
 	    function enqueue(method, arg) {
 	      function callInvokeWithMethodAndArg() {
-	        return invoke(method, arg);
+	        return new Promise(function(resolve, reject) {
+	          invoke(method, arg, resolve, reject);
+	        });
 	      }
 
 	      return previousPromise =
@@ -7491,9 +7503,7 @@ var showSwawk =
 	          // Avoid propagating failures to Promises returned by later
 	          // invocations of the iterator.
 	          callInvokeWithMethodAndArg
-	        ) : new Promise(function (resolve) {
-	          resolve(callInvokeWithMethodAndArg());
-	        });
+	        ) : callInvokeWithMethodAndArg();
 	    }
 
 	    // Define the unified helper method that is used to implement .next,
@@ -7601,13 +7611,10 @@ var showSwawk =
 	        }
 
 	        if (method === "next") {
-	          context._sent = arg;
+	          // Setting context._sent for legacy support of Babel's
+	          // function.sent implementation.
+	          context.sent = context._sent = arg;
 
-	          if (state === GenStateSuspendedYield) {
-	            context.sent = arg;
-	          } else {
-	            context.sent = undefined;
-	          }
 	        } else if (method === "throw") {
 	          if (state === GenStateSuspendedStart) {
 	            state = GenStateCompleted;
@@ -7668,6 +7675,8 @@ var showSwawk =
 	  Gp[iteratorSymbol] = function() {
 	    return this;
 	  };
+
+	  Gp[toStringTagSymbol] = "Generator";
 
 	  Gp.toString = function() {
 	    return "[object Generator]";
@@ -7777,7 +7786,9 @@ var showSwawk =
 	    reset: function(skipTempReset) {
 	      this.prev = 0;
 	      this.next = 0;
-	      this.sent = undefined;
+	      // Resetting context._sent for legacy support of Babel's
+	      // function.sent implementation.
+	      this.sent = this._sent = undefined;
 	      this.done = false;
 	      this.delegate = null;
 
@@ -7972,6 +7983,9 @@ var showSwawk =
 	var queueIndex = -1;
 
 	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
 	    draining = false;
 	    if (currentQueue.length) {
 	        queue = currentQueue.concat(queue);
@@ -8205,6 +8219,10 @@ var showSwawk =
 	googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
 	googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
 
+	var facebookProvider = new _firebase2.default.auth.FacebookAuthProvider();
+	facebookProvider.addScope('email');
+	facebookProvider.addScope('public_profile');
+
 	var firebaseRef = exports.firebaseRef = {
 	  auth: _firebase2.default.auth(),
 	  database: _firebase2.default.database().ref(),
@@ -8212,7 +8230,7 @@ var showSwawk =
 	  provider: {
 	    email: _firebase2.default.auth().signInWithEmailAndPassword,
 	    google: googleProvider,
-	    facebook: new _firebase2.default.auth.FacebookAuthProvider()
+	    facebook: facebookProvider
 	  }
 	};
 
@@ -30645,7 +30663,7 @@ var showSwawk =
 	    'borderColor': 'grey',
 	    'borderStyle': 'solid',
 	    'borderWidth': '1px',
-	    'fontSize': '14px',
+	    'font': '14px \'Source Sans Pro\', \'Helvetica Neue\', Helvetica, Arial, sans-serif', // eslint-disable-line quotes',
 	    'transform': 'scale(1)',
 	    'transition': 'transform .25s ease-in-out,opacity .1s linear .15s',
 	    'transformOrigin': 'bottom right',
@@ -32463,7 +32481,7 @@ var showSwawk =
 	    }
 	    return dispatch({
 	      type: _actionTypes.SIGN_IN_SUCCESS,
-	      payload: data.val().profile,
+	      payload: data.val(),
 	      meta: {
 	        timestamp: Date.now()
 	      }
@@ -35408,8 +35426,8 @@ var showSwawk =
 	  var cancelTracker = _ref.cancelTracker;
 
 	  var price = (tracker.price / 100).toFixed(2);
-	  var priceInfoMessage = 'We will notify you of any price changes for this item.';
-	  var stockInfoMessage = 'We will let you know when this item comes back in to stock.';
+	  var priceInfoMessage = 'We will email you of any price changes for this item.';
+	  var stockInfoMessage = 'We will email you when this item comes back in to stock.';
 	  return _react2.default.createElement(
 	    'div',
 	    { className: (0, _aphrodite.css)(styles.container) },
@@ -42469,6 +42487,7 @@ var showSwawk =
 	    var onChange = (0, _createOnChange2.default)(name, change, isReactNative);
 	    var initialFormValue = (0, _read2.default)(name + '.initial', form);
 	    var initialValue = initialFormValue || (0, _read2.default)(name, initialValues);
+	    initialValue = initialValue === undefined ? '' : initialValue;
 	    field.name = name;
 	    field.checked = initialValue === true || undefined;
 	    field.value = initialValue;
@@ -42493,7 +42512,12 @@ var showSwawk =
 	    Object.defineProperty(field, '_isField', { value: true });
 	  }
 
-	  var fieldState = (fieldName ? state[fieldName] : state) || {};
+	  var defaultFieldState = {
+	    initial: field.value,
+	    value: field.value
+	  };
+
+	  var fieldState = (fieldName ? state[fieldName] : state) || defaultFieldState;
 	  var syncError = (0, _read2.default)(name, syncErrors);
 	  var updated = (0, _updateField2.default)(field, fieldState, name === form._active, syncError);
 	  if (fieldName || fields[fieldName] !== updated) {
@@ -43740,30 +43764,6 @@ var showSwawk =
 	function noop(){};
 
 	/**
-	 * Check if `obj` is a host object,
-	 * we don't want to serialize these :)
-	 *
-	 * TODO: future proof, move to compoent land
-	 *
-	 * @param {Object} obj
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function isHost(obj) {
-	  var str = {}.toString.call(obj);
-
-	  switch (str) {
-	    case '[object File]':
-	    case '[object Blob]':
-	    case '[object FormData]':
-	      return true;
-	    default:
-	      return false;
-	  }
-	}
-
-	/**
 	 * Expose `request`.
 	 */
 
@@ -43813,8 +43813,8 @@ var showSwawk =
 	  for (var key in obj) {
 	    if (null != obj[key]) {
 	      pushEncodedKeyValuePair(pairs, key, obj[key]);
-	        }
-	      }
+	    }
+	  }
 	  return pairs.join('&');
 	}
 
@@ -43832,6 +43832,11 @@ var showSwawk =
 	    return val.forEach(function(v) {
 	      pushEncodedKeyValuePair(pairs, key, v);
 	    });
+	  } else if (isObject(val)) {
+	    for(var subkey in val) {
+	      pushEncodedKeyValuePair(pairs, key + '[' + subkey + ']', val[subkey]);
+	    }
+	    return;
 	  }
 	  pairs.push(encodeURIComponent(key)
 	    + '=' + encodeURIComponent(val));
@@ -43854,13 +43859,18 @@ var showSwawk =
 	function parseString(str) {
 	  var obj = {};
 	  var pairs = str.split('&');
-	  var parts;
 	  var pair;
+	  var pos;
 
 	  for (var i = 0, len = pairs.length; i < len; ++i) {
 	    pair = pairs[i];
-	    parts = pair.split('=');
-	    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+	    pos = pair.indexOf('=');
+	    if (pos == -1) {
+	      obj[decodeURIComponent(pair)] = '';
+	    } else {
+	      obj[decodeURIComponent(pair.slice(0, pos))] =
+	        decodeURIComponent(pair.slice(pos + 1));
+	    }
 	  }
 
 	  return obj;
@@ -44044,15 +44054,15 @@ var showSwawk =
 	     ? this.xhr.responseText
 	     : null;
 	  this.statusText = this.req.xhr.statusText;
-	  this.setStatusProperties(this.xhr.status);
+	  this._setStatusProperties(this.xhr.status);
 	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
 	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
 	  // getResponseHeader still works. so we get content-type even if getting
 	  // other headers fails.
 	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
-	  this.setHeaderProperties(this.header);
+	  this._setHeaderProperties(this.header);
 	  this.body = this.req.method != 'HEAD'
-	    ? this.parseBody(this.text ? this.text : this.xhr.response)
+	    ? this._parseBody(this.text ? this.text : this.xhr.response)
 	    : null;
 	}
 
@@ -44080,7 +44090,7 @@ var showSwawk =
 	 * @api private
 	 */
 
-	Response.prototype.setHeaderProperties = function(header){
+	Response.prototype._setHeaderProperties = function(header){
 	  // content-type
 	  var ct = this.header['content-type'] || '';
 	  this.type = type(ct);
@@ -44101,7 +44111,7 @@ var showSwawk =
 	 * @api private
 	 */
 
-	Response.prototype.parseBody = function(str){
+	Response.prototype._parseBody = function(str){
 	  var parse = request.parse[this.type];
 	  if (!parse && isJSON(this.type)) {
 	    parse = request.parse['application/json'];
@@ -44132,7 +44142,7 @@ var showSwawk =
 	 * @api private
 	 */
 
-	Response.prototype.setStatusProperties = function(status){
+	Response.prototype._setStatusProperties = function(status){
 	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
 	  if (status === 1223) {
 	    status = 204;
@@ -44228,16 +44238,20 @@ var showSwawk =
 	      return self.callback(err, res);
 	    }
 
-	    if (res.status >= 200 && res.status < 300) {
-	      return self.callback(err, res);
+	    try {
+	      if (res.status >= 200 && res.status < 300) {
+	        return self.callback(err, res);
+	      }
+
+	      var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
+	      new_err.original = err;
+	      new_err.response = res;
+	      new_err.status = res.status;
+
+	      self.callback(new_err, res);
+	    } catch(e) {
+	      self.callback(e); // #985 touching res may cause INVALID_STATE_ERR on old Android
 	    }
-
-	    var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
-	    new_err.original = err;
-	    new_err.response = res;
-	    new_err.status = res.status;
-
-	    self.callback(new_err, res);
 	  });
 	}
 
@@ -44249,22 +44263,6 @@ var showSwawk =
 	for (var key in requestBase) {
 	  Request.prototype[key] = requestBase[key];
 	}
-
-	/**
-	 * Abort the request, and clear potential timeout.
-	 *
-	 * @return {Request}
-	 * @api public
-	 */
-
-	Request.prototype.abort = function(){
-	  if (this.aborted) return;
-	  this.aborted = true;
-	  this.xhr.abort();
-	  this.clearTimeout();
-	  this.emit('abort');
-	  return this;
-	};
 
 	/**
 	 * Set Content-Type to `type`, mapping values from `request.types`.
@@ -44294,7 +44292,7 @@ var showSwawk =
 	};
 
 	/**
-	 * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
+	 * Set responseType to `val`. Presently valid responseTypes are 'blob' and
 	 * 'arraybuffer'.
 	 *
 	 * Examples:
@@ -44395,7 +44393,7 @@ var showSwawk =
 	 *
 	 * ``` js
 	 * request.post('/upload')
-	 *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
+	 *   .attach('content', new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
 	 *   .end(callback);
 	 * ```
 	 *
@@ -44416,90 +44414,6 @@ var showSwawk =
 	    this._formData = new root.FormData();
 	  }
 	  return this._formData;
-	};
-
-	/**
-	 * Send `data` as the request body, defaulting the `.type()` to "json" when
-	 * an object is given.
-	 *
-	 * Examples:
-	 *
-	 *       // manual json
-	 *       request.post('/user')
-	 *         .type('json')
-	 *         .send('{"name":"tj"}')
-	 *         .end(callback)
-	 *
-	 *       // auto json
-	 *       request.post('/user')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // manual x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send('name=tj')
-	 *         .end(callback)
-	 *
-	 *       // auto x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // defaults to x-www-form-urlencoded
-	  *      request.post('/user')
-	  *        .send('name=tobi')
-	  *        .send('species=ferret')
-	  *        .end(callback)
-	 *
-	 * @param {String|Object} data
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.send = function(data){
-	  var obj = isObject(data);
-	  var type = this._header['content-type'];
-
-	  // merge
-	  if (obj && isObject(this._data)) {
-	    for (var key in data) {
-	      this._data[key] = data[key];
-	    }
-	  } else if ('string' == typeof data) {
-	    if (!type) this.type('form');
-	    type = this._header['content-type'];
-	    if ('application/x-www-form-urlencoded' == type) {
-	      this._data = this._data
-	        ? this._data + '&' + data
-	        : data;
-	    } else {
-	      this._data = (this._data || '') + data;
-	    }
-	  } else {
-	    this._data = data;
-	  }
-
-	  if (!obj || isHost(data)) return this;
-	  if (!type) this.type('json');
-	  return this;
-	};
-
-	/**
-	 * @deprecated
-	 */
-	Response.prototype.parse = function serialize(fn){
-	  if (root.console) {
-	    console.warn("Client-side parse() method has been renamed to serialize(). This method is not compatible with superagent v2.0");
-	  }
-	  this.serialize(fn);
-	  return this;
-	};
-
-	Response.prototype.serialize = function serialize(fn){
-	  this._parser = fn;
-	  return this;
 	};
 
 	/**
@@ -44540,7 +44454,7 @@ var showSwawk =
 	 * @api private
 	 */
 
-	Request.prototype.timeoutError = function(){
+	Request.prototype._timeoutError = function(){
 	  var timeout = this._timeout;
 	  var err = new Error('timeout of ' + timeout + 'ms exceeded');
 	  err.timeout = timeout;
@@ -44548,19 +44462,18 @@ var showSwawk =
 	};
 
 	/**
-	 * Enable transmission of cookies with x-domain requests.
+	 * Compose querystring to append to req.url
 	 *
-	 * Note that for this to work the origin must not be
-	 * using "Access-Control-Allow-Origin" with a wildcard,
-	 * and also must set "Access-Control-Allow-Credentials"
-	 * to "true".
-	 *
-	 * @api public
+	 * @api private
 	 */
 
-	Request.prototype.withCredentials = function(){
-	  this._withCredentials = true;
-	  return this;
+	Request.prototype._appendQueryString = function(){
+	  var query = this._query.join('&');
+	  if (query) {
+	    this.url += ~this.url.indexOf('?')
+	      ? '&' + query
+	      : '?' + query;
+	  }
 	};
 
 	/**
@@ -44575,7 +44488,6 @@ var showSwawk =
 	Request.prototype.end = function(fn){
 	  var self = this;
 	  var xhr = this.xhr = request.getXHR();
-	  var query = this._query.join('&');
 	  var timeout = this._timeout;
 	  var data = this._formData || this._data;
 
@@ -44592,8 +44504,8 @@ var showSwawk =
 	    try { status = xhr.status } catch(e) { status = 0; }
 
 	    if (0 == status) {
-	      if (self.timedout) return self.timeoutError();
-	      if (self.aborted) return;
+	      if (self.timedout) return self._timeoutError();
+	      if (self._aborted) return;
 	      return self.crossDomainError();
 	    }
 	    self.emit('end');
@@ -44629,12 +44541,7 @@ var showSwawk =
 	  }
 
 	  // querystring
-	  if (query) {
-	    query = request.serializeObject(query);
-	    this.url += ~this.url.indexOf('?')
-	      ? '&' + query
-	      : '?' + query;
-	  }
+	  this._appendQueryString();
 
 	  // initiate request
 	  if (this.username && this.password) {
@@ -44647,10 +44554,10 @@ var showSwawk =
 	  if (this._withCredentials) xhr.withCredentials = true;
 
 	  // body
-	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
+	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !this._isHost(data)) {
 	    // serialize stuff
 	    var contentType = this._header['content-type'];
-	    var serialize = this._parser || request.serialize[contentType ? contentType.split(';')[0] : ''];
+	    var serialize = this._serializer || request.serialize[contentType ? contentType.split(';')[0] : ''];
 	    if (!serialize && isJSON(contentType)) serialize = request.serialize['application/json'];
 	    if (serialize) data = serialize(data);
 	  }
@@ -44711,6 +44618,24 @@ var showSwawk =
 
 	request.head = function(url, data, fn){
 	  var req = request('HEAD', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * OPTIONS query to `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.options = function(url, data, fn){
+	  var req = request('OPTIONS', url);
 	  if ('function' == typeof data) fn = data, data = null;
 	  if (data) req.send(data);
 	  if (fn) req.end(fn);
@@ -45011,9 +44936,9 @@ var showSwawk =
 	};
 
 	/**
-	 * Force given parser
+	 * Override default response body parser
 	 *
-	 * Sets the body parser no matter type.
+	 * This function will be called to convert incoming data into request.body
 	 *
 	 * @param {Function}
 	 * @api public
@@ -45021,6 +44946,20 @@ var showSwawk =
 
 	exports.parse = function parse(fn){
 	  this._parser = fn;
+	  return this;
+	};
+
+	/**
+	 * Override default request body serializer
+	 *
+	 * This function will be called to convert data set via .send or .attach into payload to send
+	 *
+	 * @param {Function}
+	 * @api public
+	 */
+
+	exports.serialize = function serialize(fn){
+	  this._serializer = fn;
 	  return this;
 	};
 
@@ -45038,17 +44977,23 @@ var showSwawk =
 	};
 
 	/**
-	 * Faux promise support
+	 * Promise support
 	 *
-	 * @param {Function} fulfill
+	 * @param {Function} resolve
 	 * @param {Function} reject
 	 * @return {Request}
 	 */
 
-	exports.then = function then(fulfill, reject) {
-	  return this.end(function(err, res) {
-	    err ? reject(err) : fulfill(res);
-	  });
+	exports.then = function then(resolve, reject) {
+	  if (!this._fullfilledPromise) {
+	    var self = this;
+	    this._fullfilledPromise = new Promise(function(innerResolve, innerReject){
+	      self.end(function(err, res){
+	        if (err) innerReject(err); else innerResolve(res);
+	      });
+	    });
+	  }
+	  return this._fullfilledPromise.then(resolve, reject);
 	}
 
 	/**
@@ -45159,6 +45104,166 @@ var showSwawk =
 	  return this;
 	};
 
+	/**
+	 * Abort the request, and clear potential timeout.
+	 *
+	 * @return {Request}
+	 * @api public
+	 */
+	exports.abort = function(){
+	  if (this._aborted) {
+	    return this;
+	  }
+	  this._aborted = true;
+	  this.xhr && this.xhr.abort(); // browser
+	  this.req && this.req.abort(); // node
+	  this.clearTimeout();
+	  this.emit('abort');
+	  return this;
+	};
+
+	/**
+	 * Enable transmission of cookies with x-domain requests.
+	 *
+	 * Note that for this to work the origin must not be
+	 * using "Access-Control-Allow-Origin" with a wildcard,
+	 * and also must set "Access-Control-Allow-Credentials"
+	 * to "true".
+	 *
+	 * @api public
+	 */
+
+	exports.withCredentials = function(){
+	  // This is browser-only functionality. Node side is no-op.
+	  this._withCredentials = true;
+	  return this;
+	};
+
+	/**
+	 * Set the max redirects to `n`. Does noting in browser XHR implementation.
+	 *
+	 * @param {Number} n
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.redirects = function(n){
+	  this._maxRedirects = n;
+	  return this;
+	};
+
+	/**
+	 * Convert to a plain javascript object (not JSON string) of scalar properties.
+	 * Note as this method is designed to return a useful non-this value,
+	 * it cannot be chained.
+	 *
+	 * @return {Object} describing method, url, and data of this request
+	 * @api public
+	 */
+
+	exports.toJSON = function(){
+	  return {
+	    method: this.method,
+	    url: this.url,
+	    data: this._data
+	  };
+	};
+
+	/**
+	 * Check if `obj` is a host object,
+	 * we don't want to serialize these :)
+	 *
+	 * TODO: future proof, move to compoent land
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	exports._isHost = function _isHost(obj) {
+	  var str = {}.toString.call(obj);
+
+	  switch (str) {
+	    case '[object File]':
+	    case '[object Blob]':
+	    case '[object FormData]':
+	      return true;
+	    default:
+	      return false;
+	  }
+	}
+
+	/**
+	 * Send `data` as the request body, defaulting the `.type()` to "json" when
+	 * an object is given.
+	 *
+	 * Examples:
+	 *
+	 *       // manual json
+	 *       request.post('/user')
+	 *         .type('json')
+	 *         .send('{"name":"tj"}')
+	 *         .end(callback)
+	 *
+	 *       // auto json
+	 *       request.post('/user')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // manual x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send('name=tj')
+	 *         .end(callback)
+	 *
+	 *       // auto x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // defaults to x-www-form-urlencoded
+	 *      request.post('/user')
+	 *        .send('name=tobi')
+	 *        .send('species=ferret')
+	 *        .end(callback)
+	 *
+	 * @param {String|Object} data
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.send = function(data){
+	  var obj = isObject(data);
+	  var type = this._header['content-type'];
+
+	  // merge
+	  if (obj && isObject(this._data)) {
+	    for (var key in data) {
+	      this._data[key] = data[key];
+	    }
+	  } else if ('string' == typeof data) {
+	    // default to x-www-form-urlencoded
+	    if (!type) this.type('form');
+	    type = this._header['content-type'];
+	    if ('application/x-www-form-urlencoded' == type) {
+	      this._data = this._data
+	        ? this._data + '&' + data
+	        : data;
+	    } else {
+	      this._data = (this._data || '') + data;
+	    }
+	  } else {
+	    this._data = data;
+	  }
+
+	  if (!obj || this._isHost(data)) return this;
+
+	  // default to json
+	  if (!type) this.type('json');
+	  return this;
+	};
+
 
 /***/ },
 /* 688 */
@@ -45173,7 +45278,7 @@ var showSwawk =
 	 */
 
 	function isObject(obj) {
-	  return null != obj && 'object' == typeof obj;
+	  return null !== obj && 'object' === typeof obj;
 	}
 
 	module.exports = isObject;
@@ -46935,10 +47040,19 @@ var showSwawk =
 	      _react2.default.createElement(
 	        'div',
 	        { className: (0, _aphrodite.css)(styles.subTitle) },
-	        ' Track prices and stock levels of your favorite products '
+	        ' Get emailed on price and stock level changes for your favorite products '
 	      )
 	    ),
 	    _react2.default.createElement(_socialMediaSignIn2.default, null),
+	    _react2.default.createElement(
+	      'div',
+	      { className: (0, _aphrodite.css)(styles.divider) },
+	      _react2.default.createElement(
+	        'em',
+	        { className: (0, _aphrodite.css)(styles.dividerText) },
+	        'Or'
+	      )
+	    ),
 	    _react2.default.createElement(_emailSignIn2.default, null),
 	    _react2.default.createElement(
 	      'div',
@@ -46946,7 +47060,7 @@ var showSwawk =
 	      _react2.default.createElement(
 	        'em',
 	        { className: (0, _aphrodite.css)(styles.dividerText) },
-	        'or'
+	        'Need a new email account?'
 	      )
 	    ),
 	    _react2.default.createElement(
@@ -46995,19 +47109,8 @@ var showSwawk =
 	    'flexDirection': 'column',
 	    'justifyContent': 'center',
 	    'alignItems': 'center',
-	    'width': '100%'
-	  },
-	  'flexrow': {
-	    'flexDirection': 'row',
 	    'marginTop': '0.7em',
 	    'marginBottom': '0.7em'
-	  },
-	  'google': {
-	    'span': {
-	      'borderStyle': 'solid',
-	      'borderColor': 'rgb(126, 185, 246)',
-	      'borderWidth': '1px'
-	    }
 	  }
 	};
 
@@ -47019,12 +47122,8 @@ var showSwawk =
 	  return _react2.default.createElement(
 	    'div',
 	    { className: (0, _aphrodite.css)(defaultCreatedStyles.div) },
-	    _react2.default.createElement(
-	      'div',
-	      { className: (0, _aphrodite.css)(defaultCreatedStyles.flexrow) },
-	      _react2.default.createElement(_socialMediaButton2.default, { onClick: signInWithGoogle, styles: defaultStyle.google, image: 'https://developers.google.com/identity/sign-in/g-normal.png', title: 'google' }),
-	      _react2.default.createElement(_socialMediaButton2.default, { onClick: signInWithFacebook, image: 'https://www.facebookbrand.com/img/assets/asset.f.logo.lg.png', title: 'facebook' })
-	    )
+	    _react2.default.createElement(_socialMediaButton2.default, { onClick: signInWithGoogle, styles: defaultStyle.google, image: 'https://developers.google.com/identity/sign-in/g-normal.png', title: 'Google' }),
+	    _react2.default.createElement(_socialMediaButton2.default, { onClick: signInWithFacebook, image: 'https://www.facebookbrand.com/img/assets/asset.f.logo.lg.png', title: 'Facebook' })
 	  );
 	};
 
@@ -47059,23 +47158,21 @@ var showSwawk =
 
 	var defaultStyle = {
 	  'button': {
-	    'borderStyle': 'none',
+	    'borderStyle': 'solid',
+	    'borderRadius': '0.9em',
 	    'background': 'transparent',
+	    'marginBottom': '0.7em',
 	    'marginRight': '1em',
 	    'marginLeft': '1em',
-	    ':first-child': {
-	      'marginLeft': '0em'
-	    },
-	    ':last-child': {
-	      'marginRight': '0em'
-	    },
+	    'width': '100%',
 	    ':focus': {
 	      'outline': 'none'
 	    }
 	  },
-	  'span': {
-	    'display': 'inline-block',
-	    'borderRadius': '100%',
+	  'div': {
+	    'display': 'flex',
+	    'flexDirection': 'row',
+	    'justifyContent': 'flex-start',
 	    'borderStyle': 'none',
 	    'overflow': 'hidden',
 	    'cursor': 'pointer',
@@ -47092,10 +47189,22 @@ var showSwawk =
 	    }
 	  },
 	  'img': {
-	    'width': '5em',
-	    'height': '5em',
-	    'margin': '0 auto',
+	    'width': '3.5em',
+	    'height': '3.5em',
 	    'display': 'block'
+	  },
+	  'imgDiv': {
+	    'width': '30%',
+	    'display': 'flex',
+	    'flexDirection': 'row',
+	    'justifyContent': 'flex-end'
+	  },
+	  'text': {
+	    'fontFamily': '\'Source Sans Pro\', \'Helvetica Neue\', Helvetica, Arial, sans-serif', // eslint-disable-line quotes
+	    'fontSize': '1.5em',
+	    'marginTop': 'auto',
+	    'marginBottom': 'auto',
+	    'marginLeft': '0.4em'
 	  }
 	};
 
@@ -47110,9 +47219,19 @@ var showSwawk =
 	    'button',
 	    { onClick: onClick, title: title, className: (0, _aphrodite.css)(combinedStyles.button), type: 'button' },
 	    _react2.default.createElement(
-	      'span',
-	      { className: (0, _aphrodite.css)(combinedStyles.span) },
-	      _react2.default.createElement('img', { src: image, className: (0, _aphrodite.css)(combinedStyles.img), alt: title })
+	      'div',
+	      { className: (0, _aphrodite.css)(combinedStyles.div) },
+	      _react2.default.createElement(
+	        'div',
+	        { className: (0, _aphrodite.css)(combinedStyles.imgDiv) },
+	        _react2.default.createElement('img', { src: image, className: (0, _aphrodite.css)(combinedStyles.img), alt: title })
+	      ),
+	      _react2.default.createElement(
+	        'span',
+	        { className: (0, _aphrodite.css)(combinedStyles.text) },
+	        ' Sign In with ',
+	        title
+	      )
 	    )
 	  );
 	};
