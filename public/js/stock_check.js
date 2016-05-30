@@ -17,7 +17,7 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
   if (itemJson.isStocked) {
     icon.setAttribute('class', 'fa fa-check');
     icon.setAttribute('style', 'color: green;font-size: 20px; float:right;');
-    textSpan.setAttribute('style', 'float:right; color: green;padding-left:1em; padding-right:1em; vertical-align: top;');
+    textSpan.setAttribute('style', 'float:right; color: green;padding-left:1em; vertical-align: top;');
 
     textSpan.innerHTML = itemJson.stockQuantity;
 
@@ -33,13 +33,12 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
     $('#swagnote').show();
     icon.setAttribute('style', 'color: red;font-size: 20px;');
     var zero = document.createElement('span');
-    zero.setAttribute('style', 'color: red;padding-left:1em; padding-right:1em; vertical-align: top;');
+    zero.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
     zero.innerHTML = '0';
 
     var button = document.createElement('button');
     button.onclick = function (event) {addStockTracker(itemJson.storeId, inverseStores[itemJson.storeId], event)}
-    button.setAttribute('style', 'border-width: 0px; font-size: smaller');
-    button.setAttribute('class', ' btn btn-success swawk-stock');
+    button.setAttribute('class', ' btn btn-success btn-xs swawk-stock');
     button.innerText = 'Track stock';
 
 
