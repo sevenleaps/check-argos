@@ -36,16 +36,16 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
     zero.setAttribute('style', 'color: red;padding-left:1em; padding-right:1em; vertical-align: top;');
     zero.innerHTML = '0';
 
-    var button = document.createElement('button');
-    button.onclick = function () {swawkStock(itemJson.productId, itemJson.storeId, inverseStores[itemJson.storeId])}
-    button.setAttribute('style', 'font-size: smaller');
-    button.setAttribute('class', 'swawk-stock');
-    button.innerText = 'Swawk stock';
+    // var button = document.createElement('button');
+    // button.onclick = function () {swawkStock(itemJson.productId, itemJson.storeId, inverseStores[itemJson.storeId])}
+    // button.setAttribute('style', 'font-size: smaller');
+    // button.setAttribute('class', 'swawk-stock');
+    // button.innerText = 'Swawk stock';
 
 
     var div = document.createElement('div');
     div.setAttribute('style', 'float: right');
-    isPopular || div.appendChild(button);
+    // isPopular || div.appendChild(button);
     div.appendChild(zero);
 
     textSpan = div;
