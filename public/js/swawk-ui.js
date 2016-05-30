@@ -47158,6 +47158,7 @@ var showSwawk =
 
 	var defaultStyle = {
 	  'button': {
+	    'fontSize': '14px',
 	    'borderStyle': 'solid',
 	    'borderRadius': '0.9em',
 	    'background': 'transparent',
@@ -47167,6 +47168,9 @@ var showSwawk =
 	    'width': '100%',
 	    ':focus': {
 	      'outline': 'none'
+	    },
+	    ':hover': {
+	      'transform': 'scale(1.01)'
 	    }
 	  },
 	  'div': {
@@ -47177,9 +47181,6 @@ var showSwawk =
 	    'overflow': 'hidden',
 	    'cursor': 'pointer',
 	    'transition': 'all 0.2s ease 0s',
-	    ':hover': {
-	      'transform': 'scale(1.05)'
-	    },
 	    ':focus': {
 	      'outline': 'none'
 	    },
@@ -47189,19 +47190,19 @@ var showSwawk =
 	    }
 	  },
 	  'img': {
-	    'width': '3.5em',
-	    'height': '3.5em',
+	    'width': '3em',
+	    'height': '3em',
 	    'display': 'block'
 	  },
 	  'imgDiv': {
-	    'width': '30%',
+	    'width': '28%',
 	    'display': 'flex',
 	    'flexDirection': 'row',
 	    'justifyContent': 'flex-end'
 	  },
 	  'text': {
 	    'fontFamily': '\'Source Sans Pro\', \'Helvetica Neue\', Helvetica, Arial, sans-serif', // eslint-disable-line quotes
-	    'fontSize': '1.5em',
+	    'fontSize': '1.3em',
 	    'marginTop': 'auto',
 	    'marginBottom': 'auto',
 	    'marginLeft': '0.4em'
