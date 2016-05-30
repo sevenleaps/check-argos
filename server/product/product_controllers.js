@@ -12,6 +12,9 @@ function product(req, res){
       return displayErrorPage(res, error, req.params.productId)
     }
     searchController.searchInternal(req.params.productId, function (error, product){
+      console.log('searchInternal')
+      console.log(product);
+
       if (error) {
         return displayErrorPage(res, error, req.params.productId)
       } else {

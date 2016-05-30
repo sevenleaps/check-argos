@@ -15,7 +15,7 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <!-- <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawkPrice({{jsonProduct}})" >Swawk price</button> -->
+      <button class="swawk-button" style="margin-left: 0.5em;" onClick=addPriceTracker >Track price</button>
     </div>
     <div class="row visible-xs visible-sm">
       <h3>
@@ -26,7 +26,7 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <!-- <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawkPrice({{jsonProduct}})" >Swawk price</button> -->
+      <button class="swawk-button" style="margin-left: 0.5em;" onClick=addPriceTracker >Track price</button>
     </div>
     <div class="visible-xs">
       <a id="priceHistory" style="visibility:hidden" onclick="toggle()">
@@ -41,60 +41,50 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','gaswawk');
         gaswawk('create', 'UA-65293060-8', 'auto');
-
+        var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
         initChart({{{chartJSON}}});
 
-        function swawkPrice(product) {
-          gaswawk('send', 'event', 'opened.price.ARGOS_IE' , product.productId);
-
-          $('#pricemodal').modal()
-          $('#pricemodal').modal({ keyboard: false })
-          $('#pricemodal').modal('show')
-        }
-
-        function swawkStock(id, store, storeName) {
-          gaswawk('send', 'event', 'opened.stock.ARGOS_IE', id, store);
-
-          $('#stock-form').removeAttr('onsubmit');
-          $('#stock-form').unbind('submit');
-          $('#stock-form').submit(function(event){
-                createStockTracker(store, storeName, event);
-            });
-
-          $('#stockmodalhead').html('Get emailed when stock available in <br><strong>' + storeName + '</strong>');
-          $('#stockmodal').modal()
-          $('#stockmodal').modal({ keyboard: false })
-          $('#stockmodal').modal('show')
-        }
-
-        var productSwawk = {{{jsonProduct}}}
-
-        function createPriceTracker(submit) {
-          gaswawk('send', 'event', 'tracked.price.ARGOS_IE', product.productId);
+        var item = {{{jsonProduct}}}
+        $('.swawk-button').on('click', addPriceTracker);
+        function addPriceTracker(submit) {
+          gaswawk('send', 'event', 'opened.price.ARGOS_IE' , item.productId);
           submit.preventDefault();
-          var email = $('#email').val();
+          var tracker = {
+            affliate: REFERRAL_LINK + item.productId,
+            currency: 'EUR',
+            id: item.productId,
+            image: item.productImageUrl,
+            isPriceTracking: true,
+            name: item.productName,
+            price: Math.round(parseFloat(item.price) * 100),
+            url: 'http://www.argos.ie/static/Product/partNumber/' + item.productId,
+            website: 'ARGOS_IE',
+          };
+          showSwawk({tracker: tracker});
+        }
+
+        function addStockTracker(store, storeName, submit) {
+          gaswawk('send', 'event', 'opened.stock.ARGOS_IE', item.productId, store);
+
+          submit.preventDefault();
           var tracker = {
             currency: 'EUR',
-            price: Math.round(parseFloat(productSwawk.price) * 100) ,
-            productId: productSwawk.productId,
             email: email,
+            id: item.productId,
+            isPriceTracking: true,
+            name: item.productName,
+            price: Math.round(parseFloat(item.price) * 100) ,
+            stores: {},
             website: 'ARGOS_IE',
+          };
+          tracker.stores[store] = {
+            id: store,
+            name: storeName,
+            expiry: moment().add(14, 'days').toDate(),
           }
-        }
 
-        function createStockTracker(store, storeName, submit) {
-          gaswawk('send', 'event', 'tracked.stock.ARGOS_IE', product.productId, store);
-
-          submit.preventDefault();
-          var email = $('#email-stock').val();
-          var tracker = {
-            productId: productSwawk.productId,
-            email: email,
-            website: 'ARGOS_IE',
-            store: store,
-            storeName: storeName,
-          }
+          showSwawk(tracker);
         }
       </script>
     </div>
