@@ -47,9 +47,9 @@
 
         var item = {{{jsonProduct}}}
         $('.swawk-button').on('click', addPriceTracker);
-        function addPriceTracker(submit) {
+        function addPriceTracker(event) {
           gaswawk('send', 'event', 'opened.price.ARGOS_IE' , item.productId);
-          submit.preventDefault();
+          event.preventDefault();
           var tracker = {
             affliate: REFERRAL_LINK + item.productId,
             currency: 'EUR',
@@ -64,18 +64,20 @@
           showSwawk({tracker: tracker});
         }
 
-        function addStockTracker(store, storeName, submit) {
+        function addStockTracker(store, storeName, event) {
           gaswawk('send', 'event', 'opened.stock.ARGOS_IE', item.productId, store);
 
-          submit.preventDefault();
+          event.preventDefault();
           var tracker = {
+            affliate: REFERRAL_LINK + item.productId,
             currency: 'EUR',
-            email: email,
             id: item.productId,
-            isPriceTracking: true,
+            image: item.productImageUrl,
+            isPriceTracking: false,
             name: item.productName,
-            price: Math.round(parseFloat(item.price) * 100) ,
+            price: Math.round(parseFloat(item.price) * 100),
             stores: {},
+            url: 'http://www.argos.ie/static/Product/partNumber/' + item.productId,
             website: 'ARGOS_IE',
           };
           tracker.stores[store] = {
@@ -84,7 +86,12 @@
             expiry: moment().add(14, 'days').toDate(),
           }
 
-          showSwawk(tracker);
+          showSwawk({tracker: tracker, store : {
+              id: store,
+              name: storeName,
+              expiry: moment().add(14, 'days').toDate(),
+            },
+          });
         }
       </script>
     </div>
