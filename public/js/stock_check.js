@@ -38,8 +38,8 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
 
     var button = document.createElement('button');
     button.onclick = function (event) {addStockTracker(itemJson.storeId, inverseStores[itemJson.storeId], event)}
-    button.setAttribute('style', 'font-size: smaller');
-    button.setAttribute('class', 'swawk-stock');
+    button.setAttribute('style', 'border-width: 0px; font-size: smaller');
+    button.setAttribute('class', ' btn btn-success swawk-stock');
     button.innerText = 'Track stock';
 
 
