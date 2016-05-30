@@ -36,11 +36,6 @@
     <div id="productGraphRow">
       <canvas id="myChart" height="300" width="600" style="width: 300px; height: 150px;"></canvas>
       <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','gaswawk');
-        gaswawk('create', 'UA-65293060-8', 'auto');
         var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
 
         initChart({{{chartJSON}}});
@@ -48,7 +43,7 @@
         var item = {{{jsonProduct}}}
         $('.swawk-button').on('click', addPriceTracker);
         function addPriceTracker(event) {
-          gaswawk('send', 'event', 'opened.price.ARGOS_IE' , item.productId);
+          ga('send', 'event', 'opened.price.ARGOS_IE' , item.productId);
           event.preventDefault();
           var tracker = {
             affliate: REFERRAL_LINK + item.productId,
@@ -65,8 +60,7 @@
         }
 
         function addStockTracker(store, storeName, event) {
-          gaswawk('send', 'event', 'opened.stock.ARGOS_IE', item.productId, store);
-
+          ga('send', 'event', 'opened.stock.ARGOS_IE', item.productId, store);
           event.preventDefault();
           var tracker = {
             affliate: REFERRAL_LINK + item.productId,
