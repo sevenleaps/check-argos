@@ -15,7 +15,7 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawk({{jsonProduct}})" >Swawk price</button>
+      <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawkPrice({{jsonProduct}})" >Swawk price</button>
     </div>
     <div class="row visible-xs visible-sm">
       <h3>
@@ -26,7 +26,7 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawk({{jsonProduct}})" >Swawk price</button>
+      <button class="swawk-button" style="margin-left: 0.5em;" onClick="swawkPrice({{jsonProduct}})" >Swawk price</button>
     </div>
     <div class="visible-xs">
       <a id="priceHistory" style="visibility:hidden" onclick="toggle()">
@@ -42,23 +42,10 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','gaswawk');
         gaswawk('create', 'UA-65293060-8', 'auto');
 
-        // search for me and see where I am hacked in
-        var GLOBAL_FEATURE_FLAG = false;
-        function showSwawk(isShown) {
-          GLOBAL_FEATURE_FLAG = isShown;
-          if (isShown) {
-            $('.swawk-button').show();
-            $('.swawk-stock').show();
-          } else {
-            $('.swawk-button').hide();
-            $('.swawk-stock').hide();
-          }
-        }
-        showSwawk(false);
 
         initChart({{{chartJSON}}});
 
-        function swawk(product) {
+        function swawkPrice(product) {
           gaswawk('send', 'event', 'opened.price.ARGOS_IE' , product.productId);
 
           $('#pricemodal').modal()
@@ -94,27 +81,6 @@
             email: email,
             website: 'ARGOS_IE',
           }
-          var TRACKER_URL = 'http://tracker.swawk.com/tracker/v1/tracker';
-          $.ajax({
-              url: TRACKER_URL,
-              type: 'POST',
-              data: JSON.stringify(tracker),
-              contentType: 'application/json; charset=utf-8'
-            })
-            .done(function success() {
-              gaswawk('send', 'event', 'tracked.price.success.ARGOS_IE', productSwawk.productId);
-              $('#pricemodal').modal('hide');
-            })
-            .fail(function error(err) {
-              console.log(err)
-              var isEmail = err.responseText === 'child "email" fails because ["email" must be a valid email]';
-              gaswawk('send', 'event', 'tracked.price.failed.ARGOS_IE', productSwawk.productId);
-              if (isEmail) {
-                $('#error-email').show();
-              } else {
-                alert('Something went wrong, email sevenleaps@gmail.com.')
-              }
-            });
         }
 
         function createStockTracker(store, storeName, submit) {
@@ -129,91 +95,8 @@
             store: store,
             storeName: storeName,
           }
-          var STOCK_TRACKER_URL = 'http://tracker.swawk.com/v1/stock';
-          $.ajax({
-              url: STOCK_TRACKER_URL,
-              type: 'POST',
-              data: JSON.stringify(tracker),
-              contentType: 'application/json; charset=utf-8'
-            })
-            .done(function success() {
-              gaswawk('send', 'event', 'tracked.stock.success.ARGOS_IE', product.productId, store);
-              $('#stockmodal').modal('hide');
-            })
-            .fail(function error(err) {
-              console.log(err);
-              var isEmail = err.responseText === 'child "email" fails because ["email" must be a valid email]';
-              gaswawk('send', 'event', 'tracked.stock.failed.ARGOS_IE', product.productId, store);
-              if (isEmail) {
-                $('#stock-error-email').show();
-              } else {
-                alert('Something went wrong, email sevenleaps@gmail.com.')
-              }
-            });
         }
       </script>
     </div>
   </div>
 </div>
-
-<div id="pricemodal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Get emailed on a price change </h4>
-      </div>
-      <div class="col-md-4 col-lg-4" style="text-align: center;">
-        <div class="col-md-4 col-lg-4" style="text-align: center;">
-        </div>
-      </div>
-
-      <div class="modal-body">
-        <p>Please note price alerting is an experimental feature and will change continously.</p>
-        <form onsubmit="createPriceTracker(event)">
-          <fieldset class="form-group">
-            <label for="email">Enter the email address you want to get notified on.</label>
-            <medium style="color:red; display: none;" id="error-email" for="email">Error: Invalid email</medium>
-            <input type="email" class="form-control" id="email" placeholder="Enter email" required>
-          </fieldset>
-           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-           <button type="submit" class="btn btn-primary pull-right">Get Notified</button>
-        </form>
-      </div>
-      <div class="modal-footer">
-
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div id="stockmodal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 id="stockmodalhead" class="modal-title">Get emailed when it comes back into stock</h4>
-      </div>
-      <div class="col-md-4 col-lg-4" style="text-align: center;">
-        <div class="col-md-4 col-lg-4" style="text-align: center;">
-        </div>
-      </div>
-
-      <div class="modal-body">
-        <p>Please note stock alerting is an experimental feature and will change continously.</p>
-        <form id="stock-form" onsubmit="">
-          <fieldset class="form-group">
-            <label for="email">Enter the email address you want to get notified on.</label>
-            <medium style="color:red; display: none;" id="stock-error-email" for="email">Error: Invalid email</medium>
-            <input type="email" class="form-control" id="email-stock" placeholder="Enter email" required>
-          </fieldset>
-           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-           <button type="submit" class="btn btn-primary pull-right">Get Notified</button>
-        </form>
-      </div>
-      <div class="modal-footer">
-
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
