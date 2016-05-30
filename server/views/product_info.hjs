@@ -15,7 +15,6 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <button class="btn btn-success swawk-button" style="border-width: 0px; font-size: smaller; margin-left: 0.5em;" onClick=addPriceTracker >Track price</button>
     </div>
     <div class="row visible-xs visible-sm">
       <h3>
@@ -26,12 +25,9 @@
       <a id="productLinkB" onlclick="logClickThrough({{ product.productId }}, "productLinkB")" href="{{ referral }}">
         Buy at Argos.ie - €{{ product.price }}
       </a>
-      <button class="btn btn-success swawk-button"  style="border-width: 0px; font-size: smaller; margin-left: 0.5em;"  onClick=addPriceTracker >Track price</button>
     </div>
-    <div class="visible-xs">
-      <a id="priceHistory" style="visibility:hidden" onclick="toggle()">
-        Graph price history
-      </a>
+    <div style="margin-top:0.5em; margin-bottom:1.0em;">
+      <button class="btn btn-success swawk-button"  style="border-width: 0px; font-size: smaller; margin-left: 0.5em;"  onClick=addPriceTracker > Email me on price change </button>
     </div>
     <div id="productGraphRow">
       <canvas id="myChart" height="300" width="600" style="width: 300px; height: 150px;"></canvas>
