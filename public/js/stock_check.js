@@ -8,6 +8,7 @@ function addSpinnerToStockStatus(element)
 }
 
 function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPopular) {
+  console.log(itemJson);
   element.innerHTML = '';
   var icon = document.createElement('i');
   icon.setAttribute('aria-hidden', 'true');
@@ -30,22 +31,29 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
       textSpan.innerHTML = 'Orderable';
     }
   } else if (itemJson.hasOutOfStockMessage) {
-    $('#swagnote').show();
     icon.setAttribute('style', 'color: red;font-size: 20px;');
     var zero = document.createElement('span');
     zero.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
     zero.innerHTML = '0';
 
     var button = document.createElement('button');
-    button.onclick = function (event) {addStockTracker(itemJson.storeId, inverseStores[itemJson.storeId], event)}
-    button.setAttribute('class', ' btn btn-success btn-xs swawk-stock');
-    button.innerText = 'Track stock';
+    button.onclick = function (event) {addStockTracker(itemJson.storeId, inverseStores[itemJson.storeId], event, itemJson.productId)}
+
+    if(isPopular) {
+      button.setAttribute('class', ' btn btn-danger btn-xs swawk-stock');
+      button.innerText = 'Notify me!';
+    } else {
+      button.setAttribute('class', ' btn btn-success btn-xs swawk-stock');
+      button.innerText = 'Track stock';
+    }
 
 
     var div = document.createElement('div');
     div.setAttribute('style', 'float: right');
-    isPopular || div.appendChild(button);
-    div.appendChild(zero);
+    div.appendChild(button);
+    if(!isPopular) {
+      div.appendChild(zero);
+    }
 
     textSpan = div;
   }

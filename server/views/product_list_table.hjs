@@ -25,4 +25,35 @@
       {{/productList}}
     </tbody>
   </table>
+  <script>
+    var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+    var productList = {};
+    {{#productList}}
+      productList['{{productId}}'] = {
+        affliate: REFERRAL_LINK + '{{productId}}',
+        name: '{{productName}}',
+        price: Math.round(parseFloat({{price}}) * 100),
+        id: '{{productId}}',
+        image: '{{productImageUrl}}',
+        currency: 'EUR',
+        isPriceTracking: false,
+        name: '{{productName}}',
+        stores: {},
+        url: 'http://www.argos.ie/static/Product/partNumber/{{productId}}',
+        website: 'ARGOS_IE',
+      };
+    {{/productList}}
+
+    function addStockTracker(storeId, storeName, event, productId) {
+      var tracker = productList[productId];
+      var store = {
+        id: storeId,
+        name: storeName,
+        expiry: moment().add(14, 'days').toDate(),
+      };
+      tracker.stores[storeId] = store;
+
+      showSwawk({tracker: tracker, store : store});
+    }
+  </script>
 </div>

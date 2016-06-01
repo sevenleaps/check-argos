@@ -512,7 +512,9 @@ function isValidItemData(itemJson)
 
 function onStoreDropDownChange(storeId){
   restoreStockFilterOfItems();
+  console.log(productList);
   var itemList = document.getElementsByClassName("product-id");
+  console.log(itemList);
   if(storeId != 0 && itemList.length > 0){
     updateStockColumnVisilbity(true);
     for(var i = 0; i < itemList.length; i++){
@@ -521,7 +523,7 @@ function onStoreDropDownChange(storeId){
         var productId = itemList[i].id.replace("productId", "");
         var element = document.getElementById("stockStatus" + productId);
         element.innerHTML = "";
-        filterSearchRowByStockStatus(productId, storeId, true)
+        filterSearchRowByStockStatus(productId, storeId, true);
       }
     }
   }
@@ -547,7 +549,7 @@ function onStoreSelectChange()
       if(isValidItemData(item))
       {
         var productId = item.productId.replace("/", "");
-        filterSearchRowByStockStatus(productId, storeId)
+        filterSearchRowByStockStatus(productId, storeId, false);
       }
     }
   }
