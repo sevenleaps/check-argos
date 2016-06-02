@@ -4,6 +4,7 @@ function home(req, res, next) {
     hideNavSearch: true,
     partials : {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'home_search'}
   });

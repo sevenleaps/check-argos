@@ -15,6 +15,7 @@
       title: 'Checkargos.com - An Irish Stock Checker',
       partials : {
         common_head: 'common_head',
+        common_scripts: 'common_scripts',
         navbar: 'navbar',
         content: 'list_creator'
       }
@@ -56,6 +57,7 @@
       hasProducts: products.length > 0,
       partials : {
         common_head: 'common_head',
+        common_scripts: 'common_scripts',
         navbar: 'navbar',
         content: 'product_list_result',
         advanced_search_filters: 'advanced_search_filters',

@@ -79,6 +79,7 @@
       hasProducts: (items && items.length > 0),
       partials : {
         common_head: 'common_head',
+        common_scripts: 'common_scripts',
         navbar: 'navbar',
         content: 'search_result',
         advanced_search_filters: 'advanced_search_filters',

@@ -6,6 +6,7 @@ function addAllStores(req, res, next) {
     stores: stores,
     partials : {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'store_add_all'}
   });
