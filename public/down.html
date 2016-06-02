@@ -54,14 +54,14 @@
 		</script>
 
 		<script type="text/javascript">
-		  var keen = new Keen({
+		  var keen = Keen !== undefined ? new Keen({
 		    projectId: "55f97c6590e4bd095c030e89", // String (required always)
 		    writeKey: "a4bb5da2389c88818ca84858dedd54f92fcf6d9645ac926c7b11d7564c8e954eef84e7eff473b211ed8f42bb211c6de158db82af0bcf9dc9331ae58727dcb8d91fbdf3a38a710d2e838351648915f6533a561d14bb30fb9716f12ddb1d9fc96401a73c762469990c136715fc4aa1c3f1",   // String (required for sending data)
 		    readKey: "5d37952c0e6565119cafd26e7c0c6dfab710df97d3414d33c7d88e464c2aa24f5c52202bece7ee777f4cc0770c1e7e749efebc04fc310c8970a0e59a4659b6acf84382607dde8f30a035ae306f2c796b3f0947cc8d89dad5424366f92b9da120d1ec1d39f1ef91654dd768a42cbc1a33"      // String (required for querying data)
 		    // protocol: "https",         // String (optional: https | http | auto)
 		    // host: "api.keen.io/3.0",   // String (optional)
 		    // requestType: "jsonp"       // String (optional: jsonp, xhr, beacon)
-		  });
+		  }) || null ;
 		</script>
 
 <script>

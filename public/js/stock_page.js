@@ -254,8 +254,7 @@ function logClickThrough(productID, id)
   }
   else
   {
-    //$("#" + id).attr('href', "http://" + href);
-    keen.addEvent('clicked.referral',{
+    keen && keen.addEvent('clicked.referral',{
       productId: productID,
       linkType: id
     });
