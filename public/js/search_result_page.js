@@ -509,9 +509,7 @@ function isValidItemData(itemJson)
 
 function onStoreDropDownChange(storeId){
   restoreStockFilterOfItems();
-  console.log(productList);
   var itemList = document.getElementsByClassName("product-id");
-  console.log(itemList);
   if(storeId != 0 && itemList.length > 0){
     updateStockColumnVisilbity(true);
     for(var i = 0; i < itemList.length; i++){
