@@ -20,7 +20,7 @@
   routers.utilPages = express.Router();
   require('./config.js')(app, routers);
 
-  app.use(express.static(__dirname + '/public', '/'));
+  app.use('/', express.static(__dirname + '/public'));
 
   require('./server/stock/stock_routes.js')(routers.stockCheck);
   require('./server/search/search_routes.js')(routers.search);

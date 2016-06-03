@@ -1,9 +1,7 @@
-
 function initChart(json) {
   var ctx = $('#myChart').get(0).getContext('2d');
   // This will get the first returned node in the jQuery collection.
   var chart = new Chart(ctx).Scatter(generateData(json), generateOptions());
-
 }
 
 function generateData(prices) {
@@ -37,15 +35,14 @@ function generateData(prices) {
 
   dataPoints = _.flatten(dataPoints);
 
-
   var data = [
-    {
-      label: 'Price History',
-      strokeColor: '#F16220',
-      pointColor: '#F16220',
-      pointStrokeColor: '#fff',
-      data: dataPoints
-    }];
+  {
+    label: 'Price History',
+    strokeColor: '#F16220',
+    pointColor: '#F16220',
+    pointStrokeColor: '#fff',
+    data: dataPoints
+  }];
 
     return data;
 }
@@ -53,17 +50,17 @@ function generateData(prices) {
 function generateOptions()
 {
   return {
-        datasetStroke: true,
-				bezierCurve: false,
-				showTooltips: true,
-				scaleShowHorizontalLines: true,
-				scaleShowLabels: true,
-				scaleLabel: '€ <%=Number(value).toFixed(2)%>',
-				scaleArgLabel: '<%=value%>',
-				scaleBeginAtZero: false,
-        scaleType: 'date',
-        useUtc: true,
-        scaleDateFormat: 'mmm yy',
-        scaleDateTimeFormat: 'dd mmm yy'
-			};
+    datasetStroke: true,
+		bezierCurve: false,
+		showTooltips: true,
+		scaleShowHorizontalLines: true,
+		scaleShowLabels: true,
+		scaleLabel: '€ <%=Number(value).toFixed(2)%>',
+		scaleArgLabel: '<%=value%>',
+		scaleBeginAtZero: false,
+    scaleType: 'date',
+    useUtc: true,
+    scaleDateFormat: 'mmm yy',
+    scaleDateTimeFormat: 'dd mmm yy'
+	};
 }

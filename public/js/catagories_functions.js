@@ -1,5 +1,4 @@
-function generateCatagoriesDropDown(defaultOptionText)
-{
+function generateCatagoriesDropDown(defaultOptionText) {
   if (defaultOptionText === undefined) defaultOptionText = "-- All Sections --";
   var select = document.createElement("select");
   select.setAttribute("class", "form-control");
@@ -10,8 +9,7 @@ function generateCatagoriesDropDown(defaultOptionText)
   select.add(option);
 
   var catagoriesList = getCatagoriesList();
-  for(var key in catagoriesList)
-  {
+  for (var key in catagoriesList) {
     var option = document.createElement("option");
 
     var cleanedUpText = catagoriesList[key].replace(/\+/g, ' ').replace(/\%2C/g, ',');
@@ -45,11 +43,11 @@ var catagories = {
   14417537 : "Nursery",
   14416987 : "Jewellery+and+watches",
   14417351 : "Gifts"
-        };
+};
 
-function updateHiddenSearch(value){
+function updateHiddenSearch(value) {
   var hiddenInput = document.getElementById("updateHiddenSearch");
-  if(hiddenInput !== null){
+  if (hiddenInput !== null) {
     hiddenInput.value = value;
   }
 }

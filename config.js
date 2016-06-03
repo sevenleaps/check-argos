@@ -4,10 +4,8 @@
   var middleware = require('./middleware');
   var express = require('express');
 
-
   module.exports = exports = function (app, routes) {
     app.use(morgan('dev'));
-    // console.log(middleware);
 
     process.on('unhandledRejection', onUncaughtException);
     process.on('uncaughtException', onUncaughtException);
@@ -17,11 +15,6 @@
     app.use('/product', routes.product);
     app.use('/stockcheck', routes.stockCheck);
     app.use('/utilPages', routes.utilPages);
-    // app.get(/.*/, function(req, res) {
-    //     res.sendFile('down.html', {
-    //         root: __dirname + '/public'
-    //     });
-    // });
 
     // api routes
     app.use('/api/stockcheck', routes.stockCheck);
@@ -65,10 +58,14 @@
     });
     app.get('/*Android.php*', function(req, res) {
       console.log('Got a legacy android app php link, ' + req.url);
-      res.redirect('http://legacy.checkargos.com' + req.url);
+      res.redirect('/');
     });
     app.get('/*.php*', function(req, res) {
       console.log('Got a legacy php link');
+      res.redirect('/');
+    });
+    app.get('/index.html', function(req, res) {
+      console.log('Got an old index.html link');
       res.redirect('/');
     });
   };
@@ -84,6 +81,4 @@
     process.removeListener('unhandledRejection', onUncaughtException);
     process.removeListener('uncaughtException', onUncaughtException);
   }
-
-
 })();

@@ -1,7 +1,6 @@
 (function () {
   'use strict';
 
-
   var app = require('./app.js');
 
   app.on('error', function onError(err) {
