@@ -25,6 +25,7 @@ function clearance(req, res, next) {
     },
     partials : {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'clearance',
       advanced_search_filters: 'advanced_search_filters',
@@ -74,6 +75,7 @@ function displayClearanceResultPage(request, response, products)
     elementToUpdate: "filterButton",
     partials : {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'clearance_result',
       advanced_search_filters: 'advanced_search_filters',

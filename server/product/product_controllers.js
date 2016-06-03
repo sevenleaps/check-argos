@@ -12,8 +12,6 @@ function product(req, res){
       return displayErrorPage(res, error, req.params.productId)
     }
     searchController.searchInternal(req.params.productId, function (error, product){
-      console.log('searchInternal')
-      console.log(product);
 
       if (error) {
         return displayErrorPage(res, error, req.params.productId)
@@ -44,6 +42,7 @@ function product(req, res){
         productModel.searchQuery = product.productId;
         productModel.partials = {
           common_head: 'common_head',
+          common_scripts: 'common_scripts',
           navbar: 'navbar',
           content: 'product_page',
           product_info: 'product_info',
@@ -64,6 +63,7 @@ function displayErrorPage(res, error, productId) {
     searchQuery : productId,
     partials: {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'error'
     }

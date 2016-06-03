@@ -8,7 +8,6 @@ function addSpinnerToStockStatus(element)
 }
 
 function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPopular) {
-  console.log(itemJson);
   element.innerHTML = '';
   var icon = document.createElement('i');
   icon.setAttribute('aria-hidden', 'true');

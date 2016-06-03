@@ -3,6 +3,7 @@ function home(req, res, next) {
     title: 'Checkargos.com - An Irish Stock Checker',
     partials : {
       common_head: 'common_head',
+      common_scripts: 'common_scripts',
       navbar: 'navbar',
       content: 'about'}
   });
