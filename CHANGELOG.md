@@ -36,3 +36,4 @@
 - added google analytics (conor.fennell)
 - Updated UI to bootstrap (brian.lough)
 - added dirty deep linking that will be blocked by add blocker, its a start (conor.fennell)
+- changed to kick off build
