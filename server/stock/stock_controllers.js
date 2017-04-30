@@ -16,7 +16,7 @@
     var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
     request(url, function onHistory(err, res, body) {
       if (err) {
-        console.error('Error retrieving prices' + JSON.stringify(error));
+        console.error('Error retrieving prices' + JSON.stringify(err));
         res.json([]);
       } else {
         var prices = JSON.parse(body) || [];
@@ -30,7 +30,7 @@
     request(url, function onHistory(err, res, body) {
       if (err) {
         console.error('Error retrieving prices' + JSON.stringify(err));
-        return callback(error);
+        return callback(err);
       } else {
         var prices = JSON.parse(body) || [];
         return callback(undefined, prices);
