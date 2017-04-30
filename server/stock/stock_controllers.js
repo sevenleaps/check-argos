@@ -15,11 +15,11 @@
   function getPriceHistory (req, res) {
     var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
     request(url, function onHistory(err, res, body) {
-      var prices = JSON.parse(body) || [];
       if (err) {
         console.error('Error retrieving prices' + JSON.stringify(error));
         res.json([]);
       } else {
+        var prices = JSON.parse(body) || [];
         res.json(prices);
       }
     });
@@ -28,11 +28,11 @@
   function getPriceHistoryInternal (req, callback) {
     var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
     request(url, function onHistory(err, res, body) {
-      var prices = JSON.parse(body) || [];
       if (err) {
         console.error('Error retrieving prices' + JSON.stringify(err));
         return callback(error);
       } else {
+        var prices = JSON.parse(body) || [];
         return callback(undefined, prices);
       }
     });
