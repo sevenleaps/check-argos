@@ -30,7 +30,7 @@
     request(url, function onHistory(err, res, body) {
       if (err) {
         console.error('Error retrieving prices' + JSON.stringify(err));
-        return callback(err);
+        return callback(undefined, []);
       } else {
         var prices = JSON.parse(body) || [];
         return callback(undefined, prices);
