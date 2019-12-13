@@ -9,10 +9,6 @@ function logClickThrough(productID, id)
   }
   else
   {
-    keen && keen.addEvent('clicked.referral',{
-      productId: productID,
-      linkType: id
-    });
     ga('send', 'event', 'linkClick', 'refferal', productID);
   }
 }

@@ -47,8 +47,6 @@
 <script src="/chartJs/Chart.Scatter.min.js"></script>
 <script src="/js/chartHelper.js"></script>
 
-<script src="//cdn.jsdelivr.net/keen.js/3.4.1/keen.min.js" type="text/javascript"></script>
-
 <link rel="stylesheet" href="/css/style.css" />
 <noscript>
   <link rel="stylesheet" href="/css/style.css" />

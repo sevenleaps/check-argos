@@ -21,19 +21,6 @@
     </div>
     <div class="navbar-collapse collapse">
        <ul class="nav navbar-nav navbar-right">
-         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Popular <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="/popular/1">Today</a></li>
-              <li><a href="/popular/2">Previous 2 Days</a></li>
-              <li><a href="/popular/7">Previous Week</a></li>
-            </ul>
-        </li>
-        <li><a href="/clearance">Clearance</a></li>
-        <li><a target="_blank" href="http://rover.ebay.com/rover/1/5282-53468-19255-0/1?icep_ff3=11&pub=5575136079&toolid=10001&campid=5337775664&customid=&icep_store=argos-ireland&ipn=psmain&icep_vectorid=229543&kwid=902099&mtid=824&kw=lg">Argos eBay</a><img style="text-decoration:none;border:0;padding:0;margin:0;" src="http://rover.ebay.com/roverimp/1/5282-53468-19255-0/1?ff3=11&pub=5575136079&toolid=10001&campid=5337775664&customid=&store=argos-ireland&mpt=[CACHEBUSTER]"></li>
-        <!-- There are too many options on medium sized screens
-        <li><a href="/list">Create List</a></li>
-        -->
         <li><a href="/about">About</a></li>
        </ul>
     </div>
