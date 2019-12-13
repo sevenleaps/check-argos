@@ -101,11 +101,6 @@
         var productPageHtml = body;
         if (ProductsUtil.isValidProductPage(productPageHtml)) {
           var product = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
-          try {
-            updatePriceHistory(product);
-          } catch (error) {
-            console.error(error);
-          }
           return callback(null, product);
         }
         else {
@@ -146,11 +141,6 @@
 
     ProductsUtil.getProductInformation(product, function productInformation(){
       if(product.price){
-        try {
-          updatePriceHistory(product);
-        } catch (error) {
-          console.error(error);
-        }
         res.status(200).json(product);
       } else {
         res.status(404).json({});
@@ -158,33 +148,6 @@
     });
   }
 
-  function updatePriceHistory(product) {
-    var productPrice = Math.round(parseFloat(product.price) * 100);
-
-    if (product.price && !isNaN(productPrice)) {
-      var id = product.productId.replace('/', '');
-
-      var price = {
-        id: id,
-        price: Number.parseInt(productPrice),
-        timestamp: new Date().getTime(),
-        site: 'ARGOS_IE',
-        producer: 'check-argos',
-        currency: 'EUR',
-      };
-
-      rp({
-        method: 'POST',
-        uri: 'http://pricehistory.swawk.com/v1/price',
-        body: price,
-        json: true,
-      }).catch(function (err) {
-        console.error('Error updating price history');
-        console.error(err);
-      });
-    }
-
-  }
 
 function textSearchMethod(params)
 {
@@ -208,9 +171,6 @@ function textSearchMethod(params)
 
             productsJson = productsJson.filter(function filterBadProducts(item){
               return item.price !== '.';
-            });
-            productsJson.forEach(function updatePrice(item) {
-              updatePriceHistory(item);
             });
 
             var returnObj = {
@@ -296,10 +256,6 @@ function textSearchMethod(params)
           if (ProductsUtil.isListOfProductsPage(body) && (totalNumProducts !== 'Error')) {
             try {
               var productsJson = ProductsUtil.getProductsFromHtml(body);
-
-              productsJson.forEach(function updatePrice(item) {
-                updatePriceHistory(item);
-              });
 
               var returnObj = {
                 items: productsJson,
