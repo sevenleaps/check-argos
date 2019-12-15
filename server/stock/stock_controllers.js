@@ -1,9 +1,14 @@
 (function () {
   'use strict';
   var request = require('request');
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
   var customHeaderRequest = request.defaults({
       headers: {
-        'User-Agent': "PostmanRuntime/7.18.0",
+        'User-Agent': "PostmanRuntime/" + getRandomInt(10000) + "." + getRandomInt(100000) + "." + getRandomInt(10000),
         "Connection": "keep-alive"
       }
     })
