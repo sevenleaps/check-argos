@@ -1,6 +1,12 @@
 (function () {
   'use strict';
   var request = require('request');
+  var customHeaderRequest = request.defaults({
+      headers: {
+        'User-Agent': "PostmanRuntime/7.18.0",
+        "Connection": "keep-alive"
+      }
+    })
   var cache = require('memory-cache');
 
   module.exports = exports = {
@@ -55,7 +61,7 @@
     if(stockStatus === null){
       var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
       console.log(url)      
-      request(url, function onResponse(error, response, body) {
+      customHeaderRequest(url, function onResponse(error, response, body) {
 
         stockStatus = {
           productId: req.params.productId,
