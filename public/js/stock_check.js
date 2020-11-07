@@ -35,24 +35,10 @@ function appendStockStatus(itemJson, element, retryFunction, smallVersion, isPop
     zero.setAttribute('style', 'color: red;padding-left:1em; vertical-align: top;');
     zero.innerHTML = '0';
 
-    var button = document.createElement('button');
-    button.onclick = function (event) {addStockTracker(itemJson.storeId, inverseStores[itemJson.storeId], event, itemJson.productId)}
-
-    if(isPopular) {
-      button.setAttribute('class', ' btn btn-danger btn-xs swawk-stock');
-      button.innerText = 'Notify me!';
-    } else {
-      button.setAttribute('class', ' btn btn-success btn-xs swawk-stock');
-      button.innerText = 'Track stock';
-    }
-
 
     var div = document.createElement('div');
     div.setAttribute('style', 'float: right');
-    div.appendChild(button);
-    if(!isPopular) {
-      div.appendChild(zero);
-    }
+    div.appendChild(zero);
 
     textSpan = div;
   }

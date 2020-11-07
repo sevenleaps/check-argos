@@ -68,11 +68,8 @@
     if(stockStatus === null){
       //https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=6799944&storeSelection=262
       var url = 'https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=' + req.params.productId + '&storeSelection=' + req.params.storeId;
-      console.log(url)
-      console.log("Meow")      
+      //console.log(url)  
       customHeaderRequest(url, function onResponse(error, response, body) {
-
-        console.log("In Here");
         stockStatus = {
           productId: req.params.productId,
           storeId: req.params.storeId,
@@ -83,7 +80,6 @@
 
         stockStatus.isStocked = isStocked(storePickupSection);
         //stockStatus.isOrderable = isOrderable(body);
-        //stockStatus.isStocked = false;
         stockStatus.isOrderable = false;
         stockStatus.hasOutOfStockMessage = isOutOfStock(storePickupSection);
 
@@ -117,12 +113,10 @@
 
   function getStockQuantity(section) {
     let stockQuant;
-    const statusText = $(".status", section).text()
-    console.log(statusText)
+    const statusText = $(".status", section).text();
     try
     {
-      const matches = statusText.match(/([0-9]+)/)
-      console.log(matches);
+      const matches = statusText.match(/([0-9]+)/);
       stockQuant = matches[1];
     }
     catch(ex) {
