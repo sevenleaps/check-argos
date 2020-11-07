@@ -2,7 +2,7 @@ var moment = require('moment');
 var searchController = require('../search/search_controllers.js');
 var stockController = require('../stock/stock_controllers.js');
 var stores = require('../assets/stores.json');
-var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var REFERRAL_LINK= 'http://www.argos.ie/static/Product/partNumber/';
 var CJ_ID = '7708057';
 
 

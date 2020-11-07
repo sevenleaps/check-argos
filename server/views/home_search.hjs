@@ -9,20 +9,19 @@
     <div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
       <form name="mainSearchForm" role="search" action="/search">
         <div class="input-group input-group-lg">
-          <input type="text" class="form-control" placeholder="Search by product id or text" name="q" id="searchBox"/>
+          <input type="text" class="form-control" placeholder="Search by product id or text" name="q" id="searchBox" />
           <div class="input-group-btn">
-             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <div class="row"  style="padding-top:2em;">
-    <i class="fa fa-twitter"></i>
-    <span style="padding-top:0px">Follow us <a href="https://twitter.com/checkargos">@checkargos</a></span>
+  <div class="row" style="padding-top:2em;">
+    <h3>Apologies for the downtime!</h3>
   </div>
-  <div class="row"  style="padding-top:1em;">
-    <i class="fa fa-facebook"></i>
-    <span style="padding-top:0px">Like us on <a href="http://facebook.com/checkargosireland">facebook</a></span>
+  <div class="row" style="padding-top:2em;">
+    <i class="fa fa-twitter"></i>
+    <span style="padding-top:0px">Follow me <a href="https://twitter.com/witnessmenow">@witnessmenow</a></span>
   </div>
 </div>
