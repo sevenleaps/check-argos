@@ -17,6 +17,14 @@
     searchInternal: searchInternal
   };
 
+  var customHeaderRequest = request.defaults({
+    headers: {
+      'User-Agent': "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
+      "Connection": "keep-alive",
+      "Accept": "*/*"
+    }
+  })
+
   function searchPage(req, res, next) {
 
     var catagoriesMap = require('../assets/catagories_map.json');
@@ -160,7 +168,8 @@ function textSearchMethod(params)
       url = buildSearchUrl(params);
     }
 
-    request(url, function onResponse(err, response, body) {
+    console.log(url)
+    customHeaderRequest(url, function onResponse(err, response, body) {
       if (err) {
         reject(err);
       } else {
@@ -247,7 +256,7 @@ function textSearchMethod(params)
         }
 
         console.log('Generated URL for Argos' + url);
-        request(url, function onResponse(error, response, body) {
+        customHeaderRequest(url, function onResponse(error, response, body) {
           if (error) {
             return next(new ArgosResponseError(error));
           }
@@ -325,7 +334,7 @@ function textSearchMethod(params)
 // http://www.argos.ie/static/Browse/c_1/1|category_root|Video games|14419738/c_2/2|14419738|Clearance+Video games|14419738/p/1/pp/80/r_001=2|Price|0+%3C%3D++%3C%3D+1000000|2/s/Price%3A+Low+-+High.htm
 // http://www.argos.ie/static/Browse/c_1/1|category_root|".$sectionSelected.|".$sectionNumber[$sectionSelected]."/c_2/2|".$sectionNumber[$sectionSelected]."|Clearance+".$sectionSelected."|".$clearanceNumber[$sectionSelected]."/p/".$countProduct."/pp/".$productsPerPage."/r_001/4|Price|".$minPrice."+%3C%3D++%3C%3D+".$maxPrice."|2/s/".$searchPreference.".htm");
 function buildSubCatagorySearchUrl(params) {
-    var baseUrl = 'http://www.argos.ie/static/Browse/c_1/1%7Ccategory_root%7C';
+    var baseUrl = 'https://www.argos.ie/static/Browse/c_1/1%7Ccategory_root%7C';
     var url = baseUrl;
     var searchPreference = 'Price%3A+Low+-+High';
     url = url + params.sectionText + '|' + params.sectionNumber + '/c_2/2|' + params.sectionNumber  + '|' + params.subSectionText + '|' + params.subSectionNumber;
@@ -346,7 +355,7 @@ function buildSubCatagorySearchUrl(params) {
   }
 
   function buildSearchUrl(params) {
-    var baseUrl = 'http://www.argos.ie/webapp/wcs/stores/servlet/Search';
+    var baseUrl = 'https://www.argos.ie/webapp/wcs/stores/servlet/Search';
     var url = baseUrl;
 
     //Adding required static params

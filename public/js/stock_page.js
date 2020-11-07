@@ -1,4 +1,4 @@
-var REFERRAL_LINK= 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var REFERRAL_LINK= 'https://www.argos.ie/static/Product/partNumber/';
 
 function logClickThrough(productID, id)
 {

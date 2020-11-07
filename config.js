@@ -27,14 +27,6 @@
       {
         res.redirect('/search?q=' + req.query.search);
       }
-      else if(req.query.popular){
-        var days = req.query.popular;
-        if(isNaN(days))
-        {
-          days = "2";
-        }
-        res.redirect('/popular/' + days);
-      }
       else if(req.query.isClearance)
       {
         //Eventually do something here when clearance is back.
