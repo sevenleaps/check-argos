@@ -12,7 +12,6 @@
   routers.health = express.Router();
   routers.stockCheck = express.Router();
   routers.search = express.Router();
-  routers.popular = express.Router();
   routers.product = express.Router();
   routers.home = express.Router();
   routers.about = express.Router();
@@ -26,7 +25,6 @@
   require('./server/health/health_routes.js')(routers.health);
   require('./server/stock/stock_routes.js')(routers.stockCheck);
   require('./server/search/search_routes.js')(routers.search);
-  require('./server/popular/popular_routes.js')(routers.popular);
   require('./server/product/product_routes.js')(routers.product);
   require('./server/home/home_routes.js')(routers.home);
   require('./server/about/about_routes.js')(routers.about);
