@@ -5,10 +5,6 @@
     }
   
     module.exports = exports = function (router) {
-      router.route('/')
-          .get(function health(req, res) {
-              console.log('got here')
-            res.send(status)
-          })
+      router.route('/').get(function health(req, res) { res.send(status) })
     }
   })()
