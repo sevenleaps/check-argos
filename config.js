@@ -20,6 +20,7 @@
     app.use('/api/stockcheck', routes.stockCheck);
 
     app.use('/search', routes.search);
+    app.use('/health', routes.health);
     app.use('/popular', routes.popular);
     app.use('/product', routes.product);
     app.use('/', function(req, res, next) {
