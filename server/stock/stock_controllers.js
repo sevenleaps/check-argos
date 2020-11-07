@@ -1,6 +1,7 @@
 (function () {
   'use strict';
   var request = require('request');
+  const $ = require('cheerio');
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -8,8 +9,9 @@
 
   var customHeaderRequest = request.defaults({
       headers: {
-        'User-Agent': "PostmanRuntime/" + getRandomInt(10000) + "." + getRandomInt(100000) + "." + getRandomInt(10000),
-        "Connection": "keep-alive"
+        'User-Agent': "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
+        "Connection": "keep-alive",
+        "Accept": "*/*"
       }
     })
   var cache = require('memory-cache');
@@ -64,26 +66,29 @@
     var cacheTime = inStockTTL;
     var stockStatus = cache.get(''+req.params.storeId+req.params.productId);
     if(stockStatus === null){
-      var url = 'http://www.argos.ie/webapp/wcs/stores/servlet/ISALTMStockAvailability?storeId=10152&langId=111&partNumber_1=' + req.params.productId + '&checkStock=true&backTo=product&storeSelection=' + req.params.storeId + '&viewTaskName=ISALTMAjaxResponseView';
-      console.log(url)      
+      //https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=6799944&storeSelection=262
+      var url = 'https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=' + req.params.productId + '&storeSelection=' + req.params.storeId;
+      console.log(url)
+      console.log("Meow")      
       customHeaderRequest(url, function onResponse(error, response, body) {
 
+        console.log("In Here");
         stockStatus = {
           productId: req.params.productId,
           storeId: req.params.storeId,
           stockQuantity: 0
         };
 
-        if (isNearStoreIncluded(body)) {
-          body = getFirstStoreSource(body);
-        }
+        const storePickupSection = $(".storepickup", body);
 
-        stockStatus.isStocked = isStocked(body);
-        stockStatus.isOrderable = isOrderable(body);
-        stockStatus.hasOutOfStockMessage = hasOutOfStockMessage(body);
+        stockStatus.isStocked = isStocked(storePickupSection);
+        //stockStatus.isOrderable = isOrderable(body);
+        //stockStatus.isStocked = false;
+        stockStatus.isOrderable = false;
+        stockStatus.hasOutOfStockMessage = isOutOfStock(storePickupSection);
 
-        if (isStocked(body)) {
-          stockStatus.stockQuantity = getStockQuantity(body);
+        if (stockStatus.isStocked) {
+           stockStatus.stockQuantity = getStockQuantity(storePickupSection);
         }
 
         var badRequest = !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
@@ -106,23 +111,19 @@
    }
   }
 
-  function isNearStoreIncluded(body) {
-    return body.indexOf('storePickup2') > -1;
+  function isStocked(section) {
+    return $(".status", section).length > 0;
   }
 
-  function getFirstStoreSource(body) {
-    return body.split('<td class=\\\"storePickup2\\\">')[0];
-  }
-
-  function isStocked(body) {
-    return body.indexOf('inStock') > -1;
-  }
-
-  function getStockQuantity(body) {
-    var stockQuant;
+  function getStockQuantity(section) {
+    let stockQuant;
+    const statusText = $(".status", section).text()
+    console.log(statusText)
     try
     {
-      stockQuant = body.match(/([0-9]*) left to/)[1];
+      const matches = statusText.match(/([0-9]+)/)
+      console.log(matches);
+      stockQuant = matches[1];
     }
     catch(ex) {
       stockQuant = 'Error';
@@ -131,12 +132,8 @@
     return stockQuant;
   }
 
-  function isOrderable(body) {
-    return body.indexOf('canBeOrdered') > -1;
-  }
-
-  function hasOutOfStockMessage(body) {
-    return body.indexOf('outOfStock') > -1;
+  function isOutOfStock(section) {
+    return $(".outofstock", section).length > 0;
   }
 
 })();
