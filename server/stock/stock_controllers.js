@@ -3,10 +3,6 @@
   var request = require('request');
   const $ = require('cheerio');
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
-
   var customHeaderRequest = request.defaults({
       headers: {
         "User-Agent": "PostmanRuntime/7.26.2",
