@@ -17,7 +17,8 @@ function product(req, res){
         timestamp: new Date().getTime(),
       });
 
-      console.log(prices)
+      //console.log(product)
+      //console.log(prices)
       var productModel = { product: product};
       var row = 0;
       productModel.additionalHeadRows = ['<script type="text/javascript" src="assets/stores.json"></script>'];
