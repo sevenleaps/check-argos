@@ -21,7 +21,7 @@ function generateStoreDropDown()
   return select;
 }
 
-var REFERRAL_LINK = 'http://www.qksrv.net/links/7708057/type/am/http://www.argos.ie/static/Product/partNumber/';
+var REFERRAL_LINK = 'https://www.argos.ie/static/Product/partNumber/';
 
 function showStoreSelector(event)
 {
@@ -162,7 +162,11 @@ function getCustomStores()
 {
   if(localStorage.customStoresJson)
   {
-    return JSON.parse(localStorage.customStoresJson);
+    var customStores = JSON.parse(localStorage.customStoresJson);
+    customStores = customStores.filter(function(store) {
+      return store.code != 393 // Removing Limerick Childers Street
+    })
+    return customStores;
   }
   else {
     return null;
@@ -228,9 +232,8 @@ var stores = {
 	"Kilkenny" : 201,
 	"Killarney (Extra)" : 899,
 	"Letterkenny (Extra)" : 793,
-	"Liffey Valley (Extra)" : 687,
+  "Liffey Valley (Extra)" : 687,
 	"Limerick Childers Road (Extra)" : 915,
-	"Limerick Cruises Street" : 393,
 	"Limerick The Crescent" : 583,
 	"Longford (Extra)" : 880,
 	"Monaghan (Extra)" : 945,
