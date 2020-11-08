@@ -170,7 +170,7 @@ function textSearchMethod(params)
 
     //console.log(url)
     customHeaderRequest(url, function onResponse(err, response, body) {
-      console.log(body);
+      //console.log(body);
       if (err) {
         reject(err);
       } else {
