@@ -4,7 +4,7 @@
   var express = require('express');
 
   module.exports = exports = function (app, routes) {
-    app.use(morgan('dev'));
+    app.use(morgan(':date[iso] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms'))
 
     process.on('unhandledRejection', onUncaughtException);
     process.on('uncaughtException', onUncaughtException);
