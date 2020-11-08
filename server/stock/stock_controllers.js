@@ -17,39 +17,12 @@
   var cache = require('memory-cache');
 
   module.exports = exports = {
-    checkStock : checkStock,
-    getPriceHistory : getPriceHistory,
-    getPriceHistoryInternal : getPriceHistoryInternal
-  };
+    checkStock : checkStock
+  }
 
   var inStockTTL = 90000;
   var outOfStockTTL = 420000;
 
-  function getPriceHistory (req, res) {
-    var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
-    request(url, function onHistory(err, res, body) {
-      if (err) {
-        console.error('Error retrieving prices' + JSON.stringify(err));
-        res.json([]);
-      } else {
-        var prices = JSON.parse(body) || [];
-        res.json(prices);
-      }
-    });
-  }
-
-  function getPriceHistoryInternal (req, callback) {
-    var url = 'http://pricehistory.swawk.com/v1/price/ARGOS_IE/' + req.params.productId + '/EUR';
-    request(url, function onHistory(err, res, body) {
-      if (err) {
-        console.error('Error retrieving prices' + JSON.stringify(err));
-        return callback(undefined, []);
-      } else {
-        var prices = JSON.parse(body) || [];
-        return callback(undefined, prices);
-      }
-    });
-  }
 
   function checkStock(req, res, next) {
     try{
