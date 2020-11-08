@@ -79,8 +79,7 @@
         const storePickupSection = $(".storepickup", body);
 
         stockStatus.isStocked = isStocked(storePickupSection);
-        //stockStatus.isOrderable = isOrderable(body);
-        stockStatus.isOrderable = false;
+        stockStatus.isOrderable = isOrderable(storePickupSection);
         stockStatus.hasOutOfStockMessage = isOutOfStock(storePickupSection);
 
         if (stockStatus.isStocked) {
@@ -109,6 +108,10 @@
 
   function isStocked(section) {
     return $(".status", section).length > 0;
+  }
+
+  function isOrderable(section) {
+    return $(".canbeordered", section).length > 0;
   }
 
   function getStockQuantity(section) {
