@@ -1,7 +1,6 @@
 (function () {
   'use strict';
   var request = require('request')
-  var Promise = require('bluebird')
 
   var ProductsUtil = require('../../lib/util/index').Products;
   var hoganHelper = require('../utils/hogan_helper.js');
