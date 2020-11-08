@@ -1,7 +1,6 @@
 (function () {
   'use strict';
   var morgan = require('morgan');
-  var middleware = require('./middleware');
   var express = require('express');
 
   module.exports = exports = function (app, routes) {
@@ -40,7 +39,6 @@
     app.use('/about', routes.about);
     app.use('/clearance', routes.clearance);
     app.use('/list', routes.list);
-    app.use(middleware.serverError);
     app.get('/StockCheckPage*', function(req, res) {
       res.redirect('/search?q=' + req.query.productId);
     });

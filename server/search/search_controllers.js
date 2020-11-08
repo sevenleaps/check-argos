@@ -1,11 +1,8 @@
 (function () {
   'use strict';
-  var request = require('request');
-  var rp = require('request-promise');
-  var moment = require('moment');
-  var Promise = require('bluebird');
+  var request = require('request')
+  var Promise = require('bluebird')
 
-  var ArgosResponseError = require('../../lib/error-handling/lib/').ArgosResponseError;
   var ProductsUtil = require('../../lib/util/index').Products;
   var hoganHelper = require('../utils/hogan_helper.js');
 
@@ -259,7 +256,7 @@ function textSearchMethod(params)
         console.log('Generated URL for Argos' + url);
         customHeaderRequest(url, function onResponse(error, response, body) {
           if (error) {
-            return next(new ArgosResponseError(error));
+            res.status(500).json(generateError(error))
           }
 
           var totalNumProducts = ProductsUtil.getTotalNumberOfProducts(body);
@@ -273,7 +270,7 @@ function textSearchMethod(params)
               };
               res.status(200).json(returnObj);
              } catch (error) {
-               return next(new ArgosResponseError(error));
+              res.status(500).json(generateError(error))
              }
           }
           else if(ProductsUtil.isSpecialCatagotyPage(response.request.path) && !(req.query.subSectionText || req.query.subSectionNumber)){
@@ -290,7 +287,7 @@ function textSearchMethod(params)
 
             }
             catch (error) {
-              return next(new ArgosResponseError(error));
+              res.status(500).json(generateError(error))
             }
           }
           else if(!ProductsUtil.isFoundNoProductsPage(body)) {
@@ -299,7 +296,8 @@ function textSearchMethod(params)
               res.status(200).json(productInfoJson);
             }
             catch (error) {
-              return next(new ArgosResponseError(error));
+              console.log(error)
+              res.status(500).json(generateError(error))
             }
           }
           else {
