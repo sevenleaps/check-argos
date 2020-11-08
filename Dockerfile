@@ -1,4 +1,4 @@
-FROM nodesource/trusty:4.2.0
+FROM node:14.15.0-buster
 
 COPY ./package.json ./
 RUN npm install
