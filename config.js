@@ -58,6 +58,11 @@
       console.log('Got an old index.html link');
       res.redirect('/');
     });
+
+    app.use( (err, req, res, next) => {
+      console.log(err)
+      res.status(500).send('Argos website is a Pile of shite, please try again. If you think you can improve check argos, it is open source now https://github.com/sevenleaps/check-argos')
+    })
   };
 
   // Catch the uncaught errors that weren't wrapped in a domain or try catch statement.

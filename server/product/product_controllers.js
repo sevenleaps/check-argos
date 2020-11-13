@@ -4,8 +4,8 @@ var stockController = require('../stock/stock_controllers.js');
 var stores = require('../assets/stores.json');
 var REFERRAL_LINK= 'https://www.argos.ie/static/Product/partNumber/';
 
-function product(req, res){
-  searchController.searchInternal(req.params.productId, function (error, product){
+function product(req, res, next){
+  searchController.searchInternal(req.params.productId, function (error, product) {
     if (error) {
       return displayErrorPage(res, error, req.params.productId)
     } else {
@@ -15,10 +15,8 @@ function product(req, res){
         id: product.productId,
         price: product.price * 100,
         timestamp: new Date().getTime(),
-      });
+      })
 
-      //console.log(product)
-      //console.log(prices)
       var productModel = { product: product};
       var row = 0;
       productModel.additionalHeadRows = ['<script type="text/javascript" src="assets/stores.json"></script>'];
@@ -55,7 +53,7 @@ function product(req, res){
 
 function displayErrorPage(res, error, productId) {
   return res.render('common', {
-    message : error,
+    message : 'Argos website is a pile of shite, please try again. Also you can now help improve check argos here https://github.com/sevenleaps/check-argos.',
     searchQuery : productId,
     partials: {
       common_head: 'common_head',

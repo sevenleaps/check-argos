@@ -100,12 +100,16 @@
 
   function searchInternal(productId, callback) {
     if (ProductsUtil.isValidProductId(productId)) {
-      var productNum = ProductsUtil.cleanUpProductId(productId);
+      const productNum = ProductsUtil.cleanUpProductId(productId);
       ProductsUtil.getProductPageHtml(productNum, function onResponse(error, response, body) {
-        var productPageHtml = body;
+        const productPageHtml = body;
         if (ProductsUtil.isValidProductPage(productPageHtml)) {
-          var product = ProductsUtil.getProductInformationFromProductPage(productPageHtml);
-          return callback(null, product);
+          try {
+            const product = ProductsUtil.getProductInformationFromProductPage(productPageHtml)
+            return callback(null, product)
+          } catch (exception) {
+            callback(exception)
+          }
         }
         else {
           return callback('Not a product id');
@@ -118,8 +122,7 @@
 
   function search(req, res, next) {
     try {
-      if (req.query && (req.query.q || req.query.isClearance))
-      {
+      if (req.query && (req.query.q || req.query.isClearance)) {
         if (ProductsUtil.isValidProductId(req.query.q)) {
           searchProductNumber(req, res, next);
         } else {
@@ -132,8 +135,7 @@
       }
     }
     catch(ex){
-      console.error(ex);
-      res.status(500).send('Error with request');
+      next(ex)
     }
   }
 
@@ -164,9 +166,7 @@ function textSearchMethod(params)
       url = buildSearchUrl(params);
     }
 
-    //console.log(url)
     customHeaderRequest(url, function onResponse(err, response, body) {
-      //console.log(body);
       if (err) {
         reject(err);
       } else {
