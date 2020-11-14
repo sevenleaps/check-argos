@@ -1,7 +1,12 @@
 (function () {
   'use strict';
-  var request = require('request');
-  const $ = require('cheerio');
+  var request = require('request')
+  const $ = require('cheerio')
+  const NodeCache = require( "node-cache" );
+  const ONE_MINUTE = 100000
+  const stockCache = new NodeCache({
+    stdTTL: ONE_MINUTE
+  })
 
   var customHeaderRequest = request.defaults({
       headers: {
@@ -33,9 +38,9 @@
   }
 
   function checkStockStatus(req, res, next, retry) {
-    var cacheTime = inStockTTL;
-    var stockStatus = cache.get(''+req.params.storeId+req.params.productId);
-    if(stockStatus === null){
+    const cacheKey = `${req.params.storeId}${req.params.productId}`
+    var stockStatus = stockCache.get(cacheKey)
+    if (stockStatus === undefined) {
       //https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=6799944&storeSelection=262
       var url = 'https://www.argos.ie/webapp/wcs/stores/servlet/CheckPriceAndStockCmd?storeId=10152&partNum=' + req.params.productId + '&storeSelection=' + req.params.storeId;
       //console.log(url)  
@@ -46,8 +51,11 @@
           stockQuantity: 0
         };
 
-        const storePickupSection = $(".storepickup", body);
-
+        const accessDenied = $('TITLE', body).text() === 'Access Denied'
+        if (accessDenied) {
+          console.log('Access Denied')
+        }
+        const storePickupSection = $("storepickup", body);
         stockStatus.isStocked = isStocked(storePickupSection);
         stockStatus.isOrderable = isOrderable(storePickupSection);
         stockStatus.hasOutOfStockMessage = isOutOfStock(storePickupSection);
@@ -56,7 +64,7 @@
            stockStatus.stockQuantity = getStockQuantity(storePickupSection);
         }
 
-        var badRequest = !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
+        const badRequest = accessDenied || !stockStatus.isStocked && !stockStatus.isOrderable && !stockStatus.hasOutOfStockMessage;
 
         var tryAgain = retry && badRequest;
         if (tryAgain) {
@@ -66,7 +74,7 @@
             cacheTime = outOfStockTTL;
           }
           if (!badRequest) {
-            cache.put(''+req.params.storeId+req.params.productId, stockStatus, cacheTime);
+            stockCache.set(cacheKey, stockStatus)
           }
           res.status(200).json(stockStatus);
         }

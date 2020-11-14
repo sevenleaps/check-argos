@@ -1,6 +1,11 @@
 (function () {
   'use strict';
   const axios = require('axios')
+  const NodeCache = require( "node-cache" );
+  const ONE_DAY = 86400
+  const productCache = new NodeCache({
+    stdTTL: ONE_DAY
+  })
   var request = require('request')
 
   var ProductsUtil = require('../../lib/util/index').Products;
@@ -123,20 +128,29 @@
 
   function retrieveProduct(productId) {
     if (ProductsUtil.isValidProductId(productId)) {
-      return ProductsUtil.retrieveProductHtml(ProductsUtil.cleanUpProductId(productId))
-            .then(response => {
-              try {
-                return Promise.resolve(ProductsUtil.getProductInformationFromProductPage(response.data))
-              } catch (exception) {
-                console.log(exception)
-                console.log(response.data)
-                console.log(response.status)
-                console.log(response.statusText)
-                console.log(response.headers)
-                console.log(response.config)
-                return Promise.reject(exception)
-              }
-            })
+      const productNumber = ProductsUtil.cleanUpProductId(productId)
+      const product = productCache.get(productNumber)
+      if (product == undefined) {
+        return ProductsUtil.retrieveProductHtml(productNumber)
+        .then(response => {
+          try {
+            const latestProduct = ProductsUtil.getProductInformationFromProductPage(response.data)
+            productCache.set(productNumber, latestProduct)
+            return Promise.resolve(latestProduct)
+          } catch (exception) {
+            console.log(exception)
+            console.log(response.data)
+            console.log(response.status)
+            console.log(response.statusText)
+            console.log(response.headers)
+            console.log(response.config)
+            return Promise.reject(exception)
+          }
+        })
+      } else {
+        return Promise.resolve(product)
+      }
+
     } else {
       return Promise.reject('Not a product id')
     }
