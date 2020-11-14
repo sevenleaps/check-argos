@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  const axios = require('axios')
   var request = require('request')
 
   var ProductsUtil = require('../../lib/util/index').Products;
@@ -10,7 +11,8 @@
     search : search,
     searchPage : searchPage,
     textSearchMethod : textSearchMethod,
-    searchInternal: searchInternal
+    searchInternal: searchInternal,
+    retrieveProduct: retrieveProduct
   };
 
   var customHeaderRequest = request.defaults({
@@ -116,6 +118,27 @@
           return callback('Not a product id');
         }
       });
+    }
+  }
+
+  function retrieveProduct(productId) {
+    if (ProductsUtil.isValidProductId(productId)) {
+      return ProductsUtil.retrieveProductHtml(ProductsUtil.cleanUpProductId(productId))
+            .then(response => {
+              try {
+                return Promise.resolve(ProductsUtil.getProductInformationFromProductPage(response.data))
+              } catch (exception) {
+                console.log(exception)
+                console.log(response.data)
+                console.log(response.status)
+                console.log(response.statusText)
+                console.log(response.headers)
+                console.log(response.config)
+                return Promise.reject(exception)
+              }
+            })
+    } else {
+      return Promise.reject('Not a product id')
     }
   }
 
