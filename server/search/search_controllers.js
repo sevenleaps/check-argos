@@ -15,6 +15,7 @@
 
   var customHeaderRequest = request.defaults({
     headers: {
+      "Host":"www.argos.ie",
       "User-Agent": "PostmanRuntime/7.26.2",
       "Connection": "keep-alive",
       "Accept": "*/*"
