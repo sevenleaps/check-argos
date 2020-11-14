@@ -16,15 +16,10 @@
         "Accept": "*/*"
       }
     })
-  var cache = require('memory-cache');
 
   module.exports = exports = {
     checkStock : checkStock
   }
-
-  var inStockTTL = 90000;
-  var outOfStockTTL = 420000;
-
 
   function checkStock(req, res, next) {
     try{
@@ -70,9 +65,6 @@
         if (tryAgain) {
           checkStockStatus(req, res, next, false);
         } else {
-          if(stockStatus.hasOutOfStockMessage || stockStatus.isOrderable ){
-            cacheTime = outOfStockTTL;
-          }
           if (!badRequest) {
             stockCache.set(cacheKey, stockStatus)
           }
