@@ -3,9 +3,9 @@
   var request = require('request')
   const $ = require('cheerio')
   const NodeCache = require( "node-cache" );
-  const ONE_MINUTE = 100000
+  const FIVE_MINUTES = 300
   const stockCache = new NodeCache({
-    stdTTL: ONE_MINUTE
+    stdTTL: FIVE_MINUTES
   })
 
   var customHeaderRequest = request.defaults({
